@@ -9,7 +9,7 @@
 #' @param save If TRUE the plot is saved in a pdf file.
 #' @param path Path to save plot to (combined with file name). If it is missing, the plot is saved in the working directory.
 #' @return A plot with the density time grid and the line plot of cancer growth data as a ggplot object.
-#' @example
+#' @examples
 #'
 #'GrowDataFile<-"data/1864dataset.xls"
 #'AnnotationFile <-"data/1864info.txt"

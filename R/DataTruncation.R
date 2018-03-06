@@ -12,7 +12,7 @@
 #' @param path Path to save plot to (combined with file name). If it is missing, the plot is saved in the working directory.
 #' @return DataTruncation returns the line plot of growth curves with a vertical line at the truncation time and the CONNECTORList updated with the following arguments: a data frame with three variables (ID curves, volume and time values truncated at the chosen time), a vector collecting the number of truncated observations collected per sample, a data frame with curves labeled according to target file feature chosen and a vector for overall truncated time grid.
 #'
-#' @example
+#' @examples
 #'
 #'GrowDataFile<-"data/1864dataset.xls"
 #'AnnotationFile <-"data/1864info.txt"

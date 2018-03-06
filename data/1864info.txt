@@ -1,4 +1,4 @@
-ID,SampleName,Progeny,Therapy,Implanted Site
+ID,SampleName,Progeny,Therapy,Implanted.Site
 1,1864_P1a,1,Yes,Subcutaneos
 2,1864_P1aP2a,2,Yes,Subcutaneos
 3,1864_P1aP2b,2,Yes,IntraAbdominal

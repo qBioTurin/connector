@@ -6,7 +6,7 @@
 #' @param data CONNECTORList.
 #' @param truncTime  An integer number corresponding to the time at which truncate the curves.
 #' @return  The CONNECTORList updated with the following arguments: a data frame with three variables (ID curves, volume and time values truncated at the chosen time), a vector collecting the number of truncated observations collected per sample, a data frame with curves labeled according to target file feature chosen and a vector for overall truncated time grid.
-#' @example
+#' @examples
 #'
 #'GrowDataFile<-"data/1864dataset.xls"
 #'AnnotationFile <-"data/1864info.txt"
