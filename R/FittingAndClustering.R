@@ -39,7 +39,7 @@ FittingAndClustering<-function(data,clusterdata,h=NULL,k=NULL,feature,save=FALSE
 {
   out<-list()
 
-  if( !is.null(clusterdata$FCM_all) )
+  if( !isS4(clusterdata) )
   {
     if(!is.null(h) & !is.null(k) )
     {
@@ -50,6 +50,7 @@ FittingAndClustering<-function(data,clusterdata,h=NULL,k=NULL,feature,save=FALSE
     }
   }else{
     out.funcit<-clusterdata
+    k<-clusterdata@k
   }
 
   models<-c("FCM","Malthus","Gompertz","Logistic")

@@ -4,6 +4,7 @@
 #' In each cluster it is counted the number of samples belonging to the feature chosen by the user.
 #'
 #' @param clusterdata Output of the ClusterWithMeanCurve or FittingAndClustering function.
+#'  @param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.
 #' @param Model Vector of the model names, i.e. FCM, Malthus, Logistic or Gompertz. If NULL then all the models will be considered.
 #' @return Returns a list storing for each model analyzed a matrix composed by three columns: (i) cluster, (ii) the feature name, and (iii) the number of samples. 
 #' @examples
@@ -32,7 +33,7 @@
 #'
 #' @import plyr
 #' @export
-CountingSamples<-function(clusterdata,Model=NULL)
+CountingSamples<-function(clusterdata,Model=NULL,feature=NULL)
 {
 
  if(is.null(Model))
@@ -56,9 +57,9 @@ CountingSamples<-function(clusterdata,Model=NULL)
      ClustCurve<-clusterdata$Information$ClustCurve
    }else{ ClustCurve<-clusterdata[[i]]$Information$ClustCurve}
 
-
-   feature<-tail(colnames(ClustCurve),1)
-   a<-count(ClustCurve, c("ID", "Cluster",feature))[,-4]
+  if( is.null(feature) )   feature<-tail(colnames(ClustCurve),-5)
+  
+   a<-count(ClustCurve, c("ID", "Cluster",feature))[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
    Counting[[paste(i)]]<-count(a,c( "Cluster",feature))
  }
 

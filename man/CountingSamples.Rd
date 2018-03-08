@@ -4,10 +4,11 @@
 \alias{CountingSamples}
 \title{Counting samples}
 \usage{
-CountingSamples(clusterdata, Model = NULL)
+CountingSamples(clusterdata, Model = NULL, feature = NULL)
 }
 \arguments{
-\item{clusterdata}{Output of the ClusterWithMeanCurve or FittingAndClustering function.}
+\item{clusterdata}{Output of the ClusterWithMeanCurve or FittingAndClustering function.
+@param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.}
 
 \item{Model}{Vector of the model names, i.e. FCM, Malthus, Logistic or Gompertz. If NULL then all the models will be considered.}
 }

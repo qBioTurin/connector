@@ -50,7 +50,7 @@ lencurv.tr <- numeric(sample.size)
 if(!is.null(truncTime)) data.tr <- DataTrunc(data,truncTime=truncTime)
 else data.tr <- data
 
-data.tr$LabCurv <- data.tr$LabCurv[c("ID",feature)]
+
 
 plot(growth.curve.tr)
 
