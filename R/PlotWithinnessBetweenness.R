@@ -95,7 +95,7 @@ PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE
   WithDist$Cluster <- factor(WithDist$Cluster)
   WithDist$feature <- factor(WithDist$feature)
 
-  plots <- ggplot() + geom_circle(aes(x0=x0, y0=y0, r=r,linetype=distance,color=Cluster), data=circles,size=1)
+  plots <- ggplot() + geom_circle(aes(x0=x0, y0=y0, r=r,linetype=distance,color=Cluster), data=circles,size=.6)
   plots <- plots + scale_shape_manual(values=c(0:(K-1)))+
                     geom_point(data=WithDist,aes(x=x1,y=y1,shape=Cluster),size=4)+
                     scale_linetype_manual("",values = c( "2"= "dashed","1"="solid"),

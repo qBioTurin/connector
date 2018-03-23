@@ -1,4 +1,4 @@
-library(Prova1)
+library(connector)
 
 ### Data files
 GrowDataFile<-"data/1864dataset.xls"
@@ -21,7 +21,7 @@ pca$plot
 
 ### Calculation of k
 
-CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(2:6),h=2)
+CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(3:6),h=2)
 CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(2:6),PCAperc = pca$perc)
 
 CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
