@@ -83,5 +83,5 @@ ClusterChoice<-function(data,k,h=NULL,PCAperc=NULL)
 
 
 
-  return(list(FCM_all=output_k,matrix_BIC=matrix_BIC,matrix_AIC=matrix_AIC,ElbowMethod=ElbowMethod))
+  return(list(FCM_all=output_k,matrix_BIC=matrix_BIC,matrix_AIC=matrix_AIC,ElbowMethod=ElbowMethod,Tot.within=Tot.within))
 }

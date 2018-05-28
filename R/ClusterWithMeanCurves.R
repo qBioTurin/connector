@@ -37,7 +37,7 @@ ClusterWithMeanCurve<-function(clusterdata=NULL,data,k,model,feature,labels=NULL
 {
   if(is.null(clusterdata) & model=="FCM")
   {
-    warning("The model FCM needs an object of the class ." )
+    warning("The model FCM needs an object of the class funcyOutList." )
     break
   }
 

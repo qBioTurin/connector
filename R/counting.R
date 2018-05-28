@@ -48,7 +48,7 @@ CountingSamples<-function(clusterdata,Model=NULL,feature=NULL)
    # Possibility to consider the ClusterWithMeanCurve output
 
    if(is.null(clusterdata[[i]])) {
-     if(is.null(cluster$Information))
+     if(is.null(clusterdata$Information))
      {
        warning("File in input is different from the ClusterWithMeanCurve or FittingAndClustering output")
 
