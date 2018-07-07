@@ -2,14 +2,14 @@
 #'
 #'@description
 #'
-#'Calculates the BIC and AIC values considering k number of clusters and h dimension of the cluster mean space, and generates the plot based on the Elbow Method.
+#'Calculates the BIC and AIC values considering k number of clusters and h dimension of the cluster mean space, and generates the plot based on the Elbow Method considering the Hasdorff distance.
 #'
 #' @param data CONNECTORList.
 #' @param k Number of clusters.
 #' @param h Dimension of the cluster mean space. If NULL, ClusterChoice set the h value equals to the number of PCA components needed to explain the 95 perc. of variability of the data.
 #' @param PCAperc The PCA percentages calculated with the function PCAbarplot, if NULL then it must be inserted in input a value for h.
 #'  @return
-#' The matrices of the AIC and BIC values, a list of FCMList objects belonging to class funcyOutList for each h and k and  the plot generated using the Elbow Method.
+#' The matrices of the AIC and BIC values, a list of FCMList objects belonging to class funcyOutList for each h and k, the plot generated using the Elbow Method and a matrix kxh containing the total withinness measures.
 #' @examples
 #'
 #'GrowDataFile<-"data/1864dataset.xls"
@@ -52,8 +52,8 @@ ClusterChoice<-function(data,k,h=NULL,PCAperc=NULL)
 
   data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
 
-  Tot.within<-matrix(0,nrow = length(K),ncol = length(H),dimnames=list(row_names,col_names))
-
+  Tot.within.Haus<-matrix(0,nrow = length(K),ncol = length(H),dimnames=list(row_names,col_names))
+  
   # return a list of K lists, in which is is stored the output for all h
   # We also create two matrixes with the BIC and AIC values
   for(k in K)
@@ -65,23 +65,45 @@ ClusterChoice<-function(data,k,h=NULL,PCAperc=NULL)
       out.funcit<- funcit(data.funcit,seed=2404,k,methods="fitfclust",funcyCtrl=mycontfclust,save.data=TRUE)
       output_h[[paste("h=",h)]] <- out.funcit
 
-      minDist<-out.funcit@models$fitfclust@cldist[,1]
-      Tot.within[which(K==k),which(H==h)]<-sum(minDist)
+      ### Hausdorff withiness
+      out.fit<-out.funcit@models$fitfclust@fit
+      within<-c()
+      FCM.ClustCurve<-data.frame(ID=out.funcit@data[,1],Times=out.funcit@data[,3],Vol=out.funcit@data[,2],Cluster=rep(out.funcit@allClusters,times=data$LenCurv))
+      
+      if(out.funcit@reg==1)
+      {
+        fitfclust.curvepred(out.fit)$meancurves->meancurves
+      } else{
+        fitfclust.curvepredIrreg(out.fit)$meancurves->meancurves
+      }
 
+      for (i in 1:k)
+      {
+        # if(centroids==FALSE) ### i-th cluster curves distance
+        # {
+        #   within.i <- WithCluster_CurvDist(FCM.ClustCurve,i)
+        # }
+        # else                 ### i-th cluster curves and meancurve distance
+        within.i <- WithCluster_MeanDist(FCM.ClustCurve,meancurves,i)
+        within<-c(within, within.i)
+      }
+      Tot.within.Haus[which(K==k),which(H==h)]<-sum(within)
+      
+      #######
       matrix_BIC[which(K==k),which(H==h)]<-output_h[[paste("h=",h)]]@models$fitfclust@BIC
       matrix_AIC[which(K==k),which(H==h)]<-output_h[[paste("h=",h)]]@models$fitfclust@AIC
     }
     output_k[[paste("k=",k)]]<-output_h
   }
 
-  Tot.within<-data.frame(dist=c(Tot.within),K=rep(K,length(H)),H=factor(rep(H,each=length(K))))
-  ElbowMethod<-ggplot(data=Tot.within,aes(x=K))+ geom_point(aes(y=dist,col=H))+
-                                    geom_line(aes(y=dist,col=H))+
-                                    labs(title="Elbow method",x="Cluster",y="total within-cluster")+
-                                    theme(text = element_text(size=20))
+####### Elbow method with Hausdorff distance
+  Tot.within.Haus<-data.frame(dist=c(Tot.within.Haus),K=rep(K,length(H)),H=factor(rep(H,each=length(K))))
+  
+  ElbowMethod.Haus<-ggplot(data=Tot.within.Haus,aes(x=K))+ geom_point(aes(y=dist,col=H))+
+                    geom_line(aes(y=dist,col=H))+
+                    labs(title="Elbow method",x="Cluster",y="total within-cluster")+
+                    theme(text = element_text(size=20))
 
 
-
-
-  return(list(FCM_all=output_k,matrix_BIC=matrix_BIC,matrix_AIC=matrix_AIC,ElbowMethod=ElbowMethod,Tot.within=Tot.within))
+  return(list(FCM_all=output_k,matrix_BIC=matrix_BIC,matrix_AIC=matrix_AIC,ElbowMethod=ElbowMethod.Haus,Tot.within=Tot.within.Haus))
 }

@@ -12,7 +12,7 @@ DataVisualization(CONNECTORList,feature="Progeny",labels = c("time","volume","Tu
 
 ### Truncation
 
-CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",truncTime=60,labels = c("time","volume","Tumor Growth"))
+CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",labels = c("time","volume","Tumor Growth"))
 
 ### Calculation of h
 
@@ -30,7 +30,7 @@ CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 
 FCMplots <- ClusterWithMeanCurve(clusterdata = CONNECTORList.FCM.k4.h2,data= CONNECTORList, k = 4, model = "FCM",feature = "Progeny",labels = c("Time","Volume"))
 
-MalthusPlots<- ClusterWithMeanCurve(data = CONNECTORList,k = 4,model="Malthus",feature = "Progeny")
+MalthusPlots<- ClusterWithMeanCurve(data = CONNECTORList,k = 4,model="Malthus",feature = "Progeny",labels = c("Time","Volume"))
 
 ### Fitting and clustering considering all the models
 
