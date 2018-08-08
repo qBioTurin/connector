@@ -4,19 +4,18 @@
 \alias{CountingSamples}
 \title{Counting samples}
 \usage{
-CountingSamples(clusterdata, Model = NULL, feature = NULL)
+CountingSamples(clusterdata, data, feature = "ID")
 }
 \arguments{
-\item{clusterdata}{Output of the ClusterWithMeanCurve or FittingAndClustering function.
-@param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.}
+\item{feature}{The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.}
 
-\item{Model}{Vector of the model names, i.e. FCM, Malthus, Logistic or Gompertz. If NULL then all the models will be considered.}
+\item{Clusterdata}{}
 }
 \value{
 Returns a list storing for each model analyzed a matrix composed by three columns: (i) cluster, (ii) the feature name, and (iii) the number of samples.
 }
 \description{
-In each cluster it is counted the number of samples belonging to the feature chosen by the user.
+For each cluster it is counted the number of samples distinguished by the feature.
 }
 \examples{
 

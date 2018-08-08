@@ -3,7 +3,7 @@
 #' @description
 #' Returns the data coefficients with respect to a base type chosen.
 #'
-#' @import fda
+#' @import fda 
 makeCoeffs <- function(data, base=NULL, reg, dimBase, grid=NULL, pert){
   if(is.null(base)){
     time<-grid
@@ -18,9 +18,7 @@ makeCoeffs <- function(data, base=NULL, reg, dimBase, grid=NULL, pert){
     base <- base[,1:dimBase]
   }
   if(reg){
-    coeffs <- t((solve(t(base) %*% base + pert *
-                         diag(dimBase))
-                 %*%t(base))%*%t(data))
+    coeffs <- t((solve(t(base) %*% base + pert *diag(dimBase))%*%t(base))%*% data)
     fullBase <- base
   }else{
     curveIndx <- data[,1]

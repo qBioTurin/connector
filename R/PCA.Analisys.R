@@ -5,7 +5,7 @@
 #' Generates a bar plot reporting the percentage values associated to each component identified by the Principal Component Analysis (PCA).
 #'
 #' @param data CONNECTORList.
-#' @param dimBase Dimension of the basis.
+#' @param p Dimension of the basis.
 #' @param save If TRUE the bar plot of the PCA components is saved in a pdf file.
 #' @param path  Path to save plot to (combined with file name). If it is missing, the plot is saved in the working  directory.
 #' @return The bar plot of the PCA components and the vector of percentage values of the PCA components.
@@ -21,15 +21,29 @@
 #' PCA<-PCA.Analysis(CONNECTORList$Dataset)
 #' PCA$plot
 #'
-#' @import ggplot2
+#' @import ggplot2 
 #' @export
-PCA.Analysis <- function(data,dimBase=5,save=FALSE,path=NULL)
+PCA.Analysis <- function(data,p=5,save=FALSE,path=NULL)
 {
-  TimeGrid <- c(1:max(data[,3]))
-
-  data<-as.matrix(data)
+  database<-data$Dataset
+  
+  data <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
+  
+  
+  chf <- checkFormat(data)
+  reg <- chf$reg
+  data<-chf$data
+  if(reg){
+    TimeGrid<-1:dim(data)[1]
+  }else{
+    TimeGrid <- unique(sort(data[,3]))
+  }
+  
+  
+  
   # curves splines basis coefficients
-  res <- makeCoeffs(data=data, reg=FALSE, dimBase=dimBase,
+  
+  res <- makeCoeffs(data=data, reg=reg, dimBase=p,
                      grid=TimeGrid, pert=0.01)
 
   # Principal Components Analysis

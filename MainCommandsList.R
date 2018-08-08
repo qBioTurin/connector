@@ -1,4 +1,3 @@
-library(connector)
 
 ### Data files
 GrowDataFile<-"data/1864dataset.xls"
@@ -8,48 +7,127 @@ AnnotationFile <-"data/1864info.txt"
 CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 
 ### Visualization
+
+GrowthCurve(CONNECTORList,"Progeny")
+
 DataVisualization(CONNECTORList,feature="Progeny",labels = c("time","volume","Tumor Growth"))
 
 ### Truncation
 
-CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",labels = c("time","volume","Tumor Growth"))
+CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",60,labels = c("time","volume","Tumor Growth"))
 
 ### Calculation of h
 
-pca <- PCA.Analysis(CONNECTORList$Dataset)
+pca <- PCA.Analysis(CONNECTORList,p = 5)
+
 pca$plot
 
-### Calculation of k
+### Calculation of k and fitting using FCM
 
-CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(3:6),h=2)
+CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(2:6),h=2)
+
 CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(2:6),PCAperc = pca$perc)
 
 CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 
-### Fitting and clustering
 
-FCMplots <- ClusterWithMeanCurve(clusterdata = CONNECTORList.FCM.k4.h2,data= CONNECTORList, k = 4, model = "FCM",feature = "Progeny",labels = c("Time","Volume"))
+FCMplots <- ClusterWithMeanCurve(clusterdata = CONNECTORList.FCM.k4.h2,data= CONNECTORList,feature = "Progeny",labels = c("Time","Volume"),title= " FCM model ")
 
-MalthusPlots<- ClusterWithMeanCurve(data = CONNECTORList,k = 4,model="Malthus",feature = "Progeny",labels = c("Time","Volume"))
 
-### Fitting and clustering considering all the models
+FCMplots$plotsCluster$ALL
 
-CONNECTORList.models <- FittingAndClustering(data = CONNECTORList, clusterdata = CONNECTORList.FCM, h = 2, k=4, feature = "Progeny", labels = c("time","volume"))
+######### separation and tightness plot considering the FCM
 
-CONNECTORList.models <- FittingAndClustering(data = CONNECTORList, clusterdata = CONNECTORList.FCM.k4.h2, feature = "Progeny", labels = c("time","volume"))
+PlotSeparationTightness(CONNECTORList.FCM.k4.h2,Title = "FCM Cluster betweenness and withinness")
 
-### Withinness and betweenness plot for Malthus and FCM
+############################## MALTHUS ##############################
+lower<-c(10^(-5),0)
+upper<-c(10^2,10^3)
+init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=1)
 
-Malthus.ClustCurve <-  CONNECTORList.models$Malthus$Information$ClustCurve
-Malthus.MeanCurves <-  CONNECTORList.models$Malthus$Information$meancurves
 
-PlotWithinnessBetweenness(Malthus.ClustCurve,Malthus.MeanCurves,Title = "Malthus Cluster betweenness and withinness")
+Malthus1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
+Malthus2<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="GenSA",lower=lower,upper=upper,init=init)
+Malthus3<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="DEoptim",lower=lower,upper=upper)
 
-FCM.ClustCurve <-  CONNECTORList.models$FCM$Information$ClustCurve
-FCM.MeanCurves <-  CONNECTORList.models$FCM$Information$meancurves
+MalthusPlots1<-ClusterWithMeanCurve(clusterdata=Malthus1,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "Optimr Malthus model")
+MalthusPlots2<-ClusterWithMeanCurve(clusterdata=Malthus2,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "GenSA Malthus model")
+MalthusPlots3<-ClusterWithMeanCurve(clusterdata=Malthus3,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "DEoptim Malthus model")
 
-PlotWithinnessBetweenness(FCM.ClustCurve,FCM.MeanCurves,Title = "FCM Cluster betweenness and withinness")
+MalthusPlots1$plotsCluster$ALL
+MalthusPlots2$plotsCluster$ALL
+MalthusPlots3$plotsCluster$ALL
 
-### Counting the samples w.r.t. all the models
+##### separation and tightness plot considering the Malthus model
 
-NumberSamples<-CountingSamples(CONNECTORList.models,feature = "Progeny")
+PlotSeparationTightness(Malthus1,Title = "Malthus Optimr Cluster betweenness and withinness")
+
+PlotSeparationTightness(Malthus2,Title = "Malthus Gensa Cluster betweenness and withinness")
+
+PlotSeparationTightness(Malthus3,Title = "Malthus Deoptim Cluster betweenness and withinness")
+
+############################## LOGISTIC ##############################
+
+lower<-c(10^(-5),0,0)
+upper<-c(10^2,10^5,1)
+init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=.5, b=.5)
+
+Logistic1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Logistic",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
+Logistic2<- FittingAndClustering(data = CONNECTORList, k = 4, model="Logistic",feature="Progeny",fitting.method="GenSA",lower=lower,upper=upper,init=init)
+Logistic3<- FittingAndClustering(data = CONNECTORList, k = 4, model="Logistic",feature="Progeny",fitting.method="DEoptim",lower=lower,upper=upper)
+
+LogisticPlots1<-ClusterWithMeanCurve(clusterdata=Logistic1,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "Optimr Logistic model")
+LogisticPlots2<-ClusterWithMeanCurve(clusterdata=Logistic2,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "GenSA Logistic model")
+LogisticPlots3<-ClusterWithMeanCurve(clusterdata=Logistic3,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "DEoptim Logistic model")
+
+LogisticPlots1$plotsCluster$ALL
+LogisticPlots2$plotsCluster$ALL
+LogisticPlots3$plotsCluster$ALL
+
+
+##### separation and tightness plot considering the Logistic model
+
+PlotSeparationTightness(Logistic1,Title = "Logistic Optimr Cluster betweenness and withinness")
+
+PlotSeparationTightness(Logistic2,Title = "Logistic Gensa Cluster betweenness and withinness")
+
+PlotSeparationTightness(Logistic3,Title = "Logistic Deoptim Cluster betweenness and withinness")
+
+############################## GOMPERTZ ##############################
+
+lower<-c(10,0,10^(-4))
+upper<-c(10^2,2,2)
+init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=.5, b=.5)
+
+Gompertz1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Gompertz",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
+Gompertz2<- FittingAndClustering(data = CONNECTORList, k = 4, model="Gompertz",feature="Progeny",fitting.method="GenSA",lower=lower,upper=upper,init=init)
+Gompertz3<- FittingAndClustering(data = CONNECTORList, k = 4, model="Gompertz",feature="Progeny",fitting.method="DEoptim",lower=lower,upper=upper)
+
+GompertzPlots1<-ClusterWithMeanCurve(clusterdata=Gompertz1,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "Optimr Gompertz model")
+GompertzPlots2<-ClusterWithMeanCurve(clusterdata=Gompertz2,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "GenSA Gompertz model")
+GompertzPlots3<-ClusterWithMeanCurve(clusterdata=Gompertz3,data = CONNECTORList, feature = "Progeny",labels = c("Time","Volume"),title= "DEoptim Gompertz model")
+
+GompertzPlots1$plotsCluster$ALL
+GompertzPlots2$plotsCluster$ALL
+GompertzPlots3$plotsCluster$ALL
+
+###### separation and tightness plot considering the Gompertz model
+
+a2<-PlotSeparationTightness(Gompertz1,Title = "Gompertz Optimr Cluster betweenness and withinness")
+b2<-PlotSeparationTightness(Gompertz2,Title = "Gompertz Gensa Cluster betweenness and withinness")
+c2<-PlotSeparationTightness(Gompertz3,Title = "Gompertz Deoptim Cluster betweenness and withinness")
+#################################################
+
+###### All meancurves together
+
+pl1<-list(FCMplots$plotMeanCurve,MalthusPlots1$plotMeanCurve,LogisticPlots1$plotMeanCurve,GompertzPlots1$plotMeanCurve)
+
+pl2<-list(FCMplots$plotMeanCurve,MalthusPlots2$plotMeanCurve,LogisticPlots2$plotMeanCurve,GompertzPlots2$plotMeanCurve)
+
+pl3<-list(FCMplots$plotMeanCurve,MalthusPlots3$plotMeanCurve,LogisticPlots3$plotMeanCurve,GompertzPlots3$plotMeanCurve)
+
+
+
+############## Counting the samples
+
+NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.k4.h2,CONNECTORList,feature = "Progeny")

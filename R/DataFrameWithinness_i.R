@@ -13,9 +13,6 @@
 DataFrameWithinness.i <- function(ClustCurve,MeanCurves,i,ClustSymbol,shift=0)
 {
   K <- length(unique(ClustCurve[,4]))
-  feature <- colnames(ClustCurve)[5]
-  nfeature <- length(unique(ClustCurve[,feature]))[1]
-  featurecurve.i <- t(unique(ClustCurve[ClustCurve[,4]==i,c(1,5)])[2])
 
   ### Centroid withinness distance
   Withinness.i <- WithCluster_MeanDist(ClustCurve,MeanCurves,i)
@@ -37,10 +34,9 @@ DataFrameWithinness.i <- function(ClustCurve,MeanCurves,i,ClustSymbol,shift=0)
   WithDist.i <- data.frame(
   x1 <- Withinness.i + shift,
   y1 <- numeric(length(Withinness.i)),
-  Cluster <- factor((i-1),levels=c(0:(K-1))),
-  type <- factor(featurecurve.i,levels=c(1:nfeature))
+  Cluster <- factor((i-1),levels=c(0:(K-1)))
   )
-  colnames(WithDist.i) <- c("x1","y1","Cluster","feature")
+  colnames(WithDist.i) <- c("x1","y1","Cluster")
  return(DataFrame.i=list(circles=circles.i,WithDist=WithDist.i))
  }
 
