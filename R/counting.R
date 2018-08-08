@@ -1,11 +1,11 @@
 #' Counting samples
 #'
 #' @description
-#' In each cluster it is counted the number of samples belonging to the feature chosen by the user.
+#' For each cluster it is counted the number of samples distinguished by the feature.
 #'
-#' @param clusterdata Output of the ClusterWithMeanCurve or FittingAndClustering function.
-#'  @param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.
-#' @param Model Vector of the model names, i.e. FCM, Malthus, Logistic or Gompertz. If NULL then all the models will be considered.
+#' @param Clusterdata 
+#' @param data
+#' @param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.
 #' @return Returns a list storing for each model analyzed a matrix composed by three columns: (i) cluster, (ii) the feature name, and (iii) the number of samples. 
 #' @examples
 #'
@@ -33,35 +33,27 @@
 #'
 #' @import plyr
 #' @export
-CountingSamples<-function(clusterdata,Model=NULL,feature=NULL)
+#' 
+CountingSamples<-function(clusterdata,data,feature="ID")
 {
-
- if(is.null(Model))
- {
-   Model<-c("FCM","Malthus","Gompertz","Logistic")
- }
-
- Counting<-list()
-
- for( i in Model)
- {
-   # Possibility to consider the ClusterWithMeanCurve output
-
-   if(is.null(clusterdata[[i]])) {
-     if(is.null(clusterdata$Information))
-     {
-       warning("File in input is different from the ClusterWithMeanCurve or FittingAndClustering output")
-
-       break
-     }
-     ClustCurve<-clusterdata$Information$ClustCurve
-   }else{ ClustCurve<-clusterdata[[i]]$Information$ClustCurve}
-
-  if( is.null(feature) )   feature<-tail(colnames(ClustCurve),-5)
   
-   a<-count(ClustCurve, c("ID", "Cluster",feature))[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
-   Counting[[paste(i)]]<-count(a,c( "Cluster",feature))
- }
-
- return(Counting)
+  
+  if(isS4(clusterdata))
+  {
+    
+    ClustCurve <-clusterdata@models$fitfclust@fit$ClustCurves
+    
+  }else{
+    
+    ClustCurve <- clusterdata$Summary
+    
+  }
+  
+  ClustCurve <- data.frame(merge(ClustCurve,data$LabCurv,by="ID"))
+  
+  a<-count(ClustCurve, c("ID", "Cluster",feature))[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
+  Counting<-count(a,c( "Cluster",feature))
+  
+  return(Counting)
 }
+

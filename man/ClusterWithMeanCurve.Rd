@@ -4,21 +4,21 @@
 \alias{ClusterWithMeanCurve}
 \title{Mean Cluster Curves}
 \usage{
-ClusterWithMeanCurve(clusterdata = NULL, data, k, model, feature,
-  labels = NULL)
+ClusterWithMeanCurve(clusterdata, data, feature, title = "", labels = c("",
+  ""), path = NULL, save = FALSE)
 }
 \arguments{
-\item{clusterdata}{Object belonging to the class funcyOutList.}
-
 \item{data}{CONNECTORList.}
-
-\item{k}{Number of clusters.}
-
-\item{model}{Model name, i.e. FCM, Malthus, Gompertz or Logistic.}
 
 \item{feature}{The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated.}
 
 \item{labels}{Vector containing the text for the title of axis.}
+
+\item{clusterdata.FCM}{Object belonging to the class funcyOutList.}
+
+\item{clusterdata.Models}{Object, or a list of objects storing the parameters, clusters, centers, meancurves and seed derived from fitting and clustering the data using Malthus, Gompertz or/and Logistic model.}
+
+\item{model}{Model name, i.e. FCM, Malthus, Gompertz or Logistic. The default is "ALL" that runs all the models but it needs in input both clusterdata.FCM and clusterdata.Models .}
 }
 \value{
 The plot reporting the mean curves of all clusters, for each cluster the plot of the growth curves and a list of data reporting the mean curve values and for each sample the ID of the belonging cluster.
@@ -32,18 +32,6 @@ ClusterWithMeanCurve  generates k plots, where k is the number of clusters: in e
 GrowDataFile<-"data/1864dataset.xls"
 AnnotationFile <-"data/1864info.txt"
 
-CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
-
-CONNECTORList<- DataTruncation(CONNECTORList,"Progeny",truncTime=60,labels = c("time","volume","Tumor Growth"))
-
-# Considering the FCM
-
-CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
-
-FCMplots <- ClusterWithMeanCurve(CONNECTORList.FCM.k4.h2,CONNECTORList,k = 4,model="FCM",feature = "Progeny",labels = c("Time","Volume"))
-
-# Considering the Malthud model
-
-MalthusPlots<- ClusterWithMeanCurve(database = CONNECTORList,k = 4,model="Malthus",feature = "Progeny")
+CONNECTORList <- DataImport(GrowDataFile,AnnotationFile).............
 
 }

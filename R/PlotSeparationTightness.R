@@ -1,4 +1,4 @@
-#' Withinness and Betweenness Visualization
+#' Separation and Tightness Visualization
 #'
 #' Visualization of the plots reporting the withinness and betweenness clustering measures.
 #'
@@ -10,40 +10,43 @@
 #' @return Returns the Withinness and Betweenness plot.
 #' @examples
 #' 
-#' ### Data files
-#' GrowDataFile<-"data/1864dataset.xls"
-#' AnnotationFile <-"data/1864info.txt"
-#'
-#' ### Merge curves and target file
-#' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
-#' CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",truncTime=60,save=TRUE,path="~/Desktop/ImagesPerFrancesca/",labels = c("time","volume","Tumor Growth"
-#'
-#' CONNECTORList.FCM <- ClusterChoice(CONNECTORList,K=c(2:6),h=2)
-#'
-#' CONNECTORList.models <- FittingAndClustering( data= CONNECTORList, FCM_all = CONNECTORList.FCM, h = 2, k=4, feature = "Progeny", labels = c("time","volume"))
-#' 
-#' ### Withinness and betweenness plot for Matlhus model and FCM
-#' 
-#' Malthus.ClustCurve <-  CONNECTORList.models$Malthus$Information$ClustCurve
-#' Malthus.MeanCurves <-  CONNECTORList.models$Malthus$Information$meancurves
-#' PlotWithinnessBetweenness(Malthus.ClustCurve,Malthus.MeanCurves,Title = "Malthus Cluster betweenness and withinness")
-#' 
-#' FCM.ClustCurve <-  CONNECTORList.models$FCM$Information$ClustCurve
-#' FCM.MeanCurves <-  CONNECTORList.models$FCM$Information$meancurves
-#' 
-#' PlotWithinnessBetweenness(FCM.ClustCurve,FCM.MeanCurves,Title = "FCM Cluster betweenness and withinness")
-#' 
 #' @import ggplot2 ggforce
 #' @export
-PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE,path=NULL)
+PlotSeparationTightness <- function(clusterdata,Title=NULL,save=FALSE,path=NULL)
 {
+  
+  
+  if(isS4(clusterdata))
+  {
+    
+    k<-clusterdata@k
+    
+    Cluster(clusterdata)->cluster
+    out.fit<-clusterdata@models$fitfclust@fit
+    # Check if it is regular
+    if(clusterdata@reg==1)
+    {
+      fitfclust.curvepred(out.fit)$meancurves-> MeanCurves
+      
+      
+    } else{
+      
+      fitfclust.curvepredIrreg(out.fit)$meancurves-> MeanCurves
+      
+    }
+    ClustCurve <- out.fit$ClustCurves
+    
+  }else{
+    
+    MeanCurves <- clusterdata$meancurves
+    ClustCurve <- clusterdata$Summary
+  }
+
 
   K <- length(unique(ClustCurve[,4]))
   ClustSymbol<-cluster.symbol(K)
-  nfeature <- length(unique(ClustCurve[,5]))[1]
   cluster.palette <- rainbow(K)
-  #feature.palette <- rainbow(nfeature+3)
-  feature.lev <- sort(unique(ClustCurve[,5]))
+ 
 
   ## calculate the max, min, mean and sd distance in the k-clusters;
   within.all <- Withinness(ClustCurve,MeanCurves,centroids=TRUE)
@@ -73,10 +76,9 @@ PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE
   WithDist <- data.frame(
   x1 = numeric(n),
   y1 = numeric(n),
-  Cluster = numeric(n),
-  feature = numeric(n)
+  Cluster = numeric(n)
 	)
-  colnames(WithDist) <- c("x1","y1","Cluster","feature")
+  colnames(WithDist) <- c("x1","y1","Cluster")
   counter <- 1
   index <- matrix(seq(1,3*K),nrow=K,byrow=TRUE)
 
@@ -93,7 +95,6 @@ PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE
   circles$Cluster <- factor(circles$Cluster)
 
   WithDist$Cluster <- factor(WithDist$Cluster)
-  WithDist$feature <- factor(WithDist$feature)
 
   plots <- ggplot() + geom_circle(aes(x0=x0, y0=y0, r=r,linetype=distance,color=Cluster), data=circles,size=.6)
   plots <- plots + scale_shape_manual(values=c(0:(K-1)))+
@@ -101,7 +102,7 @@ PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE
                     scale_linetype_manual("",values = c( "2"= "dashed","1"="solid"),
                                            labels=c("Mean ","Mean+- sd"))
 
-  if(is.null(Title)) Title<-"Cluster betweenness and withinness"
+  if(is.null(Title)) Title<-"Cluster Separation and Tightness"
 
   plots <- plots  + geom_text(aes(x=x0, y=y0,label=Cluster), data=circles) +
                     #scale_colour_manual(values = cluster.palette,name="Cluster Colors") +
@@ -112,7 +113,7 @@ PlotWithinnessBetweenness <- function(ClustCurve,MeanCurves,Title=NULL,save=TRUE
   if(save==TRUE)
   {
    if(is.null(path)) path <- getwd()
-   ggsave(filename="Betweenness&Withinness.pdf",plot =plots,width=29, height = 20, units = "cm",scale = 1,path=path)
+   ggsave(filename="Separation&Tightness.pdf",plot =plots,width=29, height = 20, units = "cm",scale = 1,path=path)
   }
 
   return(plots)

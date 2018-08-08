@@ -4,51 +4,24 @@
 \alias{FittingAndClustering}
 \title{Fitting and Clustering}
 \usage{
-FittingAndClustering(data, clusterdata, h = NULL, k = NULL, feature,
-  save = FALSE, path = NULL, labels = NULL)
+FittingAndClustering(data, k, model, feature, fitting.method = "optimr",
+  init = NULL, lower = NULL, upper = NULL, seed = NULL)
 }
 \arguments{
 \item{data}{CONNECTORList.}
 
-\item{clusterdata}{Object, or a list of objects belonging to the class funcyOutList.}
-
-\item{h}{Dimension of the cluster mean space.}
-
 \item{k}{Number of clusters.}
 
-\item{feature}{The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated.}
+\item{model}{Model name, i.e. Malthus, Gompertz and Logistic.}
 
-\item{save}{If TRUE the plots of the growth curves are saved in different pdf files, one per model.}
-
-\item{path}{Path to save plot to (combined with file name). If it is missing, the plot is saved in the working  directory.}
-
-\item{labels}{Vector containing the text for the title of axis.}
+\item{fitting.method}{}
 }
 \value{
-Returns a list with five members. In details, a list for each model among FCM, Malthus, Gompertz and Logistic model that stores (i) the cluster mean curves plot, (ii) the growth curves plots partitioned according to cluster membership, (iii) all the information related to the clustering, i.e. the mean curve values, the samples cluster membership and a dataframe reporting the for each sample the corresponding ID, time and observation values, feature and belonging cluster. The last component is the cluster mean curves plot for all four models.
+A list containing per each curve (i) the parameters of the fitting, (ii) the centers, (iii) the cluster of affinity and (iv) the mean values.
 }
 \description{
-Fitting and clustering the data with respect to all FCM, Malthus, Gompertz and Logistic models.
+Fitting and Clustering the cancer growth data with respect to the following growth functions: Malthus, Gompertz and Logistic. The cancer growth fitted functions are then clustered.
 }
 \examples{
-
-### Data files
-GrowDataFile<-"data/1864dataset.xls"
-AnnotationFile <-"data/1864info.txt"
-
-### Merge curves and target file
-CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
-CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",truncTime=60,save=TRUE,path="~/Desktop/ImagesPerFrancesca/",labels = c("time","volume","Tumor Growth"
-
-CONNECTORList.FCM <- ClusterChoice(CONNECTORList,K=c(2:6),h=2)
-
-### Using the CONNECTORList.FCM and the values: h=2 and k=4.
-
-CONNECTORList.models <- FittingAndClustering( data= CONNECTORList, clusterdata = CONNECTORList.FCM, h = 2, k=4, feature = "Progeny", labels = c("time","volume"))
-
-### Using directly the list corresponding to the values h=2 and k=4 
-
-CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h=2`
-CONNECTORList.models <- FittingAndClustering( data= CONNECTORList, clusterdata = CONNECTORList.FCM.k4.h2, feature = "Progeny", labels = c("time","volume"))
 
 }
