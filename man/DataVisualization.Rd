@@ -7,21 +7,21 @@
 DataVisualization(data, feature, labels = NULL, save = FALSE, path = NULL)
 }
 \arguments{
-\item{data}{CONNECTORList.}
+\item{data}{CONNECTORList. (see \code{\link{DataImport}})}
 
-\item{feature}{The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated.}
+\item{feature}{The column name reported in the AnnotationFile  containing the feature to be investigated.}
 
-\item{labels}{Vector containing the text for the title of axis and plot title.}
+\item{labels}{The vector containing the text for the axis names and plot title.}
 
-\item{save}{If TRUE the plot is saved in a pdf file.}
+\item{save}{If TRUE then the plot is saved into a pdf file.}
 
-\item{path}{Path to save plot to (combined with file name). If it is missing, the plot is saved in the working directory.}
+\item{path}{The folder path  where the plot will be saved. If it is missing, the plot is saved in the current working  directory.}
 }
 \value{
-A plot with the density time grid and the line plot of cancer growth data as a ggplot object.
+Data Visualization returns a plot with the density time grid and the line plot of cancer growth data as a ggplot object.
 }
 \description{
-Visualization of the time grid and the line plot of cancer growth data.
+Computes the time grid and the line plot of cancer growth data.
 }
 \examples{
 
@@ -32,4 +32,7 @@ CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 
 DataVisualization(CONNECTORList,"Progeny",labels = c("time","volume","Tumor Growth"))
 
+}
+\seealso{
+\code{\link{GrowthCurve}}, code{\link{TimeGridDensity}}.
 }

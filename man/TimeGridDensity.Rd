@@ -7,18 +7,17 @@
 TimeGridDensity(data, save = FALSE, path = NULL)
 }
 \arguments{
-\item{data}{CONNECTORList.}
+\item{data}{CONNECTORList. (see \code{\link{DataImport}})}
 
-\item{save}{If TRUE it is saved in a pdf the density time grid plot.}
+\item{save}{If TRUE then the density time grid plot is saved into a pdf file.}
 
-\item{path}{Path to save plot to (combined with file name). If it is missing, the plot is saved in the working  directory.}
+\item{path}{The folder path where the plot will be saved. If it is missing, the plot is saved in the current working  directory.}
 }
 \value{
-The time grid density plot as a ggplot object.
+Time Grid Density returns the time grid density plot as a ggplot object.
 }
 \description{
-Plots the grid of the time points at which the growth data are collected.
-Each point of the grid is colored with respect to its frequency in the input data.
+Plots the grid of the time points at which the growth data are collected. Each point of the grid is colored with respect to its frequency in the input data.
 }
 \examples{
 GrowDataFile<-"data/1864dataset.xls"

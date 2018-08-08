@@ -1,13 +1,14 @@
 #' Time Grid Density
 #'
 #'@description
-#'Plots the grid of the time points at which the growth data are collected.
-#'Each point of the grid is colored with respect to its frequency in the input data.
+#'Plots the grid of the time points at which the growth data are collected. Each point of the grid is colored with respect to its frequency in the input data.
 #'
-#' @param  data CONNECTORList.
-#' @param  save If TRUE it is saved in a pdf the density time grid plot.
-#' @param  path	Path to save plot to (combined with file name). If it is missing, the plot is saved in the working  directory.
-#' @return The time grid density plot as a ggplot object.
+#' @param  data CONNECTORList. (see \code{\link{DataImport}})
+#' @param  save If TRUE then the density time grid plot is saved into a pdf file.
+#' @param  path	 The folder path where the plot will be saved. If it is missing, the plot is saved in the current working  directory.
+#' 
+#' @return Time Grid Density returns the time grid density plot as a ggplot object.
+#' 
 #' @examples
 #' GrowDataFile<-"data/1864dataset.xls"
 #' AnnotationFile <-"data/1864info.txt"

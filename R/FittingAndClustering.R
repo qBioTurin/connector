@@ -2,17 +2,64 @@
 #'
 #'
 #' @description
-#' Fitting and Clustering the cancer growth data with respect to the following growth functions: Malthus, Gompertz and Logistic. The cancer growth fitted functions are then clustered.
+#' Fits and clusters the data with respect to the Malthus, Gompertz and Logistic model. The clustering method used is the \emph{k-means} one.
 #'
-#' @param data CONNECTORList.
-#' @param k  Number of clusters.
-#' @param model Model name, i.e. Malthus, Gompertz and Logistic.
-#' @param fitting.method 
-#' @param lower
-#' @param upper
-#' @param seed
-#' @return A list containing per each curve (i) the parameters of the fitting, (ii) the centers, (iii) the cluster of affinity and (iv) the mean values.
+#' @param data CONNECTORList. (see \code{\link{DataImport}})
+#' @param k   The number of clusters.
+#' @param model Model name, i.e. Malthus, Gompertz and Logistic. See \sQuote{Details}.
+#' @param fitting.method The method to be used to fit the data with respect to the Malthus, Gompertz and Logistic model. Three methods are proposed: \code{\link[optimr]{opm}}, \code{\link[GenSA]{GenSA}}, \code{\link[DEoptim]{DEoptim}}. See \sQuote{Details}.
+#' @param init A vector containing the initial values for the parameters that must be optimized. In the Malthus case the length of this vector has to be two, instead in the Gompertz and Logistic cases it has to be three. It is not necessary when  \emph{DEoptim} is used.
+#' @param lower Lower bound associated with each parameter.
+#' @param upper Upper bound associated with each parameter.
+#' @param seed  Seed for the k-means.
+#' 
+#' @return FittingAndClustering returns a list containing all the information related to the clustering, i.e. the parameters estimated for each sample, the parameters of the cluster centers, the mean curve values, the samples cluster membership and the seed used in the k-means. Finally, it is also returned a data frame with four arguments: ID, time, volume and cluster membership for each sample.
+#' 
+#' 
+#' @details 
+#' The model proposed are the following:
+#' \itemize{
+#'  \item \emph{Malthus}:  \eqn{f(t)= V_0 e^{a\cdot t}}, 
+#'  \item \emph{Gompertz}:  \eqn{ f(t)= V_0 e^{\frac{a}{b} (1-e^{-b\cdot t})} },
+#'  \item \emph{Logistic}:  \eqn{ f(t)= \dfrac{V_0  K}{V_0 + (K-V_0)e^{-b\cdot t}} }.
+#' }
+#' These are parametric models characterized by three (or two in the Malthus case) unknow parameters. In order to identify the parameters that minimize the sums of squared error (SSE), three methods are proposed:
+#'\itemize{
+#' \item "\emph{optimr}": the function \code{\link[optimr]{opm}}  from the package \emph{optimr} (see the \emph{optimr} manual) is used. Given that the result is a dataframe having one row for each method included in this package for which results are obtained. 
+#'  \item "\emph{GenSA}": the function \code{\link[GenSA]{GenSA}} searches for global minimum of a very complex non-linear objective function with a very large number of optima.
+#'  \item "\emph{DEoptim}": the function \code{\link[DEoptim]{DEoptim}} performs evolutionary global optimization via  Differential Evolution algorithm.
+#' }
+#' 
+#' 
+#' @references 
+#' 
+#' Benzekry, Sébastien AND Lamont, Clare AND Beheshti, Afshin AND Tracz, Amanda AND Ebos, John M. L. AND Hlatky, Lynn AND Hahnfeldt, Philip. (2014) Classical Mathematical Models for Description and Prediction of Experimental Tumor Growth. PLOS Computational Biology.
+#' 
 #' @examples
+#' ### Data files
+#' GrowDataFile<-"data/1864dataset.xls"
+#' AnnotationFile <-"data/1864info.txt"
+#' 
+#' ### Merge curves and target file
+#' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
+#' 
+#' ############################## MALTHUS ##############################
+#' lower<-c(10^(-5),0)
+#' upper<-c(10^2,10^3)
+#' init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=1)
+#' 
+#' 
+#' Malthus1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
+#' Malthus2<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="GenSA",lower=lower,upper=upper,init=init)
+#' 
+#' ############################## LOGISTIC ##############################
+#'
+#'lower<-c(10^(-5),0,0)
+#'upper<-c(10^2,10^5,1)
+#'init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=.5, b=.5)
+#'
+#'Logistic1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Logistic",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
+#'Logistic2<- FittingAndClustering(data = CONNECTORList, k = 4, model="Logistic",feature="Progeny",fitting.method="DEoptim",lower=lower,upper=upper)
 #'
 #' @import GenSA DEoptim optimr
 #' @export

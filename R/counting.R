@@ -1,35 +1,44 @@
 #' Counting samples
 #'
 #' @description
-#' For each cluster it is counted the number of samples distinguished by the feature.
+#' Counts for each combination of cluster and feature the number of samples and their name are returned.
 #'
-#' @param Clusterdata 
-#' @param data
-#' @param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated. If NULL all the features will be considered.
-#' @return Returns a list storing for each model analyzed a matrix composed by three columns: (i) cluster, (ii) the feature name, and (iii) the number of samples. 
+#' @param clusterdata Object belonging to the class funcyOutList if the model in study is the Functional Clustering Model (see \code{\link[funcy]{funcyOutList-class}}). Otherwise a list derived from fitting and clustering the data using Malthus, Gompertz or Logistic model storing the parameters and the cluster membership for each sample, the  parameters of the center and the mean curve values for each cluster (see \code{\link{FittingAndClustering}}).
+#' @param data CONNECTORList.  (see \code{\link{DataImport}})
+#' @param feature the column name reported in the AnnotationFile containing the feature  to be investigated.
+#' 
+#' @return CountingSample returns a list containing  a matrix composed by three columns: (i) cluster, (ii) the feature name, and (iii) the number of samples, and a dataframe storing the sample names reported in the AnnotationFile and the corresponding  cluster membership.
+#' 
 #' @examples
 #'
 #' ### Data files
 #' GrowDataFile<-"data/1864dataset.xls"
 #' AnnotationFile <-"data/1864info.txt"
-#'
+#' 
 #' ### Merge curves and target file
 #' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
-#' CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",truncTime=60,save=TRUE,path="~/Desktop/ImagesPerFrancesca/",labels = c("time","volume","Tumor Growth"
+#' 
+#'### Truncation
 #'
-#' CONNECTORList.FCM <- ClusterChoice(CONNECTORList,K=c(2:6),h=2)
+#'CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",60,labels = c("time","volume","Tumor Growth"))
 #'
-#' ### Using the CONNECTORList.FCM and the values: h=2 and k=4.
+#' ############################## FCM ##############################
 #'
-#' CONNECTORList.models <- FittingAndClustering( data= CONNECTORList, clusterdata = CONNECTORList.FCM, h = 2, k=4, feature = "Progeny", labels = c("time","volume"))
+#' CONNECTORList.FCM <- ClusterChoice(CONNECTORList,k=c(2:6),h=2)
+#' CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 #'
-#' ###  Counting the samples for all the models.
+#' NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.k4.h2,CONNECTORList,feature = "Progeny")
 #'
-#' CountingSamples(CONNECTORList.models)
+#' ############################## MALTHUS ##############################
+#' lower<-c(10^(-5),0)
+#' upper<-c(10^2,10^3)
+#' init<- list(V0=max(0.1,min(CONNECTORList$Dataset$Vol)),a=1)
+#' 
+#' 
+#' Malthus1<- FittingAndClustering(data = CONNECTORList, k = 4, model="Malthus",feature="Progeny",fitting.method="optimr",lower=lower,upper=upper,init=init)
 #'
-#' ###  Counting the samples just for the FCM.
 #'
-#' CountingSamples(CONNECTORList.models, "FCM")
+#' NumberSamples<-CountingSamples(clusterdata=Malthus1,CONNECTORList,feature = "Progeny")
 #'
 #' @import plyr
 #' @export
@@ -53,7 +62,8 @@ CountingSamples<-function(clusterdata,data,feature="ID")
   
   a<-count(ClustCurve, c("ID", "Cluster",feature))[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
   Counting<-count(a,c( "Cluster",feature))
+
   
-  return(Counting)
+  return(list(Counting=Counting,ClusterNames=data.frame(Cluster=unique(ClustCurve$Cluster),SampleName=unique(ClustCurve$SampleName))))
 }
 

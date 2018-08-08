@@ -1,9 +1,3 @@
-#' Make Coeffs
-#'
-#' @description
-#' Returns the data coefficients with respect to a base type chosen.
-#'
-#' @import fda 
 makeCoeffs <- function(data, base=NULL, reg, dimBase, grid=NULL, pert){
   if(is.null(base)){
     time<-grid

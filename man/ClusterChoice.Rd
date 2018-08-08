@@ -4,7 +4,7 @@
 \alias{ClusterChoice}
 \title{Cluster Choice}
 \usage{
-ClusterChoice(data, k, h = 1, PCAperc = NULL)
+ClusterChoice(data, k, h = 1, p = 5, PCAperc = NULL)
 }
 \arguments{
 \item{data}{CONNECTORList.}

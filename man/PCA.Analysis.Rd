@@ -4,22 +4,22 @@
 \alias{PCA.Analysis}
 \title{PCA Analysis}
 \usage{
-PCA.Analysis(data, dimBase = 5, save = FALSE, path = NULL)
+PCA.Analysis(data, p = 5, save = FALSE, path = NULL)
 }
 \arguments{
-\item{data}{CONNECTORList.}
+\item{data}{CONNECTORList.  (see \code{\link{DataImport}})}
 
-\item{dimBase}{Dimension of the basis.}
+\item{p}{The dimension of the natural cubic spline basis.}
 
-\item{save}{If TRUE the bar plot of the PCA components is saved in a pdf file.}
+\item{save}{If TRUE the bar plot of the PCA components is saved into a pdf file.}
 
-\item{path}{Path to save plot to (combined with file name). If it is missing, the plot is saved in the working  directory.}
+\item{path}{The folder path   where the plot will be saved. If it is missing, the plot is saved in the current working  directory.}
 }
 \value{
-The bar plot of the PCA components and the vector of percentage values of the PCA components.
+PCA Analysis returns the bar plot of the PCA components and the vector of percentage values associated with the PCA components.
 }
 \description{
-Generates a bar plot reporting the percentage values associated to each component identified by the Principal Component Analysis (PCA).
+Generates a bar plot reporting the percentage values associated with each component identified by the Principal Component Analysis (PCA). Considering the Functional Clustering Model [Sugar and James] the PCA is applied on the natural cubic spline coefficients to estimate the dimension of the subspace, h, in which the cluster means lie. This is due to a parameterization of the cluster means for producing low-dimensional representations of the curves, for this reason \eqn{h\le p}.
 }
 \examples{
 
@@ -30,7 +30,13 @@ CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 
 CONNECTORList<- DataTruncation(CONNECTORList,"Progeny",truncTime=60,labels = c("time","volume","Tumor Growth"))
 
-PCA<-PCA.Analysis(CONNECTORList$Dataset)
+PCA<-PCA.Analysis(CONNECTORList)
 PCA$plot
 
+}
+\references{
+Gareth M. James and Catherine A. Sugar, (2003). Clustering for Sparsely Sampled Functional Data. Journal of the American Statistical Association.
+}
+\seealso{
+\code{\link[packagename]{functioname}}
 }

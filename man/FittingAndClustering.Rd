@@ -4,8 +4,8 @@
 \alias{FittingAndClustering}
 \title{Fitting and Clustering}
 \usage{
-FittingAndClustering(data, k, model, feature, fitting.method = "optimr",
-  init = NULL, lower = NULL, upper = NULL, seed = NULL)
+FittingAndClustering(data, k, model, fitting.method = "optimr", init = NULL,
+  lower, upper, seed = NULL)
 }
 \arguments{
 \item{data}{CONNECTORList.}

@@ -1,12 +1,3 @@
-#' Cluster Symbols
-#'
-#' @description
-#' Assigns a symbol for each K clusters.
-#'
-#' @param K Number of clusters.
-#' @return  Returns a vector of K symbols.
-#' 
-#' @export
 cluster.symbol <- function(K)
 {
 symbol.matrix <- cbind(paste("pch=",seq(0:20),sep=""),

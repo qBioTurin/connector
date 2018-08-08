@@ -1,14 +1,24 @@
 #' Data Import
 #'
 #'@description
-#' Reads the files in a table format and create a list storing all the information.
+#' Reads the files and creates a list storing all the information.
 #'
 #'
-#' @param file1 the name of the excel file which the data are to be read from. The growth data associated with an experiment must be reported using a pair of columns. The first column must contains the time points, suggested column header "Time". The second column must contains the data volume, the column header is the sample name.
+#' @param GrowDataFile The name of the excel file storing the  growth evolution data. See \sQuote{Details}.
 #'
-#' @param file2 the name of a cvs file which the annontation data are reported. Each row of the file containes: the identifier (ID) of the sample, e.g. an integer number, the sample name used in file1 and a list of features associated with the sample.
+#' @param AnnotationFile The name of a csv file storing  the annotation data. See \sQuote{Details}.
 #'
-#' @return List with four arguments: (i) data frame reporting three variables (ID, data and time values), (ii) the vector reporting the number of observations collected per sample, (iii) the data frame with curves labeled according to target file features and (iv) the vector for overall time grid.
+#' @return   DataImport returns a list called CONNECTORList, with four arguments: (i) data frame with three columns (i.e. ID, data and time values) encoding the growth data for each sample, (ii) the vector reporting the number of observations collected per sample  (iii) the data frame matching the samples with their annotations, (iv) the vector storing all the sample time points (i.e. time grid).
+#' 
+#' @details Two files are requested to run the data analysis exploiting the CONNECTOR package:
+#' \itemize{
+#' \item the excel file, namely \emph{GrowDataFile}, reporting the growth evolution data,
+#' \item the csv file, namely \emph{AnnotationFile}, containing the annotation information associated with the samples.
+#' }
+#' Hence, the growth data associated with an experiment must be stored into GrowDataFile as a table with two columns for each sample.
+#' The first column, labeled  \emph{Time}, contains the time points of a sample. The second column, labeled by the sample name, contains  the data volume over the time.
+#' 
+#' Instead, the second file (i.e. AnnotationFile)  stores  the annotated information associated with the samples as a table in csv format so that  number of rows is equals to the total number of samples.
 #'
 #' @examples
 #'
@@ -19,11 +29,11 @@
 #'
 #' @import readxl
 #' @export
-DataImport <- function(file1,file2) {
+DataImport <- function(GrowDataFile,AnnotationFile) {
  ###Read Data File
-  dataset <- read_excel(file1,col_names=T)
+  dataset <- read_excel(GrowDataFile,col_names=T)
  ### Read Target File
-  labcurv  <- read.csv(file=file2,header=TRUE)
+  labcurv  <- read.csv(file=AnnotationFile,header=TRUE)
 
  ###Check the column names
   c_names<-colnames(dataset[2*(1:(length(dataset[1,])/2))])

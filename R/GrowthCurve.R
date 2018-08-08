@@ -1,12 +1,14 @@
 #' Growth curves
 #'
-#' Visualization of the line plot of the cancer growth data.
-#' The curves are colored with respect of the feature chosen by the user and reported in the AnnotationFile.
+#' Generates the line plot of the cancer growth data. The curves are colored with respect to the feature chosen by the user and/or reported in the AnnotationFile.
 #'
-#' @param data CONNECTORList.
-#' @param feature The column name reported in the AnnotationFile containing the feature interesting for the user to be investigated.
-#' @param labels   Vector containing the text for the axis and plot title.
-#' @return A list containing the line plot and the CONNECTORList.
+#' @param data CONNECTORList. (see \code{\link{DataImport}})
+#' @param feature The column name reported in the AnnotationFile containing the feature to be investigated.
+#' @param labels   The vector containing the text for the axis names and plot title.
+#' 
+#' @return GrowthCurve returns a list containing the line plot and the CONNECTORList.
+#' 
+#' 
 #' @examples
 #' GrowDataFile<-"data/1864dataset.xls"
 #' AnnotationFile <-"data/1864info.txt"
