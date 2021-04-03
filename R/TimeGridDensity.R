@@ -18,7 +18,7 @@
 #' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 #' TimeGridDensity(CONNECTORList)
 #'
-#' @import ggplot2 plyr
+#' @import ggplot2 plyr ggplotify grid
 #' @export
 TimeGridDensity <- function(data,save=FALSE,path=NULL)
 {
@@ -72,6 +72,29 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
           title =element_text(size=12, face='bold'))+
     guides(color = FALSE)
   
+  BarPlot<-ggplot(data=data.frame(x=data$Dataset$Time), aes(x) )+
+    geom_boxplot(width=0.4)+ coord_flip()+
+    #labs(x="",y="Number of observations per time point")+
+    labs(x="",y="Time Grid distribution")+
+    theme(legend.text=element_text(size=14),
+          legend.position=c(.9,1.1),
+          legend.title=element_blank(),
+          legend.key=element_blank(),
+          legend.key.size = unit(.9, "cm"),
+          legend.key.width = unit(.9,"cm"),
+          panel.background = element_rect(colour = NA),
+          plot.background = element_rect(colour = NA),
+          plot.margin=unit(c(10,5,5,5),"mm"), 
+          strip.background = element_blank(),
+          strip.text.x = element_blank() ,
+          title =element_text(size=12, face='bold'))
+
+  Plot.new <-arrangeGrob(cbind(ggplotGrob(TimeGrid_plot+
+                                             theme(legend.position="left") ) ,
+                                           ggplotGrob(BarPlot),size = "last")) 
+  
+  Plot.new <-ggplotify::as.ggplot(Plot.new)
+  
   if(save==TRUE)
   {
     if(is.null(path))
@@ -80,5 +103,5 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
     ggsave(filename="TimeGrid.pdf",plot =TimeGrid_plot,width=29, height = 20, units = "cm",scale = 1,path=path )
     }
   }
-  return(TimeGrid_plot)
+  return(list(TimeGrid_plot=TimeGrid_plot,TimeGrid_Boxplot=Plot.new))
 }

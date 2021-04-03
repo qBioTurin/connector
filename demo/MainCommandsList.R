@@ -24,9 +24,10 @@ CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",70,labels = c("Ti
 CrossLogLike<-BasisDimension.Choice(CONNECTORList,2:6,Cores = 2)
 
 CrossLogLike$CrossLogLikePlot
+CrossLogLike$KnotsPlot
 
 # p is 
-p<-3
+p<-5
 
 ### Calculation of h
 pca <- PCA.Analysis(CONNECTORList,p = p)
@@ -34,16 +35,16 @@ pca <- PCA.Analysis(CONNECTORList,p = p)
 pca$plot
 
 # h is 
-h<-1
+h<-4
 
 ####### Calculation of G and fitting using FCM
 
 ### Stability Analysis
 S.cl <-StabilityAnalysis(data = CONNECTORList,
-                                         G = 2:5,
+                                         G = h+0:2,
                                          h = h,
                                          p = p,
-                                         runs = 100)
+                                         runs = 10)
 
 ### Using the Box Plots you can understand the optimal number of cluster, G.
 BoxPlot.Extrapolation(stability.list = S.cl, h = h)
