@@ -34,7 +34,7 @@ DataVisualization <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
  plot1 <- growth.curves$GrowthCurve_plot
  plot2 <- TimeGridDensity(data)
 
- plots <- plot_grid(plotlist=list(plot1 , plot2))
+ plots <- plot_grid(plotlist=list(plot1 , plot2$TimeGrid_plot))
 
  if(save==TRUE)
  {
