@@ -4,8 +4,14 @@
 \alias{DataTruncation}
 \title{DataTruncation}
 \usage{
-DataTruncation(data, feature, truncTime = NULL, labels = NULL,
-  save = FALSE, path = NULL)
+DataTruncation(
+  data,
+  feature,
+  truncTime = NULL,
+  labels = NULL,
+  save = FALSE,
+  path = NULL
+)
 }
 \arguments{
 \item{data}{CONNECTORList. (see \code{\link{DataImport}})}

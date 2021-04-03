@@ -4,8 +4,7 @@
 \alias{DiscriminantPlot}
 \title{Discriminant Plot}
 \usage{
-DiscriminantPlot(clusterdata, h, data, feature, save = FALSE,
-  path = NULL)
+DiscriminantPlot(clusterdata, h, data, feature, save = FALSE, path = NULL)
 }
 \arguments{
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).}
