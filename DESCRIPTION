@@ -10,9 +10,8 @@ Imports: cowplot, fda, ggplot2, gridExtra, knitr, MASS, Matrix, plyr, RColorBrew
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: rmarkdown
-

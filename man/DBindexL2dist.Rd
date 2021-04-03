@@ -9,8 +9,7 @@
 \alias{Rclust.coeff}
 \title{Functional Davies–Bouldin (fDB) index and L2 (or with derivatives) distances}
 \usage{
-L2dist.curve2mu(clust, fcm.curve, gauss.info, fcm.fit = NULL,
-  deriv = 0)
+L2dist.curve2mu(clust, fcm.curve, gauss.info, fcm.fit = NULL, deriv = 0)
 
 L2dist.mu2mu(fcm.curve, gauss.info, fcm.fit = NULL, deriv = 0)
 

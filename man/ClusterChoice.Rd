@@ -4,8 +4,18 @@
 \alias{ClusterChoice}
 \title{Cluster Choice}
 \usage{
-ClusterChoice(data, G, h = 1, p = 5, PCAperc = NULL, seed = 2404,
-  tol = 0.001, maxit = 20, save = FALSE, path = NULL)
+ClusterChoice(
+  data,
+  G,
+  h = 1,
+  p = 5,
+  PCAperc = NULL,
+  seed = 2404,
+  tol = 0.001,
+  maxit = 20,
+  save = FALSE,
+  path = NULL
+)
 }
 \arguments{
 \item{data}{CONNECTORList. (see \code{\link{DataImport}})}

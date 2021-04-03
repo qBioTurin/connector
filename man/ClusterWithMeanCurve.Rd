@@ -4,8 +4,15 @@
 \alias{ClusterWithMeanCurve}
 \title{Cluster Curves}
 \usage{
-ClusterWithMeanCurve(clusterdata, data, feature, title = "",
-  labels = c("", ""), save = FALSE, path = NULL)
+ClusterWithMeanCurve(
+  clusterdata,
+  data,
+  feature,
+  title = "",
+  labels = c("", ""),
+  save = FALSE,
+  path = NULL
+)
 }
 \arguments{
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).}

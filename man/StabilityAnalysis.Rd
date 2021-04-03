@@ -4,8 +4,17 @@
 \alias{StabilityAnalysis}
 \title{Cluster Stability}
 \usage{
-StabilityAnalysis(data, G, h, p, runs = 50, seed = 2404,
-  save = FALSE, path = NULL, Cores = 1)
+StabilityAnalysis(
+  data,
+  G,
+  h,
+  p,
+  runs = 50,
+  seed = 123,
+  save = FALSE,
+  path = NULL,
+  Cores = 1
+)
 }
 \arguments{
 \item{data}{CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})}
