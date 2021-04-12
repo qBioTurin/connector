@@ -276,55 +276,61 @@ Unique.Param = function(List.runs.fitfclust){
 ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.info,G)
 {
   ClusterAll<-lapply(1:length(Indexes.Uniq.Par),function(i){
-    ## Select just one configuration among the same ones
-    Indexes.Uniq.Par[[i]][1]->j
-    List.runs.fitfclust[[j]]->fcm.fit
-    ## Run the FCM prediction
-    fclust.curvepred(fcm.fit) -> fcm.prediction
-    fclust.pred(fcm.fit) -> fcm.PRED
-    fcm.PRED$class.pred -> cluster
-    ##
-    
-    database<-data$Dataset
-    ClustCurve <- data.frame(ID=database[,1],
-                             Times=database[,3],
-                             Vol=database[,2],
-                             Cluster= rep(cluster,data$LenCurv))
-    
-    ## Goodness coefficents calculation
-    fcm.prediction$meancurves->meancurves
-    distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
-    distances.zero<-L2dist.mu20(fcm.prediction,gauss.info,fcm.fit,deriv=0)
-    Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
-    Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 1)
-    Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 2)
-    ## Let name the cluster with A->Z from the lower mean curve to the higher.
-    if( G !=1 )
-    {
-      Cl.order<-order(distances.zero)
-    }else{
-      Cl.order<-1
-    }
-    cl.names<-LETTERS[order(Cl.order)]
-    names(cluster)<-cl.names[cluster]
-    
-    out.funcit<-list()
-    output<-list()
-    
-    out.funcit$cluster <- list(ClustCurve=ClustCurve,
-                               cl.info=fcm.PRED,
-                               cluster.member=cluster,
-                               cluster.names=cl.names)
-    out.funcit$fit <- fcm.fit
-    out.funcit$prediction <- fcm.prediction
-    out.funcit$TimeGrid<-data$TimeGrid
-    
-    output$FCM <- out.funcit
-    output$Cl.Info<- list(Tight.indexes = sum(distances),
-                          Coefficents=Coefficents,
-                          Deriv.Coefficents=Deriv.Coefficents,
-                          Deriv2.Coefficents=Deriv2.Coefficents)
-    output$ParamConfig.Freq <- length(Indexes.Uniq.Par[[i]]) 
+    tryCatch({
+      ## Select just one configuration among the same ones
+      Indexes.Uniq.Par[[i]][1]->j
+      List.runs.fitfclust[[j]]->fcm.fit
+      ## Run the FCM prediction
+      fclust.curvepred(fcm.fit) -> fcm.prediction
+      fclust.pred(fcm.fit) -> fcm.PRED
+      fcm.PRED$class.pred -> cluster
+      ##
+      
+      database<-data$Dataset
+      ClustCurve <- data.frame(ID=database[,1],
+                               Times=database[,3],
+                               Vol=database[,2],
+                               Cluster= rep(cluster,data$LenCurv))
+      
+      ## Goodness coefficents calculation
+      fcm.prediction$meancurves->meancurves
+      distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
+      distances.zero<-L2dist.mu20(fcm.prediction,gauss.info,fcm.fit,deriv=0)
+      Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
+      Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 1)
+      Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 2)
+      ## Let name the cluster with A->Z from the lower mean curve to the higher.
+      if( G !=1 )
+      {
+        Cl.order<-order(distances.zero)
+      }else{
+        Cl.order<-1
+      }
+      cl.names<-LETTERS[order(Cl.order)]
+      names(cluster)<-cl.names[cluster]
+      
+      out.funcit<-list()
+      output<-list()
+      
+      out.funcit$cluster <- list(ClustCurve=ClustCurve,
+                                 cl.info=fcm.PRED,
+                                 cluster.member=cluster,
+                                 cluster.names=cl.names)
+      out.funcit$fit <- fcm.fit
+      out.funcit$prediction <- fcm.prediction
+      out.funcit$TimeGrid<-data$TimeGrid
+      
+      output$FCM <- out.funcit
+      output$Cl.Info<- list(Tight.indexes = sum(distances),
+                            Coefficents=Coefficents,
+                            Deriv.Coefficents=Deriv.Coefficents,
+                            Deriv2.Coefficents=Deriv2.Coefficents)
+      output$ParamConfig.Freq <- length(Indexes.Uniq.Par[[i]]) 
+      
+    }, error=function(e) {
+      output<-paste("ERROR :",conditionMessage(e), "\n")
+      }
+    )
     
     return(output)
   })
