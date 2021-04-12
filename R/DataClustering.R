@@ -284,6 +284,17 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
 }
 
 Unique.Param = function(List.runs.fitfclust){
+  L1<- length(List.runs.fitfclust)
+  # deleting if there was some errors in the predictions:
+  List.runs.fitfclust <-lapply(1:L1,function(x){
+    if(!is.character(List.runs.fitfclust[[x]]))
+      List.runs.fitfclust[[x]]
+    else NA
+  } )
+  if(length(which(is.na(List.runs.fitfclust)))!=0){
+    List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
+  }
+  ###
   L1=length(List.runs.fitfclust)
   Indexes.Param.list<-list()
   k=1
