@@ -200,7 +200,7 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
   } )
   ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
   ###
-  alpha.List<-lapply(1:runs , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
+  alpha.List<-lapply(1:length(ALL.runs.tmp) , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
   percentagePCA.List<-lapply(1:length(alpha.List),function(i){
     alpha <- alpha.List[[i]]
     #alpha <- fcm.fit$parameters$alpha
