@@ -248,17 +248,22 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
   clusterExport(cl,list("fitfclust","fclustinit","fclustMstep","fclustEstep","fclustconst",
                         "points","ID","timeindex","G","p","grid","tol","maxit"),envir = environment() )
   
-  ALL.runs<-parLapply(cl,1:runs, function(i)  fitfclust(x=points,
-                                                        curve=ID,
-                                                        timeindex=timeindex,
-                                                        q=p,
-                                                        h=min(G-1,p),
-                                                        K=G,
-                                                        p=p,
-                                                        grid=grid,
-                                                        tol = tol,
-                                                        maxit = maxit)
-  )
+  ALL.runs<-parLapply(cl,1:runs, function(i){
+    tryCatch({
+      fitfclust(x=points,
+                curve=ID,
+                timeindex=timeindex,
+                q=p,
+                h=min(G-1,p),
+                K=G,
+                p=p,
+                grid=grid,
+                tol = tol,
+                maxit = maxit)},
+      error=function(e) {
+        return(paste("ERROR :",conditionMessage(e), "\n"))
+        })
+    })
   
   stopCluster(cl)
   
