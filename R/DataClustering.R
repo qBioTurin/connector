@@ -333,6 +333,8 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       fclust.curvepred(fcm.fit) -> fcm.prediction
       fclust.pred(fcm.fit) -> fcm.PRED
       fcm.PRED$class.pred -> cluster
+      if(length(unique(cluster))!=G)
+        return(paste0("ERROR in prediction: number of clusters obtained is different from ",G," \n") )
       ##
       
       database<-data$Dataset
