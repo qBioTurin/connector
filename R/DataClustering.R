@@ -61,6 +61,7 @@ ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1
   # source('~/GIT/R_packages_project/connector/R/ClusterCoefficents.R', echo=F)
   # Cores=2; seed=2404; tol = 0.001; maxit = 20; PercPCA=.85; runs=50; p=5
   #  data = CONNECTORList
+  #  G=4
 
   ##### questo va sul g singolo
   Clusters.List<-list()
@@ -326,13 +327,11 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
                             Deriv.Coefficents=Deriv.Coefficents,
                             Deriv2.Coefficents=Deriv2.Coefficents)
       output$ParamConfig.Freq <- length(Indexes.Uniq.Par[[i]]) 
-      
+      return(output)
     }, error=function(e) {
-      output<-paste("ERROR :",conditionMessage(e), "\n")
+      return(paste("ERROR :",conditionMessage(e), "\n"))
       }
     )
-    
-    return(output)
   })
   
   return(ClusterAll)
