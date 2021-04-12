@@ -81,15 +81,32 @@ ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1
   ##### Calculation of the tightness and DB (0,1,2) indexes
   l.tight <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]
-    V<- sapply(1:length(ClusterAll),function(j) ClusterAll[[j]]$Cl.Info$Tight.indexes)
-    Freq<- sapply(1:length(ClusterAll),function(j) ClusterAll[[j]]$ParamConfig.Freq)
-    return(data.frame(V = V, Cluster = G[i], Freq= Freq, Index = "Elbow plot (Tightness)"))
+    V<- sapply(1:length(ClusterAll),function(j){
+      if(!is.character(ClusterAll[[j]]))
+        ClusterAll[[j]]$Cl.Info$Tight.indexes
+      else NA
+      })
+    Freq<- sapply(1:length(ClusterAll),function(j){
+      if(!is.character(ClusterAll[[j]]))
+        ClusterAll[[j]]$ParamConfig.Freq
+      else NA
+      })
+    return(data.frame(V = na.omit(V), Cluster = G[i], Freq= na.omit(Freq), Index = "Elbow plot (Tightness)"))
   })
+  
   l.fdb <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]
-    V<- sapply(1:length(ClusterAll),function(j) ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index)
-    Freq<- sapply(1:length(ClusterAll),function(j) ClusterAll[[j]]$ParamConfig.Freq)
-    return(data.frame(V = V, Cluster = G[i], Freq= Freq, Index = "fDB indexes"))
+    V<- sapply(1:length(ClusterAll),function(j){
+      if(!is.character(ClusterAll[[j]])) 
+        ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index
+      else NA
+      })
+    Freq<- sapply(1:length(ClusterAll),function(j){
+      if(!is.character(ClusterAll[[j]]))
+        ClusterAll[[j]]$ParamConfig.Freq
+      else NA
+    })
+    return(data.frame(V = na.omit(V), Cluster = G[i], Freq= na.omit(Freq), Index = "fDB indexes"))
   })
   
   dt.fr<-rbind(do.call("rbind",l.tight),do.call("rbind",l.fdb))
@@ -210,6 +227,7 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
   ## Check the same parameter configurations:
   Indexes.Uniq.Par<-Unique.Param(ALL.runs)
   ## Obtain the cluster and all its info
+
   ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
   ####################
 
@@ -271,6 +289,7 @@ Unique.Param = function(List.runs.fitfclust){
     #cat(seq.L2,"\n")
     k=k+1
   }
+  
   return(Indexes.Param.list)
 }
 
@@ -340,11 +359,26 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
 ConsM.generation<-function(Gind,ALL.runs,runs,data) {
   FixedG.runs<-ALL.runs[[Gind]]
   L1<- length(FixedG.runs)
-  ############# first we found the most probably clustering:
-  ClustCounting<-sapply(1:L1,function(x) names(FixedG.runs[[x]]$FCM$cluster$cluster.member  ) )
-  Freq<-sapply(1:L1,function(x) FixedG.runs[[x]]$ParamConfig.Freq ) 
   
-  ClustString<-sapply(1:L1,function(x) paste ( table(ClustCounting[,x]) , collapse = "") )
+  # deleting if there was some errors in the predictions:
+  FixedG.runs <-lapply(1:L1,function(x){
+    if(!is.character(FixedG.runs[[x]]))
+      FixedG.runs[[x]]
+    else NA
+  } )
+  FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs))]
+  ###
+  
+  L1<- length(FixedG.runs)
+  ############# first we found the most probably clustering:
+  ClustCounting<-sapply(1:L1,function(x){
+      names(FixedG.runs[[x]]$FCM$cluster$cluster.member  )
+    } )
+  Freq<-sapply(1:L1,function(x){
+      FixedG.runs[[x]]$ParamConfig.Freq 
+    } ) 
+  
+  ClustString<-sapply(1:length(ClustCounting[1,]),function(x) paste ( table(ClustCounting[,x]) , collapse = "") )
   IndexBestClustering<-which.max(Freq)
   
   BestClustering<-FixedG.runs[[IndexBestClustering]]
