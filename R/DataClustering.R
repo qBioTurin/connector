@@ -191,8 +191,16 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
                            Cores=Cores,
                            runs=runs)
   
-  alpha.List<-lapply(1:runs , function(x) ALL.runs[[x]]$parameters$alpha)
-
+  ALL.runs.tmp<-ALL.runs
+  # deleting if there was some errors in the predictions:
+  ALL.runs.tmp <-lapply(1:L1,function(x){
+    if(!is.character(ALL.runs.tmp[[x]]))
+      ALL.runs.tmp[[x]]
+    else NA
+  } )
+  ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
+  ###
+  alpha.List<-lapply(1:runs , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
   percentagePCA.List<-lapply(1:length(alpha.List),function(i){
     alpha <- alpha.List[[i]]
     #alpha <- fcm.fit$parameters$alpha
@@ -261,7 +269,9 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
                 tol = tol,
                 maxit = maxit)},
       error=function(e) {
-        return(paste("ERROR :",conditionMessage(e), "\n"))
+        err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
+        print(err)
+        return(err)
         })
     })
   
@@ -353,7 +363,9 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       output$ParamConfig.Freq <- length(Indexes.Uniq.Par[[i]]) 
       return(output)
     }, error=function(e) {
-      return(paste("ERROR :",conditionMessage(e), "\n"))
+      err<-paste("ERROR in prediction :",conditionMessage(e), "\n")
+      print(err)
+      return(err)
       }
     )
   })
