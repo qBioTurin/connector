@@ -193,7 +193,7 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
   
   ALL.runs.tmp<-ALL.runs
   # deleting if there was some errors in the predictions:
-  ALL.runs.tmp <-lapply(1:L1,function(x){
+  ALL.runs.tmp <-lapply(1:length(ALL.runs.tmp),function(x){
     if(!is.character(ALL.runs.tmp[[x]]))
       ALL.runs.tmp[[x]]
     else NA
