@@ -198,7 +198,10 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
       ALL.runs.tmp[[x]]
     else NA
   } )
-  ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
+  if(length(which(is.na(ALL.runs.tmp)))!=0){
+    ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
+  }
+  
   ###
   alpha.List<-lapply(1:length(ALL.runs.tmp) , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
   percentagePCA.List<-lapply(1:length(alpha.List),function(i){
@@ -383,7 +386,9 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data) {
       FixedG.runs[[x]]
     else NA
   } )
-  FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs))]
+  if(length(which(is.na(FixedG.runs)))!=0){
+    FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs))]
+  }
   ###
   
   L1<- length(FixedG.runs)
