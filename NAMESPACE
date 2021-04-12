@@ -2,6 +2,7 @@
 
 export(BasisDimension.Choice)
 export(BoxPlot.Extrapolation)
+export(ClusterAnalysis)
 export(ClusterWithMeanCurve)
 export(ConsMatrix.Extrapolation)
 export(CountingSamples)
