@@ -93,25 +93,27 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   
   Knots.list<-lapply(p.values,function(p){
       Spline<-ns(grid, df = (p - 1))
-      df<-data.frame(Knots= c(attr(Spline,"Boundary.knots"),attr(Spline,"knots")))
+      df<-data.frame(Knots= c(attr(Spline,"Boundary.knots"),attr(Spline,"knots")),
+                     Name=c(rep("Boundary knots",2),rep("Knots",length(attr(Spline,"knots"))) ) )
       df$p = paste("p = ",p)
       return(df)
   })
   Knots.df <- do.call("rbind",Knots.list)
   
   Knots.Plot<-ggplot(Knots.df)+
-    scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/2) ) ) +
+    scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/5) ) ) +
     geom_hline(aes(yintercept = p), linetype="dashed",color="grey")+
-    geom_point(aes(x=Knots,y=p,shape="Knots"),col="blue")+
+    geom_point(aes(x=Knots,y=p,col=Name),shape=3)+
+    scale_color_manual(values=c("Boundary knots"= "Orange","Knots"="blue"))+
     geom_boxplot(data= data.frame(y = paste("Time grid \n distribution"), x = grid),
-                 aes(x,y),width=0.4,col="blue")+
+                 aes(x,y),width=0.4,col="black")+
     theme(axis.text=element_text(size = 15, hjust = 0.5),
           axis.text.x=element_text(angle=+90),
           axis.title=element_text(size=18,face="bold"),
           axis.line = element_line(colour="black"),
           plot.title=element_text(size=20, face="bold", vjust=1, lineheight=0.6),
           legend.text=element_text(size=14),
-          legend.position=c(.9,1.1),
+          legend.position="bottom",
           legend.title=element_blank(),
           legend.key=element_blank(),
           legend.key.size = unit(.9, "cm"),
@@ -125,7 +127,7 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   
   dataplot <- data$Dataset
   GrowthCurve <- ggplot(data= dataplot, aes(x=Time, y=Vol,group=ID) )+
-    scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/2) ) ) +
+    scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/5) ) ) +
     geom_line() +
     geom_point()+
     labs(x="",y="")+

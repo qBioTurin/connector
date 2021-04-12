@@ -29,6 +29,14 @@ CrossLogLike$KnotsPlot
 # p is 
 p<-5
 
+#### New part:
+S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,p=p,
+                       runs=50,seed=123,
+                       Cores=2,PercPCA=.85)
+S.cl$BoxPlots 
+S.cl$ConsensusInfo$G4$ConsensusPlot
+
+
 ### Calculation of h
 pca <- PCA.Analysis(CONNECTORList,p = p)
 
