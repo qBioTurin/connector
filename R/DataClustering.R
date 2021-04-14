@@ -7,6 +7,7 @@
 #' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param G  The vector/number of possible clusters.
 #' @param p The dimension of the natural cubic spline basis. (see \code{\link{BasisDimension.Choice}})
+#' @param h
 #' @param runs Number of runs.
 #' @param seed Seed for the kmeans function.
 #' @param save If TRUE then the growth curves plot truncated at the "TruncTime" is saved into a pdf file.
@@ -54,7 +55,7 @@
 #' @importFrom cowplot plot_grid
 #' @export
 
-ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1,PercPCA=.85)
+ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=123,save=FALSE,path=NULL,Cores=1,PercPCA=.85)
 {
   # library(statmod); library(parallel); library(Matrix); library(splines); library(statmod);library( reshape2)
   # source('~/GIT/R_packages_project/connector/R/FCM_fclust.R', echo=F)
@@ -63,12 +64,12 @@ ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1
   #  data = CONNECTORList
   #  G=4
 
-  ##### questo va sul g singolo
   Clusters.List<-list()
   for( g in 1:length(G) ){
     Clusters.List[[g]] = FCM.estimation(data = data,
                                         G = G[g],
                                         p = p,
+                                        h=h,
                                         seed=seed,
                                         PercPCA= PercPCA,
                                         Cores=Cores,
@@ -80,29 +81,28 @@ ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1
   ###### box plot generation #####
   ##### Calculation of the tightness and DB (0,1,2) indexes
   l.tight <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]
-    V<- sapply(1:length(ClusterAll),function(j){
-      if(!is.character(ClusterAll[[j]]))
+    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    V<- sapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error) )
         ClusterAll[[j]]$Cl.Info$Tight.indexes
       else NA
       })
-    Freq<- sapply(1:length(ClusterAll),function(j){
-      if(!is.character(ClusterAll[[j]]))
+    Freq<- sapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error))
         ClusterAll[[j]]$ParamConfig.Freq
       else NA
       })
     return(data.frame(V = na.omit(V), Cluster = G[i], Freq= na.omit(Freq), Index = "Elbow plot (Tightness)"))
   })
-  
   l.fdb <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]
-    V<- sapply(1:length(ClusterAll),function(j){
-      if(!is.character(ClusterAll[[j]])) 
+    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    V<- sapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error)) 
         ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index
       else NA
       })
-    Freq<- sapply(1:length(ClusterAll),function(j){
-      if(!is.character(ClusterAll[[j]]))
+    Freq<- sapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error))
         ClusterAll[[j]]$ParamConfig.Freq
       else NA
     })
@@ -146,7 +146,7 @@ ClusterAnalysis<-function(data,G,p,runs=50,seed=123,save=FALSE,path=NULL,Cores=1
   return( list(ConsensusInfo=ConsensusInfo,BoxPlots=Box.pl,seed=seed) )
 }
 
-FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50)
+FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
@@ -177,75 +177,94 @@ FCM.estimation<-function(data,G,p=5,Cores=1,seed=2404,tol = 0.001, maxit = 20,Pe
   times<-database$Time
   match(times,grid) -> timeindex
   
-  ##########################################
-  ## First run with h = min(G-1,p)
-  ALL.runs = Par.fitfclust(points=points,
-                           ID=ID,
-                           timeindex=timeindex,
-                           p=p,
-                           h=min(G-1,p),
-                           G=G,
-                           grid=grid,
-                           tol=tol,
-                           maxit=maxit,
-                           Cores=Cores,
-                           runs=runs)
-  
-  ALL.runs.tmp<-ALL.runs
-  # deleting if there was some errors in the predictions:
-  ALL.runs.tmp <-lapply(1:length(ALL.runs.tmp),function(x){
-    if(!is.character(ALL.runs.tmp[[x]]))
-      ALL.runs.tmp[[x]]
-    else NA
-  } )
-  if(length(which(is.na(ALL.runs.tmp)))!=0){
-    ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
-  }
-  
-  ###
-  alpha.List<-lapply(1:length(ALL.runs.tmp) , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
-  percentagePCA.List<-lapply(1:length(alpha.List),function(i){
-    alpha <- alpha.List[[i]]
-    #alpha <- fcm.fit$parameters$alpha
-  # Principal Components Analysis considering the alpha_k
-    
-    princomp(as.matrix(alpha)) -> pca
-    # Number of principal components
-    ncomp <- length(names(pca$sdev))
-    # Principal components variances
-    eigs <- pca$sdev^2
-    # Percentage of variances explained by each component
-    percentage <- eigs/sum(eigs)
-    return(percentage)
-  })
-  
-  percentagePCA <- do.call("rbind",percentagePCA.List)
-  AllPerc<-apply(percentagePCA,1,cumsum)
-  
-  h <- sapply(1:length(AllPerc[1,]) , function(i) min(which(AllPerc[,i] >= PercPCA)) )
-  h.selected = as.numeric(names(table(h)[1]))
-  ##########################################
-  
-  if(h.selected != min(G-1,p)){
-    ### Setting the new h for estimating the new param configuration
-    ALL.runs = Par.fitfclust(points,ID,
-                             timeindex,p,
-                             h=h.selected,
-                             G,grid,tol,maxit,
+  if(is.null(h)){
+    ##########################################
+    ## First run with h = min(G-1,p)
+    ALL.runs = Par.fitfclust(points=points,
+                             ID=ID,
+                             timeindex=timeindex,
+                             p=p,
+                             h=min(G-1,p),
+                             G=G,
+                             grid=grid,
+                             tol=tol,
+                             maxit=maxit,
                              Cores=Cores,
                              runs=runs)
+    ALL.runs.tmp<-ALL.runs
+    # deleting if there was some errors in the predictions:
+    ALL.runs.tmp <-lapply(1:length(ALL.runs.tmp),function(x){
+      if(!is.character(ALL.runs.tmp[[x]]$Error))
+        ALL.runs.tmp[[x]]
+      else NA
+    } )
+    if(length(which(is.na(ALL.runs.tmp)))!=0){
+      ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
     }
+    
+    ###
+    alpha.List<-lapply(1:length(ALL.runs.tmp) , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
+    percentagePCA.List<-lapply(1:length(alpha.List),function(i){
+      alpha <- alpha.List[[i]]
+      #alpha <- fcm.fit$parameters$alpha
+    # Principal Components Analysis considering the alpha_k
+      
+      princomp(as.matrix(alpha)) -> pca
+      # Number of principal components
+      ncomp <- length(names(pca$sdev))
+      # Principal components variances
+      eigs <- pca$sdev^2
+      # Percentage of variances explained by each component
+      percentage <- eigs/sum(eigs)
+      return(percentage)
+    })
+    
+    percentagePCA <- do.call("rbind",percentagePCA.List)
+    AllPerc<-apply(percentagePCA,1,cumsum)
+    
+    h <- sapply(1:length(AllPerc[1,]) , function(i) min(which(AllPerc[,i] >= PercPCA)) )
+    h.selected = as.numeric(names(table(h)[1])) 
+    h.out <- list(h=h.selected,
+                Percenteges=AllPerc)
+      }
+    ##########################################
+    if(h.selected != min(G-1,p)){
+      ### Setting the new h for estimating the new param configuration
+      ALL.runs = Par.fitfclust(points,ID,
+                               timeindex,p,
+                               h=h.selected,
+                               G,grid,tol,maxit,
+                               Cores=Cores,
+                               runs=runs)
+  }else{
+    ## run with h passed by the user
+    ALL.runs = Par.fitfclust(points=points,
+                             ID=ID,
+                             timeindex=timeindex,
+                             p=p,
+                             h=h,
+                             G=G,
+                             grid=grid,
+                             tol=tol,
+                             maxit=maxit,
+                             Cores=Cores,
+                             runs=runs)
+    h.out <- h
+  }
+  
   ## Check the same parameter configurations:
   Indexes.Uniq.Par<-Unique.Param(ALL.runs)
   ## Obtain the cluster and all its info
 
   ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
   ####################
-
+  ClusterAll$h.selected<-h.out
+  
   return(ClusterAll)
 }
 
-Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404){
+Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404)
+{
   
   cl <- makeCluster(Cores)
   clusterSetRNGStream(cl, seed)
@@ -257,7 +276,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
   
   
   clusterExport(cl,list("fitfclust","fclustinit","fclustMstep","fclustEstep","fclustconst",
-                        "points","ID","timeindex","G","p","grid","tol","maxit"),envir = environment() )
+                        "points","ID","timeindex","G","p","h","grid","tol","maxit"),envir = environment() )
   
   ALL.runs<-parLapply(cl,1:runs, function(i){
     tryCatch({
@@ -265,7 +284,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
                 curve=ID,
                 timeindex=timeindex,
                 q=p,
-                h=min(G-1,p),
+                h=h,
                 K=G,
                 p=p,
                 grid=grid,
@@ -273,8 +292,9 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
                 maxit = maxit)},
       error=function(e) {
         err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
+        err.list<-list(Error= err)
         print(err)
-        return(err)
+        return(err.list)
         })
     })
   
@@ -283,11 +303,12 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
   return(ALL.runs)
 }
 
-Unique.Param = function(List.runs.fitfclust){
+Unique.Param = function(List.runs.fitfclust)
+{
   L1<- length(List.runs.fitfclust)
   # deleting if there was some errors in the predictions:
   List.runs.fitfclust <-lapply(1:L1,function(x){
-    if(!is.character(List.runs.fitfclust[[x]]))
+    if(!is.character(List.runs.fitfclust[[x]]$Error))
       List.runs.fitfclust[[x]]
     else NA
   } )
@@ -324,6 +345,20 @@ Unique.Param = function(List.runs.fitfclust){
 
 ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.info,G)
 {
+  L1<- length(List.runs.fitfclust)
+  # deleting if there was some errors in the predictions:
+  List.runs.fitfclust <-lapply(1:L1,function(x){
+    if(!is.character(List.runs.fitfclust[[x]]$Error))
+      List.runs.fitfclust[[x]]
+    else NA
+  } )
+  if(length(which(is.na(List.runs.fitfclust)))!=0){
+    ErrorConfigurationFit <- List.runs.fitfclust[which(is.na(List.runs.fitfclust))]
+    List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
+  }else{
+    ErrorConfigurationFit<-NULL
+  }
+  ###
   ClusterAll<-lapply(1:length(Indexes.Uniq.Par),function(i){
     tryCatch({
       ## Select just one configuration among the same ones
@@ -333,8 +368,12 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       fclust.curvepred(fcm.fit) -> fcm.prediction
       fclust.pred(fcm.fit) -> fcm.PRED
       fcm.PRED$class.pred -> cluster
-      if(length(unique(cluster))!=G)
-        return(paste0("ERROR in prediction: number of clusters obtained is different from ",G," \n") )
+      if(length(unique(cluster))!=G){
+        err<-list(Error= paste0("ERROR in prediction: number of clusters obtained is different from ",G),
+                  Params= List.runs.fitfclust[[j]]) 
+        return( err )
+      }
+       
       ##
       
       database<-data$Dataset
@@ -380,27 +419,34 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       return(output)
     }, error=function(e) {
       err<-paste("ERROR in prediction :",conditionMessage(e), "\n")
+      err.list<-list(Error= err,
+                Params= List.runs.fitfclust[[j]])
       print(err)
-      return(err)
+      return(err.list)
       }
     )
   })
   
-  return(ClusterAll)
+  return(list(ClusterAll=ClusterAll,ErrorConfigurationFit=ErrorConfigurationFit) )
 }
 
-ConsM.generation<-function(Gind,ALL.runs,runs,data) {
-  FixedG.runs<-ALL.runs[[Gind]]
+ConsM.generation<-function(Gind,ALL.runs,runs,data) 
+{
+  FixedG.runs<-ALL.runs[[Gind]]$ClusterAll
   L1<- length(FixedG.runs)
-  
   # deleting if there was some errors in the predictions:
-  FixedG.runs <-lapply(1:L1,function(x){
-    if(!is.character(FixedG.runs[[x]]))
+  FixedG.runs.tmp <-lapply(1:L1,function(x){
+    if(!is.character(FixedG.runs[[x]]$Error))
       FixedG.runs[[x]]
     else NA
   } )
-  if(length(which(is.na(FixedG.runs)))!=0){
-    FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs))]
+  if(length(which(is.na(FixedG.runs.tmp)))!=0){
+    ErrorConfiguration <- list(FromFitting=ALL.runs[[Gind]]$ErrorConfigurationFit,
+                               FromPrediction = FixedG.runs[which(is.na(FixedG.runs.tmp))] )
+    FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs.tmp))]
+  }else{
+    ErrorConfiguration <-list(FromFitting=ALL.runs[[Gind]]$ErrorConfigurationFit,
+                              FromPrediction = NULL)
   }
   ###
   
@@ -450,7 +496,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data) {
   grid<-fcm$FCM$fit$grid
   
   gauss.quad(10) -> gauss
-  
+  ErrorConfiguration
   a <- min(grid)
   b <- max(grid)
   itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
@@ -511,6 +557,19 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data) {
   
   lab = rev(BestClustering$FCM$cluster$cluster.names)[rev(BestClustering$FCM$cluster$cluster.names) %in% unique(names(BestClustering$FCM$cluster$cluster.member)) ]
   
+  ### Freq in each cluster
+  G <- unique(cl.memer)
+  Freq.cl<-lapply(G,function(g){
+    as.numeric(names(cl.memer[which(cl.memer == g)])) -> curve.cl.fixed
+    indexes <- which(m$Var1 %in% curve.cl.fixed & m$Var2 %in% curve.cl.fixed & as.numeric(levels(m$Var1)[c(m$Var1)]) - as.numeric(levels(m$Var2)[c(m$Var2)])!=0)
+    data.frame(Median= median(m[indexes,3]), Mean = round(mean(m[indexes,3]),2),Cluster = g)
+  })
+  Freq.cl<-do.call("rbind",Freq.cl)
+  Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
+  Freq.cl[order(match(Freq.cl$Cluster, lab)),]
+  lab.new<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = "; ") ))
+  ##
+  
   ConsensusPlot <- ggplot() +
     geom_tile(data = m, 
               aes(x = Var1, y = Var2, fill = value)) +
@@ -524,12 +583,15 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data) {
                  aes(x, y, xend = xend, yend = yend), size = 1.5, 
                  inherit.aes = F) +
     labs(title = "Consensus Matrix",
-         subtitle = "Black line for the most probable clustering") + 
+         subtitle = paste("Black line for the most probable clustering: ",mean(Freq.cl$Mean)) ) + 
     annotate(geom = "text", x = x.text, y = y.text, 
-             label = lab , 
+             label = lab.new , 
              size = 6)
   
-  return(list(ConsensusMatrix=consensusM,ConsensusPlot=ConsensusPlot,MostProbableClustering=BestClustering) )
+  return(list(ConsensusMatrix = consensusM,
+              ConsensusPlot = ConsensusPlot,
+              MostProbableClustering = BestClustering,
+              ErrorConfiguration = ErrorConfiguration) )
 } 
 
 
