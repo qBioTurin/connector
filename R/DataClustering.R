@@ -198,7 +198,10 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
         ALL.runs.tmp[[x]]
       else NA
     } )
-    if(length(which(is.na(ALL.runs.tmp)))!=0){
+    if(length(which(is.na(ALL.runs.tmp)))==length(ALL.runs.tmp) ){
+      stop("All runs have errors!")
+    }
+    else if(length(which(is.na(ALL.runs.tmp)))!=0){
       ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
     }
     
