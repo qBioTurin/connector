@@ -227,11 +227,10 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
     }else{
       h.selected =1
     }
-    
     h.out <- list(h=h.selected,
                 Percenteges=AllPerc)
-      }
-    ##########################################
+
+##########################################
     if(h.selected != min(G-1,p)){
       ### Setting the new h for estimating the new param configuration
       ALL.runs = Par.fitfclust(points,ID,
@@ -240,6 +239,8 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
                                G,grid,tol,maxit,
                                Cores=Cores,
                                runs=runs)
+    }
+    
   }else{
     ## run with h passed by the user
     ALL.runs = Par.fitfclust(points=points,
