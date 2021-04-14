@@ -221,9 +221,13 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
     
     percentagePCA <- do.call("rbind",percentagePCA.List)
     AllPerc<-apply(percentagePCA,1,cumsum)
+    if(min(G-1,p)!=1){
+      h <- sapply(1:length(AllPerc[1,]) , function(i) min(which(AllPerc[,i] >= PercPCA)) )
+      h.selected = as.numeric(names(table(h)[1])) 
+    }else{
+      h.selected =1
+    }
     
-    h <- sapply(1:length(AllPerc[1,]) , function(i) min(which(AllPerc[,i] >= PercPCA)) )
-    h.selected = as.numeric(names(table(h)[1])) 
     h.out <- list(h=h.selected,
                 Percenteges=AllPerc)
       }
