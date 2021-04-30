@@ -51,18 +51,18 @@
 #'
 #' @seealso MostProbableClustering.Extrapolation, BoxPlot.Extrapolation, ConsMatrix.Extrapolation.
 #' 
-#' @import ggplot2 reshape2 RColorBrewer statmod parallel  Matrix splines statmod
+#' @import ggplot2 reshape2 RColorBrewer statmod parallel  Matrix splines statmod viridis
 #' @importFrom cowplot plot_grid
 #' @export
 
-ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=123,save=FALSE,path=NULL,Cores=1,PercPCA=.85)
+ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85)
 {
   # library(statmod); library(parallel); library(Matrix); library(splines); library(statmod);library( reshape2)
   # source('~/GIT/R_packages_project/connector/R/FCM_fclust.R', echo=F)
   # source('~/GIT/R_packages_project/connector/R/ClusterCoefficents.R', echo=F)
   # Cores=2; seed=2404; tol = 0.001; maxit = 20; PercPCA=.85; runs=50; p=5
   #  data = CONNECTORList
-  #  G=4
+  #  G=3:5; h=NULL
 
   Clusters.List<-list()
   for( g in 1:length(G) ){
@@ -92,7 +92,11 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=123,save=FALSE,path=NULL,
         ClusterAll[[j]]$ParamConfig.Freq
       else NA
       })
-    return(data.frame(V = na.omit(V), Cluster = G[i], Freq= na.omit(Freq), Index = "Elbow plot (Tightness)"))
+    return(data.frame(V = na.omit(V),
+                      Cluster = G[i],
+                      Freq= na.omit(Freq), 
+                      Index = "Elbow plot (Tightness)",
+                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected$h)))
   })
   l.fdb <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]$ClusterAll
@@ -106,22 +110,33 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=123,save=FALSE,path=NULL,
         ClusterAll[[j]]$ParamConfig.Freq
       else NA
     })
-    return(data.frame(V = na.omit(V), Cluster = G[i], Freq= na.omit(Freq), Index = "fDB indexes"))
+    return(data.frame(V = na.omit(V),
+                      Cluster = G[i],
+                      Freq= na.omit(Freq),
+                      Index = "fDB indexes",
+                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected$h)))
   })
-  
+
   dt.fr<-rbind(do.call("rbind",l.tight),do.call("rbind",l.fdb))
-  dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index), FUN = "max")
-  colnames(dt.fr.max)[3]<-"Freq"
+  dt.fr.rep<-lapply(1:length(dt.fr[,1]), function(i){
+    dt.fr[i,"Freq"]->freq
+    do.call("rbind", lapply(1:freq, function(j) dt.fr[i,]) )
+  } )
+  dt.fr.rep<-do.call("rbind", dt.fr.rep)
+  dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index,ClusterH=dt.fr$ClusterH), FUN = "max")
+  colnames(dt.fr.max)[4]<-"Freq"
   dt.fr.max<-merge(dt.fr.max,dt.fr)
   
-  Box.pl<-ggplot(data= dt.fr)+
+  Box.pl<- ggplot(data= dt.fr.rep)+
     facet_wrap(~Index,scales = "free")+
-    geom_boxplot(aes(x=Cluster,y=V,group=Cluster))+
+    geom_violin(aes(x=Cluster,y=V,fill=ClusterH,group=Cluster))+
     geom_line(data= dt.fr.max,aes(x=Cluster,y=V,col="Most probable"))+
-    geom_point(col="red",aes(x=Cluster,y=V,size=Freq/runs) )+
-    scale_x_continuous(breaks = G)+
-    scale_color_manual(values = c("Most probable" = "blue") )+
+    geom_jitter(aes(x=Cluster,y=V),color="black", width = .1, height = 0, alpha=0.5)+   
+    scale_fill_viridis("",discrete = TRUE, alpha=0.6) +
+   #geom_point(col="red",aes(x=Cluster,y=V,size=Freq/runs) )+
     labs(size="Counts freq.",col= "",x = "Number of Clusters",y="Indexes Values")+
+    scale_x_continuous(breaks = G)+
+    scale_color_manual(values = c("Most probable" = "blue") ) +
     theme(axis.text=element_text(size = 14, hjust = 0.5),
           axis.text.x=element_text(vjust=0.5, hjust=1),
           axis.title=element_text(size=16,face="bold"),
@@ -198,43 +213,44 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
         ALL.runs.tmp[[x]]
       else NA
     } )
+    
     if(length(which(is.na(ALL.runs.tmp)))==length(ALL.runs.tmp) ){
       stop("All runs have errors!")
     }
-    else if(length(which(is.na(ALL.runs.tmp)))!=0){
-      ALL.runs.tmp <- ALL.runs.tmp[-which(is.na(ALL.runs.tmp))]
-    }
+
+    #### Alpha most probable
+    ## Check the same parameter configurations:
+    Indexes.Uniq.Par<-Unique.Param(ALL.runs)
+    mostFreq.index<-which.max(sapply(1:length(Indexes.Uniq.Par), 
+                                     function(i) length(Indexes.Uniq.Par[[i]])))
     
-    ###
-    alpha.List<-lapply(1:length(ALL.runs.tmp) , function(x) ALL.runs.tmp[[x]]$parameters$alpha)
-    percentagePCA.List<-lapply(1:length(alpha.List),function(i){
-      alpha <- alpha.List[[i]]
-      #alpha <- fcm.fit$parameters$alpha
+    index<- Indexes.Uniq.Par[[mostFreq.index]][1]
+    alpha<-ALL.runs[[index]]$parameters$alpha
+    #alpha <- fcm.fit$parameters$alpha
     # Principal Components Analysis considering the alpha_k
       
-      princomp(as.matrix(alpha)) -> pca
-      # Number of principal components
-      ncomp <- length(names(pca$sdev))
-      # Principal components variances
-      eigs <- pca$sdev^2
-      # Percentage of variances explained by each component
-      percentage <- eigs/sum(eigs)
-      return(percentage)
-    })
+    prcomp(as.matrix(alpha)) -> pca
+    # Number of principal components
+    ncomp <- length(names(pca$sdev))
+    # Principal components variances
+    eigs <- pca$sdev^2
+    percentage<-eigs/sum(eigs)
     
-    percentagePCA <- do.call("rbind",percentagePCA.List)
-    AllPerc<-apply(percentagePCA,1,cumsum)
+    AllPerc<-cumsum(percentage)
+    
     if(min(G-1,p)!=1){
-      h <- sapply(1:length(AllPerc[1,]) , function(i) min(which(AllPerc[,i] >= PercPCA)) )
-      h.selected = as.numeric(names(table(h)[1])) 
+      h.selected <- min( which(AllPerc >= PercPCA) )
     }else{
-      h.selected =1
+      h.selected = 1
     }
+    
     h.out <- list(h=h.selected,
-                Percenteges=AllPerc)
+                  Percenteges=AllPerc)
 
 ##########################################
+    
     if(h.selected != min(G-1,p)){
+      
       ### Setting the new h for estimating the new param configuration
       ALL.runs = Par.fitfclust(points,ID,
                                timeindex,p,
