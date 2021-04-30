@@ -35,7 +35,7 @@ S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,p=p,
                        Cores=2,PercPCA=.85)
 S.cl$BoxPlots 
 S.cl$ConsensusInfo$G4$ConsensusPlot
-
+S.cl$ConsensusInfo$G3$MostProbableClustering
 
 ### Calculation of h
 pca <- PCA.Analysis(CONNECTORList,p = p)
@@ -43,7 +43,7 @@ pca <- PCA.Analysis(CONNECTORList,p = p)
 pca$plot
 
 # h is 
-h<-4
+h<-1
 
 ####### Calculation of G and fitting using FCM
 
@@ -52,7 +52,7 @@ S.cl <-StabilityAnalysis(data = CONNECTORList,
                                          G = h+0:2,
                                          h = h,
                                          p = p,
-                                         runs = 10)
+                                         runs = 50,Cores = 2)
 
 ### Using the Box Plots you can understand the optimal number of cluster, G.
 BoxPlot.Extrapolation(stability.list = S.cl, h = h)
