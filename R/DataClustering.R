@@ -68,7 +68,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   params <- list()
   database<-data$Dataset
   data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
-  params$grid <- grid <- data$TimeGrid
+  grid <- data$TimeGrid
   
   ############### Calculation and integration of the Gauss points into the timegrid 
   ############### for calculating the distances between curves
@@ -80,7 +80,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   b <- max(grid)
   itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
   
-  grid <- sort(c(grid,itempi))
+  params$grid <- grid <- sort(c(grid,itempi))
   match(itempi,grid) -> itimeindex 
   
   gauss.info<-list(gauss=gauss,itimeindex=itimeindex,a=a,b=b)
