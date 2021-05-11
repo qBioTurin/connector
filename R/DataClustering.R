@@ -251,7 +251,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
         Nerr.Clus <- 0
       }
       Nerr.Fitting <- length(which(is.na(ALL.runs.tmp)))
-      Err.Freq <- (NerrFitting+NerrClus)/runs
+      Err.Freq <- (Nerr.Fitting+Nerr.Clus)/runs
       
       if(MinErrFreq > 1 ){
         warning("MinErrFreq paramter should belong to [0,1]. The default is used.")
