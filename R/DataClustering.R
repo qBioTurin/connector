@@ -228,7 +228,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
       Indexes.Uniq.Par<-Unique.Param(ALL.runs)
       
       ## Let calculate the clustering and the fDB indexes
-      ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G[g])
+      ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
       l.fdb <- fdb.calc(ClusterAll$ClusterAll)
       rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
       
