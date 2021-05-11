@@ -68,7 +68,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   params <- list()
   database<-data$Dataset
   data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
-  grid <- data$TimeGrid
+  params$grid <- data$TimeGrid
   
   ############### Calculation and integration of the Gauss points into the timegrid 
   ############### for calculating the distances between curves
@@ -218,7 +218,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
                                p=p,
                                h=h.selected,
                                G=G,
-                               grid=grid,
+                               grid=params$grid,
                                tol=tol,
                                maxit=maxit,
                                Cores=Cores,
@@ -281,7 +281,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
                              p=p,
                              h=h,
                              G=G,
-                             grid=grid,
+                             grid=params$grid,
                              tol=tol,
                              maxit=maxit,
                              Cores=Cores,
