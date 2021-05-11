@@ -55,7 +55,7 @@
 #' @importFrom cowplot plot_grid
 #' @export
 
-ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85)
+ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0)
 {
   # library(statmod); library(parallel); library(Matrix); library(splines); library(statmod);library( reshape2)
   # source('~/GIT/R_packages_project/connector/R/FCM_fclust.R', echo=F)
@@ -64,17 +64,50 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   #  data = CONNECTORList
   #  G=3:5; h=NULL
 
+  ## Let define some parameters needed to FCM
+  params <- list()
+  database<-data$Dataset
+  data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
+  grid <- data$TimeGrid
+  
+  ############### Calculation and integration of the Gauss points into the timegrid 
+  ############### for calculating the distances between curves
+  ## we need the splines values calculated in the gauss$nodes in the time interval [a,b]
+  
+  gauss.quad(10) -> gauss
+  
+  a <- min(grid)
+  b <- max(grid)
+  itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
+  
+  grid <- sort(c(grid,itempi))
+  match(itempi,grid) -> itimeindex 
+  
+  gauss.info<-list(gauss=gauss,itimeindex=itimeindex,a=a,b=b)
+
+  params$points <- database$Vol
+  params$ID <- database$ID
+  params$timeindex <- match(database$Time,grid)
+  #######
+  h.gBefore <- NULL
   Clusters.List<-list()
   for( g in 1:length(G) ){
-    Clusters.List[[g]] = FCM.estimation(data = data,
-                                        G = G[g],
-                                        p = p,
-                                        h=h,
-                                        seed=seed,
-                                        PercPCA= PercPCA,
-                                        Cores=Cores,
-                                        runs = runs
-                                        )
+    FCM.Cluster <- FCM.estimation(data = data,
+                                  G = G[g],
+                                  p = p,
+                                  h.user=h,
+                                  seed=seed,
+                                  PercPCA= PercPCA,
+                                  Cores=Cores,
+                                  runs = runs,
+                                  params = params,
+                                  gauss.info = gauss.info,
+                                  h.gBefore = h.gBefore
+                                  )
+    # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
+    h.gBefore <- FCM.Cluster$h.gBefore
+    Clusters.List[[g]] = FCM.Cluster$ClusterAll
+      
   }
   
   names(Clusters.List)<-paste0("G",G)
@@ -161,110 +194,90 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   return( list(ConsensusInfo=ConsensusInfo,BoxPlots=Box.pl,seed=seed) )
 }
 
-FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50)
+FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50,MinErrFreq= 0)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
 
-  database<-data$Dataset
-  data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
-  grid <- data$TimeGrid
-  
-  ############### Calculation and integration of the Gauss points into the timegrid 
-  ############### for calculating the distances between curves
-  ## we need the splines values calculated in the gauss$nodes in the time interval [a,b]
-  
-  gauss.quad(10) -> gauss
-  
-  a <- min(grid)
-  b <- max(grid)
-  itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
-  
-  grid <- sort(c(grid,itempi))
-  match(itempi,grid) -> itimeindex 
-  
-  gauss.info<-list(gauss=gauss,itimeindex=itimeindex,a=a,b=b)
-  ##########################################
-  ## Let define the input parameters for the FCM function
-  
-  points<-database$Vol
-  ID<-database$ID
-  times<-database$Time
-  match(times,grid) -> timeindex
-  
   if(is.null(h)){
     ##########################################
-    ## First run with h = min(G-1,p)
-    ALL.runs = Par.fitfclust(points=points,
-                             ID=ID,
-                             timeindex=timeindex,
-                             p=p,
-                             h=min(G-1,p),
-                             G=G,
-                             grid=grid,
-                             tol=tol,
-                             maxit=maxit,
-                             Cores=Cores,
-                             runs=runs)
-    ALL.runs.tmp<-ALL.runs
-    # deleting if there was some errors in the predictions:
-    ALL.runs.tmp <-lapply(1:length(ALL.runs.tmp),function(x){
-      if(!is.character(ALL.runs.tmp[[x]]$Error))
-        ALL.runs.tmp[[x]]
-      else NA
-    } )
-    
-    if(length(which(is.na(ALL.runs.tmp)))==length(ALL.runs.tmp) ){
-      stop("All runs have errors!")
-    }
-
-    #### Alpha most probable
-    ## Check the same parameter configurations:
-    Indexes.Uniq.Par<-Unique.Param(ALL.runs)
-    mostFreq.index<-which.max(sapply(1:length(Indexes.Uniq.Par), 
-                                     function(i) length(Indexes.Uniq.Par[[i]])))
-    
-    index<- Indexes.Uniq.Par[[mostFreq.index]][1]
-    alpha<-ALL.runs[[index]]$parameters$alpha
-    #alpha <- fcm.fit$parameters$alpha
-    # Principal Components Analysis considering the alpha_k
-      
-    prcomp(as.matrix(alpha)) -> pca
-    # Number of principal components
-    ncomp <- length(names(pca$sdev))
-    # Principal components variances
-    eigs <- pca$sdev^2
-    percentage<-eigs/sum(eigs)
-    
-    AllPerc<-cumsum(percentage)
-    
-    if(min(G-1,p)!=1){
-      h.selected <- min( which(AllPerc >= PercPCA) )
+    ## First run with h = min(G-1,p) or with the h from the smaller G (the upper bound of the errors runs was found)
+    if(is.null(h.gBefore)){
+      h.selected = min(G-1,p)
     }else{
-      h.selected = 1
+      h.selected = h.gBefore
     }
     
-    h.out <- list(h=h.selected,
-                  Percenteges=AllPerc)
-
-##########################################
-    
-    if(h.selected != min(G-1,p)){
-      
-      ### Setting the new h for estimating the new param configuration
-      ALL.runs = Par.fitfclust(points,ID,
-                               timeindex,p,
+    h.found = F
+    tentative = 1
+    while(!h.found)
+    {
+      ALL.runs = Par.fitfclust(points=params$points,
+                               ID=params$ID,
+                               timeindex=params$timeindex,
+                               p=p,
                                h=h.selected,
-                               G,grid,tol,maxit,
+                               G=G,
+                               grid=grid,
+                               tol=tol,
+                               maxit=maxit,
                                Cores=Cores,
                                runs=runs)
+   
+      ## Check the same parameters configurations:
+      Indexes.Uniq.Par<-Unique.Param(ALL.runs)
+      
+      ## Let calculate the clustering and the fDB indexes
+      ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G[g])
+      l.fdb <- fdb.calc(ClusterAll$ClusterAll)
+      rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
+      
+      ## Check the number of errors:
+      ALL.runs.tmp <-lapply(1:length(ALL.runs),function(x){
+        if(!is.character(ALL.runs[[x]]$Error))
+          ALL.runs[[x]]
+        else NA
+      } )
+      ClusterAll.tmp <-lapply(1:length(ClusterAll$ClusterAll),function(x){
+        if(!is.character(ClusterAll$ClusterAll[[x]]$Error))
+          ClusterAll$ClusterAll[[x]]
+        else NA
+      } )
+      
+      if(length( which(is.na(ClusterAll.tmp)) )!=0 ) {
+        Nerr.Clus <- sum(sapply( which(is.na(ClusterAll.tmp)) ,
+                                 function(i) length(Indexes.Uniq.Par[[i]] )))
+      }else{
+        Nerr.Clus <- 0
+      }
+      Nerr.Fitting <- length(which(is.na(ALL.runs.tmp)))
+      Err.Freq <- (NerrFitting+NerrClus)/runs
+      
+      if(MinErrFreq > 1 ){
+        warning("MinErrFreq paramter should belong to [0,1]. The default is used.")
+        MinErrFreq <- 0
+        
+      }
+      
+      # h reached the minimum value or the errors freq is higher than the set MinErrFreq
+      if(Err.Freq <= MinErrFreq | h.selected == 1 ){
+        h.found = T
+        h.out = h.selected
+        if(tentative > 1){
+          h.gBefore <- h.selected
+        }
+      }else{
+        h.selected = h.selected - 1
+        tentative = tentative + 1
+      }
+      
     }
-    
+
   }else{
     ## run with h passed by the user
-    ALL.runs = Par.fitfclust(points=points,
-                             ID=ID,
-                             timeindex=timeindex,
+    ALL.runs = Par.fitfclust(points=params$points,
+                             ID=params$ID,
+                             timeindex=params$timeindex,
                              p=p,
                              h=h,
                              G=G,
@@ -273,18 +286,17 @@ FCM.estimation<-function(data,G,p=5,h=NULL,Cores=1,seed=2404,tol = 0.001, maxit 
                              maxit=maxit,
                              Cores=Cores,
                              runs=runs)
-    h.out <- h
+    h.out <- h 
+    ## Check the same parameter configurations:
+    Indexes.Uniq.Par<-Unique.Param(ALL.runs)
+    ## Obtain the cluster and all its info
+    ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
   }
   
-  ## Check the same parameter configurations:
-  Indexes.Uniq.Par<-Unique.Param(ALL.runs)
-  ## Obtain the cluster and all its info
-
-  ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
   ####################
   ClusterAll$h.selected<-h.out
   
-  return(ClusterAll)
+  return(list(h.gBefore = h.gBefore, ClusterAll = ClusterAll) )
 }
 
 Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404)
@@ -336,22 +348,30 @@ Unique.Param = function(List.runs.fitfclust)
       List.runs.fitfclust[[x]]
     else NA
   } )
-  if(length(which(is.na(List.runs.fitfclust)))!=0){
-    List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
+  
+  if(length(which(is.na(List.runs.fitfclust)))==length(List.runs.fitfclust) ){
+    stop("All runs have errors!")
   }
+  
+  # if(length(which(is.na(List.runs.fitfclust)))!=0){
+  #   List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
+  # }
   ###
   L1=length(List.runs.fitfclust)
   Indexes.Param.list<-list()
   k=1
   seq.L2 = 1:L1
+  
+  if(length(which(is.na(List.runs.fitfclust)))>0){
+    seq.L2 <- seq.L2[-which(is.na(List.runs.fitfclust))]
+  }
+  
   while( length(seq.L2)!=0 ){
     i = seq.L2[1]
     for(j in seq.L2){
-      
-       EqParam = lapply(1:length(List.runs.fitfclust[[i]]$parameters), function(par){
-         trunc(List.runs.fitfclust[[i]]$parameters[[par]],prec = 4) %in% trunc(List.runs.fitfclust[[j]]$parameters[[par]],prec = 4)
-         } )
-     
+      EqParam = lapply(1:length(List.runs.fitfclust[[i]]$parameters), function(par){
+        trunc(List.runs.fitfclust[[i]]$parameters[[par]],prec = 3) %in% trunc(List.runs.fitfclust[[j]]$parameters[[par]],prec = 4)
+      } )
       table(unlist(EqParam))->t.EqP
       if(length(t.EqP)==1 && as.logical(names(t.EqP[1])))
       {
@@ -618,9 +638,23 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data)
               ErrorConfiguration = ErrorConfiguration) )
 } 
 
-
-
-
+fdb.calc <-function(ClusterAll){
+  
+  V<- sapply(1:(length(ClusterAll)),function(j){
+    if(!is.character(ClusterAll[[j]]$Error)) 
+      ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index
+    else NA
+  })
+  Freq<- sapply(1:(length(ClusterAll)),function(j){
+    if(!is.character(ClusterAll[[j]]$Error))
+      ClusterAll[[j]]$ParamConfig.Freq
+    else NA
+  })
+  
+  return(data.frame(V = na.omit(V),
+                    Freq= na.omit(Freq))
+  )
+}
 
 
 
