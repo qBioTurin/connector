@@ -329,7 +329,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
       error=function(e) {
         err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
         err.list<-list(Error= err)
-        print(err)
+        #print(err)
         return(err.list)
         })
     })
