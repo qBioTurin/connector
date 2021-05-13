@@ -129,7 +129,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                       Cluster = G[i],
                       Freq= na.omit(Freq), 
                       Index = "Elbow plot (Tightness)",
-                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected$h)))
+                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)))
   })
   l.fdb <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]$ClusterAll
@@ -147,7 +147,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                       Cluster = G[i],
                       Freq= na.omit(Freq),
                       Index = "fDB indexes",
-                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected$h)))
+                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)))
   })
 
   dt.fr<-rbind(do.call("rbind",l.tight),do.call("rbind",l.fdb))
