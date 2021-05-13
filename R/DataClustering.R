@@ -159,6 +159,8 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index,ClusterH=dt.fr$ClusterH), FUN = "max")
   colnames(dt.fr.max)[4]<-"Freq"
   dt.fr.max<-merge(dt.fr.max,dt.fr)
+  dt.fr.max<-aggregate(dt.fr.max$V,by = list(Cluster=dt.fr.max$Cluster,Index=dt.fr.max$Index,ClusterH=dt.fr.max$ClusterH,Freq=dt.fr.max$Freq), FUN = "min")
+  colnames(dt.fr.max)[5]<-"V"
   
   Box.pl<- ggplot(data= dt.fr.rep)+
     facet_wrap(~Index,scales = "free")+
@@ -186,8 +188,9 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
           plot.margin=unit(c(5,5,5,5),"mm"),
           strip.text = element_text(size = 20)) 
   
+  Freq.ConfigCl<-unique(dt.fr.max[,c("Cluster","Config")])
   ConsensusInfo<-lapply(1:length(G), function(Gind){
-    ConsM.generation(Gind,Clusters.List,runs,data)
+    ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl)
     })
   names(ConsensusInfo)<-paste0("G",G)
     
@@ -465,7 +468,7 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       err<-paste("ERROR in prediction :",conditionMessage(e), "\n")
       err.list<-list(Error= err,
                 Params= List.runs.fitfclust[[j]])
-      print(err)
+      #print(err)
       return(err.list)
       }
     )
@@ -474,7 +477,7 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
   return(list(ClusterAll=ClusterAll,ErrorConfigurationFit=ErrorConfigurationFit) )
 }
 
-ConsM.generation<-function(Gind,ALL.runs,runs,data) 
+ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl) 
 {
   FixedG.runs<-ALL.runs[[Gind]]$ClusterAll
   L1<- length(FixedG.runs)
@@ -486,8 +489,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data)
   } )
   if(length(which(is.na(FixedG.runs.tmp)))!=0){
     ErrorConfiguration <- list(FromFitting=ALL.runs[[Gind]]$ErrorConfigurationFit,
-                               FromPrediction = FixedG.runs[which(is.na(FixedG.runs.tmp))] )
-    FixedG.runs <- FixedG.runs[-which(is.na(FixedG.runs.tmp))]
+                               FromPrediction = ALL.runs[[which(is.na(FixedG.runs.tmp))]] )
   }else{
     ErrorConfiguration <-list(FromFitting=ALL.runs[[Gind]]$ErrorConfigurationFit,
                               FromPrediction = NULL)
@@ -496,17 +498,8 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data)
   
   L1<- length(FixedG.runs)
   ############# first we found the most probably clustering:
-  ClustCounting<-sapply(1:L1,function(x){
-      names(FixedG.runs[[x]]$FCM$cluster$cluster.member  )
-    } )
-  Freq<-sapply(1:L1,function(x){
-      FixedG.runs[[x]]$ParamConfig.Freq 
-    } ) 
-  
-  ClustString<-sapply(1:length(ClustCounting[1,]),function(x) paste ( table(ClustCounting[,x]) , collapse = "") )
-  IndexBestClustering<-which.max(Freq)
-  
-  BestClustering<-FixedG.runs[[IndexBestClustering]]
+  IndexBestClustering <- Freq.ConfigCl[Gind,"Config"]
+  BestClustering<-ALL.runs[[IndexBestClustering]]
   
   ##########################################################
   #### Let build the consensus matrix
@@ -611,7 +604,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data)
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
   Freq.cl[order(match(Freq.cl$Cluster, lab)),]
-  lab.new<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = "; ") ))
+  lab.new<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") ))
   ##
   
   ConsensusPlot <- ggplot() +
