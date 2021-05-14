@@ -202,7 +202,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
 
-  if(is.null(h)){
+  if(is.null(h.user)){
     ##########################################
     ## First run with h = min(G-1,p) or with the h from the smaller G (the upper bound of the errors runs was found)
     if(is.null(h.gBefore)){
@@ -282,14 +282,14 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
                              ID=params$ID,
                              timeindex=params$timeindex,
                              p=p,
-                             h=h,
+                             h=h.user,
                              G=G,
                              grid=params$grid,
                              tol=tol,
                              maxit=maxit,
                              Cores=Cores,
                              runs=runs)
-    h.out <- h 
+    h.out <- h.user 
     ## Check the same parameter configurations:
     Indexes.Uniq.Par<-Unique.Param(ALL.runs)
     ## Obtain the cluster and all its info
