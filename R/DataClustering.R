@@ -117,14 +117,12 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
     ClusterAll <- Clusters.List[[i]]$ClusterAll
     V.all<- lapply(1:(length(ClusterAll)),function(j){
       if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, 
-                   V = ClusterAll[[j]]$Cl.Info$Tight.indexes,
-                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
+        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Tight.indexes, Freq= ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
-    V.all$Index = "Elbow plot (Tightness)"
+    V.all$Index = "Tightness"
     V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
     return(V.all)
   })
@@ -132,29 +130,34 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
     ClusterAll <- Clusters.List[[i]]$ClusterAll
     V.all<- lapply(1:(length(ClusterAll)),function(j){
       if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, 
-                   V = ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index,
-                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
+        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index, Freq= ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
-    V.all$Index = "fDB indexes"
+    V.all$Index = "fDB"
     V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
     return(V.all)
   })
-
-  dt.fr<-rbind(do.call("rbind",l.tight),do.call("rbind",l.fdb))
-  dt.fr.rep<-lapply(1:length(dt.fr[,1]), function(i){
-    dt.fr[i,"Freq"]->freq
-    do.call("rbind", lapply(1:freq, function(j) dt.fr[i,]) )
-  } )
-  dt.fr.rep<-do.call("rbind", dt.fr.rep)
-  dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index,ClusterH=dt.fr$ClusterH,Config=dt.fr$Config), FUN = "max")
-  colnames(dt.fr.max)[5]<-"Freq"
-  dt.fr.max<-merge(dt.fr.max,dt.fr)
-  dt.fr.max<-aggregate(dt.fr.max$V,by = list(Cluster=dt.fr.max$Cluster,Index=dt.fr.max$Index,ClusterH=dt.fr.max$ClusterH,Freq=dt.fr.max$Freq,Config=dt.fr$Config), FUN = "min")
-  colnames(dt.fr.max)[6]<-"V"
+  
+  dt.fr <- rbind(do.call("rbind", l.tight), do.call("rbind",l.fdb))
+  dt.fr.rep <- lapply(1:length(dt.fr[, 1]), function(i) {
+    freq <- dt.fr[i, "Freq"]
+    do.call("rbind", lapply(1:freq, function(j) dt.fr[i, 
+                                                      ]))
+  })
+  dt.fr.rep <- do.call("rbind", dt.fr.rep)
+  dt.fr.max <- aggregate(dt.fr$Freq, by = list(Cluster = dt.fr$Cluster, 
+                                               Index = dt.fr$Index, 
+                                               ClusterH = dt.fr$ClusterH), 
+                         FUN = "max")
+  colnames(dt.fr.max)[4] <- "Freq"
+  dt.fr.max <- merge(dt.fr.max, dt.fr)
+  dt.fr.max <- aggregate(dt.fr.max$V, by = list(Cluster = dt.fr.max$Cluster, 
+                                                Index = dt.fr.max$Index, ClusterH = dt.fr.max$ClusterH, 
+                                                Freq = dt.fr.max$Freq), FUN = "min")
+  colnames(dt.fr.max)[5] <- "V"
+  dt.fr.max <- merge(dt.fr.max, dt.fr)
   
   Box.pl<- ggplot(data= dt.fr.rep)+
     facet_wrap(~Index,scales = "free")+
@@ -493,7 +496,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   L1<- length(FixedG.runs)
   ############# first we found the most probably clustering:
   IndexBestClustering <- Freq.ConfigCl[Gind,"Config"]
-  BestClustering<-ALL.runs[[IndexBestClustering]]
+  BestClustering<-FixedG.runs[[IndexBestClustering]]
   
   ##########################################################
   #### Let build the consensus matrix
@@ -598,6 +601,8 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
   Freq.cl[order(match(Freq.cl$Cluster, lab)),]
+  MeanFreq<-mean(Freq.cl$Mean)
+  Freq.cl$Mean[is.na(Freq.cl$Mean)] <- 1
   lab.new<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") ))
   ##
   
@@ -614,7 +619,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
                  aes(x, y, xend = xend, yend = yend), size = 1.5, 
                  inherit.aes = F) +
     labs(title = "Consensus Matrix",
-         subtitle = paste("Black line for the most probable clustering: ",mean(Freq.cl$Mean)) ) + 
+         subtitle = paste("Black line for the most probable clustering: ",MeanFreq) ) + 
     annotate(geom = "text", x = x.text, y = y.text, 
              label = lab.new , 
              size = 6)
