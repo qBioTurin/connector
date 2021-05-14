@@ -115,39 +115,33 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   ##### Calculation of the tightness and DB (0,1,2) indexes
   l.tight <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]$ClusterAll
-    V<- sapply(1:(length(ClusterAll)),function(j){
+    V.all<- lapply(1:(length(ClusterAll)),function(j){
       if(!is.character(ClusterAll[[j]]$Error) )
-        ClusterAll[[j]]$Cl.Info$Tight.indexes
+        data.frame(Config = j, 
+                   V = ClusterAll[[j]]$Cl.Info$Tight.indexes,
+                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
       else NA
-      })
-    Freq<- sapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error))
-        ClusterAll[[j]]$ParamConfig.Freq
-      else NA
-      })
-    return(data.frame(V = na.omit(V),
-                      Cluster = G[i],
-                      Freq= na.omit(Freq), 
-                      Index = "Elbow plot (Tightness)",
-                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)))
+    })
+    V.all <- do.call("rbind",V.all)
+    V.all$Cluster <-G[i]
+    V.all$Index = "Elbow plot (Tightness)"
+    V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
+    return(V.all)
   })
   l.fdb <- lapply(1:length(G),function(i){
     ClusterAll <- Clusters.List[[i]]$ClusterAll
-    V<- sapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error)) 
-        ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index
-      else NA
-      })
-    Freq<- sapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error))
-        ClusterAll[[j]]$ParamConfig.Freq
+    V.all<- lapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error) )
+        data.frame(Config = j, 
+                   V = ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index,
+                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
-    return(data.frame(V = na.omit(V),
-                      Cluster = G[i],
-                      Freq= na.omit(Freq),
-                      Index = "fDB indexes",
-                      ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)))
+    V.all <- do.call("rbind",V.all)
+    V.all$Cluster <-G[i]
+    V.all$Index = "fDB indexes"
+    V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
+    return(V.all)
   })
 
   dt.fr<-rbind(do.call("rbind",l.tight),do.call("rbind",l.fdb))
@@ -156,11 +150,11 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
     do.call("rbind", lapply(1:freq, function(j) dt.fr[i,]) )
   } )
   dt.fr.rep<-do.call("rbind", dt.fr.rep)
-  dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index,ClusterH=dt.fr$ClusterH), FUN = "max")
-  colnames(dt.fr.max)[4]<-"Freq"
+  dt.fr.max<-aggregate(dt.fr$Freq,by = list(Cluster=dt.fr$Cluster,Index=dt.fr$Index,ClusterH=dt.fr$ClusterH,Config=dt.fr$Config), FUN = "max")
+  colnames(dt.fr.max)[5]<-"Freq"
   dt.fr.max<-merge(dt.fr.max,dt.fr)
-  dt.fr.max<-aggregate(dt.fr.max$V,by = list(Cluster=dt.fr.max$Cluster,Index=dt.fr.max$Index,ClusterH=dt.fr.max$ClusterH,Freq=dt.fr.max$Freq), FUN = "min")
-  colnames(dt.fr.max)[5]<-"V"
+  dt.fr.max<-aggregate(dt.fr.max$V,by = list(Cluster=dt.fr.max$Cluster,Index=dt.fr.max$Index,ClusterH=dt.fr.max$ClusterH,Freq=dt.fr.max$Freq,Config=dt.fr$Config), FUN = "min")
+  colnames(dt.fr.max)[6]<-"V"
   
   Box.pl<- ggplot(data= dt.fr.rep)+
     facet_wrap(~Index,scales = "free")+
@@ -481,7 +475,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
 {
   FixedG.runs<-ALL.runs[[Gind]]$ClusterAll
   L1<- length(FixedG.runs)
-  # deleting if there was some errors in the predictions:
+  #Check some errors in the predictions:
   FixedG.runs.tmp <-lapply(1:L1,function(x){
     if(!is.character(FixedG.runs[[x]]$Error))
       FixedG.runs[[x]]
