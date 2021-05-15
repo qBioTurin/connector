@@ -15,12 +15,12 @@
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
-#' @name ExtrapolationFuncs
+#' @name ExtrapolationNewFuncs
 NULL
 #> NULL
 #' @import ggplot2 viridis reshape2 statmod
 #' 
-#' @rdname ExtrapolationFuncs
+#' @rdname ExtrapolationNewFuncs
 #' @export
 BoxPlot.ExtrapolationNew <- function(stability.list){
   Clusters.List<-stability.list$Clusters.List 
@@ -59,7 +59,7 @@ BoxPlot.ExtrapolationNew <- function(stability.list){
   return(Box.pl)
 }
 
-#' @rdname ExtrapolationFuncs
+#' @rdname ExtrapolationNewFuncs
 #' @export
 ConsMatrix.ExtrapolationNew <- function(stability.list,data){
   Clusters.List<-stability.list$Clusters.List 
@@ -80,7 +80,7 @@ ConsMatrix.ExtrapolationNew <- function(stability.list,data){
   return(ConsensusInfo)
 }
 
-#' @rdname ExtrapolationFuncs
+#' @rdname ExtrapolationNewFuncs
 #' @export
 MostProbableClustering.ExtrapolationNew <- function(stability.list, G){
   Clusters.List<-stability.list$Clusters.List 
