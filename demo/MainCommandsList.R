@@ -30,9 +30,16 @@ CrossLogLike$KnotsPlot
 p<-5
 
 #### New part:
-S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,p=p,
-                       runs=50,seed=123,
-                       Cores=2,PercPCA=.85)
+S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
+                       p=p,
+                       runs=50,
+                       seed=123,
+                       Cores=2)
+
+BoxPlot.ExtrapolationNew(S.cl)
+ConsMatrix.ExtrapolationNew(S.cl,CONNECTORList)-> ConsInfo
+MostProbableClustering.ExtrapolationNew(S.cl,4) ->MostProbableClustering
+
 S.cl$BoxPlots 
 S.cl$ConsensusInfo$G4$ConsensusPlot
 S.cl$ConsensusInfo$G3$MostProbableClustering
