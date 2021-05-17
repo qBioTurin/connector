@@ -155,7 +155,6 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   grid<-fcm$FCM$fit$grid
   
   gauss.quad(10) -> gauss
-  ErrorConfiguration
   a <- min(grid)
   b <- max(grid)
   itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
