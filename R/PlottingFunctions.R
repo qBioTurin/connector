@@ -1,16 +1,16 @@
-#' Extrapolate objects from StabilityAnalysis
+#' Extrapolate objects from ClusterAnalysis
 #' 
-#' @description Extrapolate objects from StabilityAnalysis output list (see \code{\link{StabilityAnalysis}}).
+#' @description Extrapolate objects from ClusterAnalysis output list (see \code{\link{ClusterAnalysis}}).
 #'
-#' @param stability.list The list obtained from the StabilityAnalysis function. (see \code{\link{StabilityAnalysis}})
+#' @param stability.list The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})
+#' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param G  The number of clusters.
-#' @param h  The number representing the dimension of the cluster mean space (see \code{\link{PCA.Analysis}}).
 #' 
 #' @details 
 #' \itemize{
-#' \item{BoxPlot.Extrapolation}{ extrapolates from StabilityAnalysis output list the box plot fixing the h value.}
-#' \item{ConsMatrix.Extrapolation}{extrapolates from StabilityAnalysis output list the Consensus Matrix for G and h fixed.}
-#' \item{MostProbableClustering.Extrapolation}{extrapolates from StabilityAnalysis output list the most probable cluster among the several runs obtained  for G and h fixed.}
+#' \item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
+#' \item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Consensus Matrix for G fixed.}
+#' \item{MostProbableClustering.Extrapolation}{extrapolates from ClusterAnalysis output list the most frequent clustering among the several runs obtained  for G fixed.}
 #' }
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
@@ -22,7 +22,7 @@ NULL
 #' 
 #' @rdname ExtrapolationNewFuncs
 #' @export
-BoxPlot.ExtrapolationNew <- function(stability.list){
+IndexesPlot.ExtrapolationNew <- function(stability.list){
   Clusters.List<-stability.list$Clusters.List 
   G <- as.numeric(sub("G","",names(Clusters.List)))
   
