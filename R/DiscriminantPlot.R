@@ -5,7 +5,6 @@
 #'
 #' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}). 
 #' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
-#' @param h The number between 1 or 2 representing the dimension of the cluster mean space (see \code{\link{PCA.Analysis}}).
 #' @param save If TRUE then the discriminant plots colored depending on the feature and the cluster membership are saved. 
 #' @param path The folder path where the plot(s) will be saved. If it is missing, the plot is saved in the current working  directory.
 #' 
@@ -21,9 +20,10 @@
 #' @export
 #' 
 
-DiscriminantPlot<-function(clusterdata,h,data,feature,save=FALSE,path=NULL)
+DiscriminantPlot<-function(clusterdata,data,feature,save=FALSE,path=NULL)
 { 
-  G<-length(clusterdata$FCM$prediction$meancurves[1,])
+  G<- length(clusterdata$FCM$prediction$meancurves[1,])
+  h<- length(clusterdata$FCM$fit$parameters$Lambda[1,])
   discrplot<-list()
   
   outpred<-clusterdata$FCM$cluster$cl.info
@@ -65,7 +65,7 @@ DiscriminantPlot<-function(clusterdata,h,data,feature,save=FALSE,path=NULL)
       scale_shape_manual("Cluster",values=cl.names) +
       theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank())
   }
-  else{
+  else if(h==2){
     DataFrameSamples<-data.frame(PrjCurv1=projectedcurve[,1],PrjCurv2=projectedcurve[,2],Feature=unlist(Feature),Cluster=symbols[classes] )
     DataFrameCluster<-data.frame(projectedclustcenters1=projectedclustcenters[,1],projectedclustcenters2=projectedclustcenters[,2],Cluster=symbols,Center=paste("c.",symbols,sep=""))
     
@@ -88,7 +88,10 @@ DiscriminantPlot<-function(clusterdata,h,data,feature,save=FALSE,path=NULL)
       scale_colour_manual(values = colFetaure,limits=col,breaks=col,name=feature )+
       scale_shape_manual("Cluster",values=cl.names,labels=paste(names(cl.names),", c.",symbols,sep=""),breaks=names(cl.names)) +
       theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank())
-  }
+  
+  }else{
+      stop(paste("The Discriminant plot can be exploited only with h = 1 or 2. Your h is ", h,".") )
+    }
   
   if(save==TRUE)
   {

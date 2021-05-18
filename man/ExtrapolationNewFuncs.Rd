@@ -2,32 +2,32 @@
 % Please edit documentation in R/PlottingFunctions.R
 \name{ExtrapolationNewFuncs}
 \alias{ExtrapolationNewFuncs}
-\alias{BoxPlot.ExtrapolationNew}
+\alias{IndexesPlot.ExtrapolationNew}
 \alias{ConsMatrix.ExtrapolationNew}
 \alias{MostProbableClustering.ExtrapolationNew}
-\title{Extrapolate objects from StabilityAnalysis}
+\title{Extrapolate objects from ClusterAnalysis}
 \usage{
-BoxPlot.ExtrapolationNew(stability.list)
+IndexesPlot.ExtrapolationNew(stability.list)
 
 ConsMatrix.ExtrapolationNew(stability.list, data)
 
 MostProbableClustering.ExtrapolationNew(stability.list, G)
 }
 \arguments{
-\item{stability.list}{The list obtained from the StabilityAnalysis function. (see \code{\link{StabilityAnalysis}})}
+\item{stability.list}{The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})}
+
+\item{data}{CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})}
 
 \item{G}{The number of clusters.}
-
-\item{h}{The number representing the dimension of the cluster mean space (see \code{\link{PCA.Analysis}}).}
 }
 \description{
-Extrapolate objects from StabilityAnalysis output list (see \code{\link{StabilityAnalysis}}).
+Extrapolate objects from ClusterAnalysis output list (see \code{\link{ClusterAnalysis}}).
 }
 \details{
 \itemize{
-\item{BoxPlot.Extrapolation}{ extrapolates from StabilityAnalysis output list the box plot fixing the h value.}
-\item{ConsMatrix.Extrapolation}{extrapolates from StabilityAnalysis output list the Consensus Matrix for G and h fixed.}
-\item{MostProbableClustering.Extrapolation}{extrapolates from StabilityAnalysis output list the most probable cluster among the several runs obtained  for G and h fixed.}
+\item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
+\item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Consensus Matrix for G fixed.}
+\item{MostProbableClustering.Extrapolation}{extrapolates from ClusterAnalysis output list the most frequent clustering among the several runs obtained  for G fixed.}
 }
 }
 \author{

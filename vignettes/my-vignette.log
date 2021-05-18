@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.4)  9 APR 2020 11:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.4)  18 MAY 2021 17:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette.tex
-(/tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette.tex
+**/tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette.tex
+(/tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette.tex
 LaTeX2e <2019-10-01> patch level 3
 (/home/pernice/.TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
@@ -484,6 +484,9 @@ Package grffile Info: This package is an empty stub for compatibility on input
 line 40.
 ) (./my-vignette.aux
 
+LaTeX Warning: Label `fig:ConsMatg4' multiply defined.
+
+
 LaTeX Warning: Label `eq:gspline' multiply defined.
 
 )
@@ -635,166 +638,179 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 {/home/pernice/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 156.
-[2]
-<./Fig/excel_file.png, id=67, 746.79pt x 240.65166pt>
+<./Fig/excel_file.png, id=54, 746.79pt x 240.65166pt>
 File: ./Fig/excel_file.png Graphic file (type png)
 <use ./Fig/excel_file.png>
-Package pdftex.def Info: ./Fig/excel_file.png  used on input line 217.
+Package pdftex.def Info: ./Fig/excel_file.png  used on input line 218.
 (pdftex.def)             Requested size: 422.78036pt x 136.24016pt.
-<./Fig/txt_file.png, id=69, 311.66437pt x 260.76804pt>
+[2]
+<./Fig/txt_file.png, id=70, 311.66437pt x 260.76804pt>
 File: ./Fig/txt_file.png Graphic file (type png)
 <use ./Fig/txt_file.png>
-Package pdftex.def Info: ./Fig/txt_file.png  used on input line 224.
+Package pdftex.def Info: ./Fig/txt_file.png  used on input line 225.
 (pdftex.def)             Requested size: 311.66835pt x 260.77135pt.
 [3 <./Fig/excel_file.png> <./Fig/txt_file.png>]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-264.
+265.
 (/home/pernice/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-7-1.pdf, id=80, 441.65pt x 284.06125pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-7-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-7-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-7-1.pdf  used on input line 317.
-(pdftex.def)             Requested size: 441.66911pt x 284.07353pt.
-[4]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-8-1.pdf, id=92, 489.83pt x 204.765pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
+) [4]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-8-1.pdf, id=92, 441.65pt x 284.06125pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
 nnamed-chunk-8-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-8-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-8-1.pdf  used on input line 340.
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-8-1.pdf  used on input line 358.
+(pdftex.def)             Requested size: 441.66911pt x 284.07353pt.
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-9-1.pdf, id=93, 489.83pt x 204.765pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-9-1.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-9-1.pdf  used on input line 381.
 (pdftex.def)             Requested size: 469.76805pt x 196.37843pt.
-[5 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unn
-amed-chunk-7-1.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-11-1.pdf, id=110, 453.695pt x 313.17pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-11-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-11-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-11-1.pdf  used on input line 403.
-(pdftex.def)             Requested size: 453.6939pt x 313.16922pt.
-[6 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unn
-amed-chunk-8-1.pdf>] [7 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-11-1.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-12-1.pdf, id=143, 493.845pt x 207.77625pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
+[5 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unn
+amed-chunk-8-1.pdf>] [6 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-9-1.pdf>]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-12-1.pdf, id=127, 453.695pt x 313.17pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
 nnamed-chunk-12-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-12-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-12-1.pdf  used on input line 458.
-(pdftex.def)             Requested size: 469.75291pt x 197.63994pt.
-[8 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unn
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-12-1.pdf  used on input line 444.
+(pdftex.def)             Requested size: 453.6939pt x 313.16922pt.
+[7 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unn
 amed-chunk-12-1.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-13-1.pdf, id=161, 423.5825pt x 351.3125pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-13-1.pdf, id=146, 493.845pt x 207.77625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
 nnamed-chunk-13-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-13-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-13-1.pdf  used on input line 498.
-(pdftex.def)             Requested size: 423.59439pt x 351.32234pt.
-[9 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unn
-amed-chunk-13-1.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-17-1.pdf, id=180, 1139.25626pt x 491.8375pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-17-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-17-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-17-1.pdf  used on input line 600.
-(pdftex.def)             Requested size: 469.7404pt x 202.79541pt.
-[10]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-18-1.pdf, id=193, 401.5pt x 262.9825pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-13-1.pdf  used on input line 513.
+(pdftex.def)             Requested size: 469.75291pt x 197.63994pt.
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-14-1.pdf, id=147, 458.71375pt x 549.05125pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-14-1.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-14-1.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-14-1.pdf  used on input line 529.
+(pdftex.def)             Requested size: 458.73363pt x 549.07504pt.
+[8 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unn
+amed-chunk-13-1.pdf>] [9 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_
+files/figure-latex/unnamed-chunk-14-1.pdf>] [10]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-18-1.pdf, id=195, 1128.215pt x 472.76625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
 nnamed-chunk-18-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-18-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-18-1.pdf  used on input line 638.
-(pdftex.def)             Requested size: 401.51738pt x 262.99387pt.
-[11 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-17-1.pdf>]
-Underfull \vbox (badness 10000) detected at line 727
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-18-1.pdf  used on input line 699.
+(pdftex.def)             Requested size: 469.74986pt x 196.84358pt.
+[11]
+Underfull \vbox (badness 4441) detected at line 753
  []
 
-
-Underfull \vbox (badness 10000) detected at line 727
- []
-
-[12 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+[12 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-18-1.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-20-1.pdf, id=222, 1067.99pt x 713.66624pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-20-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-20-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-20-1.pdf  used on input line 731.
-(pdftex.def)             Requested size: 469.7541pt x 313.90521pt.
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-21-1.pdf, id=225, 421.575pt x 279.0425pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-19-1.pdf, id=224, 401.5pt x 263.98625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-19-1.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-19-1.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-19-1.pdf  used on input line 757.
+(pdftex.def)             Requested size: 401.5235pt x 264.0017pt.
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-19-2.pdf, id=225, 401.5pt x 263.98625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-19-2.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-19-2.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-19-2.pdf  used on input line 772.
+(pdftex.def)             Requested size: 401.5235pt x 264.0017pt.
+[13 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-19-1.pdf>]
+Underfull \vbox (badness 10000) detected at line 855
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 855
+ []
+
+[14 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-19-2.pdf>]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-21-1.pdf, id=256, 1067.99pt x 710.655pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
 nnamed-chunk-21-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
 named-chunk-21-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-21-1.pdf  used on input line 768.
-(pdftex.def)             Requested size: 421.58038pt x 279.04607pt.
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-21-2.pdf, id=226, 421.575pt x 279.0425pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-21-2.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-21-2.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-21-2.pdf  used on input line 784.
-(pdftex.def)             Requested size: 421.58038pt x 279.04607pt.
-[13] [14 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-lat
-ex/unnamed-chunk-20-1.pdf>] [15 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vi
-gnette_files/figure-latex/unnamed-chunk-21-1.pdf> </tmp/RtmpE9duIY/preview-1493
-63abac2e.dir/my-vignette_files/figure-latex/unnamed-chunk-21-2.pdf>]
-</tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/unname
-d-chunk-23-1.pdf, id=264, 427.5975pt x 277.035pt>
-File: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/u
-nnamed-chunk-23-1.pdf Graphic file (type pdf)
-<use /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-23-1.pdf>
-Package pdftex.def Info: /tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_f
-iles/figure-latex/unnamed-chunk-23-1.pdf  used on input line 836.
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-21-1.pdf  used on input line 859.
+(pdftex.def)             Requested size: 469.7541pt x 312.58072pt.
+[15 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-21-1.pdf>]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-22-1.pdf, id=272, 421.575pt x 280.04625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-22-1.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-22-1.pdf  used on input line 893.
+(pdftex.def)             Requested size: 421.58038pt x 280.04982pt.
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-22-2.pdf, id=273, 421.575pt x 280.04625pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-22-2.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-22-2.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-22-2.pdf  used on input line 909.
+(pdftex.def)             Requested size: 421.58038pt x 280.04982pt.
+[16 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-22-1.pdf>]
+</tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/unname
+d-chunk-24-1.pdf, id=287, 427.5975pt x 277.035pt>
+File: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/u
+nnamed-chunk-24-1.pdf Graphic file (type pdf)
+<use /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-24-1.pdf>
+Package pdftex.def Info: /tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_f
+iles/figure-latex/unnamed-chunk-24-1.pdf  used on input line 959.
 (pdftex.def)             Requested size: 427.59645pt x 277.03432pt.
-[16 </tmp/RtmpE9duIY/preview-149363abac2e.dir/my-vignette_files/figure-latex/un
-named-chunk-23-1.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 921.
-[17]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 921.
+[17 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignette_files/figure-latex/un
+named-chunk-22-2.pdf>] [18 </tmp/RtmpzFw1FI/preview-37195f51dda6.dir/my-vignett
+e_files/figure-latex/unnamed-chunk-24-1.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1044.
+[19]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1044.
 (./my-vignette.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 921.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 921.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1044.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1044.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 921.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1044.
  ) 
 Here is how much of TeX's memory you used:
- 11866 strings out of 494108
- 172275 string characters out of 6173321
- 241504 words of memory out of 5000000
- 15678 multiletter control sequences out of 15000+600000
+ 11886 strings out of 494108
+ 173036 string characters out of 6173321
+ 240554 words of memory out of 5000000
+ 15685 multiletter control sequences out of 15000+600000
  66321 words of font info for 68 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  46i,11n,37p,621b,411s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -822,10 +838,10 @@ fonts/type1/public/lm/lmtt10.pfb></home/pernice/.TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtt12.pfb></home/pernice/.TinyTeX/texmf-dist/fonts/type1/public/lm/
 lmtti10.pfb></home/pernice/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symb
 ols/msbm10.pfb>
-Output written on my-vignette.pdf (17 pages, 560416 bytes).
+Output written on my-vignette.pdf (19 pages, 707944 bytes).
 PDF statistics:
- 434 PDF objects out of 1000 (max. 8388607)
- 351 compressed objects within 4 object streams
- 81 named destinations out of 1000 (max. 500000)
- 178 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 470 PDF objects out of 1000 (max. 8388607)
+ 381 compressed objects within 4 object streams
+ 93 named destinations out of 1000 (max. 500000)
+ 183 words of extra memory for PDF output out of 10000 (max. 10000000)
 

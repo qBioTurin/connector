@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataClustering.R
 \name{ClusterAnalysis}
 \alias{ClusterAnalysis}
-\title{Cluster Stability}
+\title{Cluster Analysis}
 \usage{
 ClusterAnalysis(
   data,
@@ -38,10 +38,10 @@ ClusterAnalysis(
 \item{PercPCA=.85}{}
 }
 \value{
-StabilityAnalysis returns a list of (i) lists, called ConsensusInfo, reporting for each G and h: the Consensus Matrix, either as a NxN matrix, where N is the number of samples, or plot, and the most probable clustering obtained from running several times the method; (ii) the box plots showing both the Elbow plot considering the total tightness and the box plots of the fDB indexes for each G; and finally, (iii) the seed. See \code{\link{BoxPlot.Extrapolation}} and \code{\link{MostProbableClustering.Extrapolation}}.
+StabilityAnalysis returns a list of (i) lists, called ConsensusInfo, reporting for each G and h: the Consensus Matrix, either as a NxN matrix, where N is the number of samples, or plot, and the most probable clustering obtained from running several times the method; (ii) the box plots showing both the Elbow plot considering the total tightness and the box plots of the fDB indexes for each G; and finally, (iii) the seed. See \code{\link{IndexesPlot.Extrapolation}} and \code{\link{MostProbableClustering.Extrapolation}}.
 }
 \description{
-Fits and clusters the data with respect to the Functional Clustering Model [Sugar and James]. The plots based on the Elbow Method and on the functional Davies Bouldin (fDB) indexes are generated to properly guide the choice of the number of clusters. As explained in [Sugar and James], to have a simple low-dimensional representation of the individual curves and to reduce the number of parameters to be estimated, h value must be equals or lower than \eqn{min(p,G-1)}.
+Fits and clusters the data with respect to the Functional Clustering Model [Sugar and James]. Multiple runs of the algorithm are necessary since the algorithm is stochastic As explained in [Sugar and James], to have a simple low-dimensional representation of the individual curves and to reduce the number of parameters to be estimated, h value must be equals or lower than \eqn{min(p,G-1)}.
 }
 \details{
 Connector provides two different plots to properly guide the choice of the number of clusters:
