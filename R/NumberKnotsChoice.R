@@ -50,10 +50,10 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   
   pmax<-min(data$LenCurv)
   
-  if(max(p)>pmax)
-  {
-    warning(paste("The maximum value of p should be:", pmax,"\n") )
-  }
+  # if(max(p)>pmax)
+  # {
+  #   warning(paste("The maximum value of p should be:", pmax,"\n") )
+  # }
   
   if(max(p)>Lgrid)
   {
@@ -99,14 +99,21 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
       return(df)
   })
   Knots.df <- do.call("rbind",Knots.list)
-  
-  Knots.Plot<-ggplot(Knots.df)+
-    scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/5) ) ) +
-    geom_hline(aes(yintercept = p), linetype="dashed",color="grey")+
-    geom_point(aes(x=Knots,y=p,col=Name),shape=3)+
-    scale_color_manual(values=c("Boundary knots"= "Orange","Knots"="blue"))+
-    geom_boxplot(data= data.frame(y = paste("Time grid \n distribution"), x = grid),
-                 aes(x,y),width=0.4,col="black")+
+  Knots.df$p.num <- as.numeric(sub("p = ","",Knots.df$p))
+
+  Knots.Plot<-ggplot(Knots.df) +
+    scale_x_continuous(breaks = as.integer(seq(min(grid),
+                                               max(grid),
+                                               length.out = length(grid)/5))) +
+    geom_hline(aes(yintercept = p.num), linetype = "dashed", color = "grey") +
+    geom_point(aes(x = Knots, y = p.num, col = Name), shape = 3) +
+    scale_color_manual(values = c(`Boundary knots` = "Orange",Knots = "blue")) +
+    geom_boxplot(data = data.frame(y = max(Knots.df$p.num) +1 ,  x = grid),
+                 aes(x, y),
+                 width = 0.4, col = "black") +
+    scale_y_continuous(breaks = c(unique(Knots.df$p.num),max(Knots.df$p.num) +1),
+                       labels = c(paste("p = ", unique(Knots.df$p.num)),
+                                  "Time grid \n distribution"))+
     theme(axis.text=element_text(size = 15, hjust = 0.5),
           axis.text.x=element_text(angle=+90),
           axis.title=element_text(size=18,face="bold"),
