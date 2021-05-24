@@ -46,13 +46,15 @@ params$infoReport$TimeGrid
 
 ```
 
-# Paramenter selection
+# Paramenters selection
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(!is.null(params$infoReport$CrossLL)) params$infoReport$CrossLL
-if(!is.null(params$infoReport$PCAplot)) params$infoReport$PCAplot
-if(!is.null(params$infoReport$IndexBoxPlot)) params$infoReport$IndexBoxPlot
+if(!is.null(params$infoReport$CrossLL)){
+  params$infoReport$CrossLL$CrossLogLikePlot
+  params$infoReport$CrossLL$KnotsPlot
+} 
+if(!is.null(params$infoReport$IndexBoxPlot)) params$infoReport$IndexBoxPlot$Plot
 
 ```
 
@@ -60,7 +62,7 @@ if(!is.null(params$infoReport$IndexBoxPlot)) params$infoReport$IndexBoxPlot
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(!is.null(params$infoReport$ConsMatrix)) params$infoReport$ConsMatrix
+if(!is.null(params$infoReport$ConsMatrix)) params$infoReport$ConsMatrices[[paste0("G",params$infoReport$GConsMat)]]$ConsensusPlot
 if(!is.null(params$infoReport$FCMplots)){
   params$infoReport$FCMplots$plotMeanCurve
   params$infoReport$FCMplots$plotsCluster

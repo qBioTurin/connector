@@ -39,7 +39,6 @@ GrowthCurve <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
 
 
   ### dataframe for ggplot
-  dataplot <- data$Dataset
   dataplot <- data.frame(merge(data$Dataset,data$LabCurv[,c("ID",feature)],by="ID"))
   dataplot[,feature]<-factor(as.matrix(dataplot[feature]))
   
@@ -54,7 +53,6 @@ GrowthCurve <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
     theme(plot.title = element_text(hjust = 0.5),title =element_text(size=10, face='bold'))+
     scale_colour_manual(values = colFetaure,limits = col, breaks = sort(col), name = feature)
 
-  ### Enrich data with colour palette
   data$FeatureColour <- colFetaure
 
   GrowthCurve.ls <- list(GrowthCurve_plot=GrowthCurve,data=data,PlotData = dataplot)
