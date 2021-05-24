@@ -179,8 +179,6 @@ ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c(""
   curves.tmp$Cluster <- symbols[curves.tmp$Cluster]
   
   plots[["ALL"]]<- ggplot()+
-    geom_line(data=plot_data,
-              aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
     scale_linetype_manual(values =1:G ,limits=sort(symbols),
                           breaks=sort(symbols),name="Cluster") +
     facet_wrap(~Cluster)+
@@ -193,6 +191,8 @@ ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c(""
     theme(plot.title = element_text(hjust = 0.5),
           axis.line = element_line(colour = "black"),
           panel.background = element_blank())+
+    geom_line(data=plot_data,
+              aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
     ylim(ymin,ymax)+xlim(xmin,xmax)+
    labs(title=paste("Other parameters: p = ", p, ", h = ", h, ", G = ", G  ,sep = ""),
         x = axis.x,
