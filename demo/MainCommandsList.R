@@ -27,7 +27,7 @@ CrossLogLike$CrossLogLikePlot
 CrossLogLike$KnotsPlot
 
 # p is 
-p<-5
+p<-3
 
 #### New part:
 S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
@@ -36,8 +36,8 @@ S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
                        seed=123,
                        Cores=2)
 
-BoxPlot.ExtrapolationNew(S.cl)
-ConsMatrix.ExtrapolationNew(S.cl,CONNECTORList)-> ConsInfo
+IndexesPlot.ExtrapolationNew(S.cl)-> indexes
+ConsMatrix.ExtrapolationNew(S.cl,data = CONNECTORList)-> ConsInfo
 MostProbableClustering.ExtrapolationNew(S.cl,4) ->MostProbableClustering
 
 S.cl$BoxPlots 

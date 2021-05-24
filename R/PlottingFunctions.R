@@ -56,7 +56,7 @@ IndexesPlot.ExtrapolationNew <- function(stability.list){
           plot.margin=unit(c(5,5,5,5),"mm"),
           strip.text = element_text(size = 20)) 
   
-  return(Box.pl)
+  return(list(Plot=Box.pl, IndexesValues = IndexesValues$DataIndexes) )
 }
 
 #' @rdname ExtrapolationNewFuncs
@@ -279,12 +279,43 @@ IndexeValues.generation <- function(Clusters.List, G){
     V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
     return(V.all)
   })
-  
+  l.fdb1 <- lapply(1:length(G),function(i){
+    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    V.all<- lapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error) )
+        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Deriv.Coefficents$fDB.index,
+                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      else NA
+    })
+    V.all <- do.call("rbind",V.all)
+    V.all$Cluster <-G[i]
+    V.all$Index = "Deriv.fDB"
+    V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
+    return(V.all)
+  })
+  l.fdb2 <- lapply(1:length(G),function(i){
+    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    V.all<- lapply(1:(length(ClusterAll)),function(j){
+      if(!is.character(ClusterAll[[j]]$Error) )
+        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Deriv2.Coefficents$fDB.index, Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      else NA
+    })
+    V.all <- do.call("rbind",V.all)
+    V.all$Cluster <-G[i]
+    V.all$Index = "Deriv2.fDB"
+    V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
+    return(V.all)
+  })
+  ## Grouping all the indexes:
+  Data <- list(Tight =do.call("rbind", l.tight),
+               fDB =do.call("rbind", l.fdb),
+               fDB1 =do.call("rbind", l.fdb1),
+               fDB2 =do.call("rbind", l.fdb2))
+  ##
   dt.fr <- rbind(do.call("rbind", l.tight), do.call("rbind",l.fdb))
   dt.fr.rep <- lapply(1:length(dt.fr[, 1]), function(i) {
     freq <- dt.fr[i, "Freq"]
-    do.call("rbind", lapply(1:freq, function(j) dt.fr[i,
-                                                      ]))
+    do.call("rbind", lapply(1:freq, function(j) dt.fr[i,]))
   })
   dt.fr.rep <- do.call("rbind", dt.fr.rep)
   dt.fr.max <- aggregate(dt.fr$Freq, by = list(Cluster = dt.fr$Cluster,
@@ -299,5 +330,5 @@ IndexeValues.generation <- function(Clusters.List, G){
   colnames(dt.fr.max)[5] <- "V"
   dt.fr.max <- merge(dt.fr.max, dt.fr)
   
-  return(list(Indexes.MostProb = dt.fr.max,Indexes.Rep = dt.fr.rep))
+  return(list(Indexes.MostProb = dt.fr.max,Indexes.Rep = dt.fr.rep,DataIndexes = Data))
 }

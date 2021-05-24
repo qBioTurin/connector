@@ -57,7 +57,6 @@ ui <- dashboardPage(
       menuItem("Pre processing", tabName = "PreProc", icon = icon("edit")),
       menuItem("Model selection", icon = icon("edit"),
                menuSubItem("Setting p", tabName = "pSelection", icon = icon("dashboard")),
-               menuSubItem("Setting h", tabName = "hSelection", icon = icon("dashboard")),
                menuSubItem("Setting G", tabName = "FCM", icon = icon("dashboard") )
                ),
       menuItem("Cluster plot", icon = icon("edit"),
@@ -171,9 +170,23 @@ ui <- dashboardPage(
               ),
       tabItem(tabName = "PreProc",
               h2("Preprocessing"),
+              box(width = 12, title = "Data visualization:",
+                  column(width = 9, 
+                         selectInput(inputId = "feature", label = "Features:",choices = "ID" )
+                  ),
+                  column(width = 3, 
+                         checkboxInput(inputId = "GrowthCurvesLegend", label = "Show legend")
+                  ),
+                  column(width =12,
+                         h4("Growth curves"),
+                         plotOutput("visualGrowth")
+                         )
+                  ),
               box(width = 12, title = "Data truncation:",collapsible = TRUE,collapsed = TRUE,
-                  sliderInput(inputId = "truncTime", label = h4("Truncation time:"),
+                  sliderInput(inputId = "truncTime", label = h4("Truncation times"),
                               min = 0, max = 0, value = c(0,0),step = 1),
+                  h4("Time grid density"),
+                  plotOutput("visualTimes"),
                   column(width=2,
                          actionButton( label = "Truncate", inputId = "TruncateData", icon = icon("cut") )
                   ),
@@ -183,15 +196,7 @@ ui <- dashboardPage(
                   add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80),
                   fluidRow(column(width = 10,offset = 1,htmlOutput("SummaryCutting")))
               ),
-              box(width = 12, title = "Data visualization:",collapsible = TRUE,
-                  selectInput(inputId = "feature", label = "Features:",choices = "" ),
-                    column(width = 7,h4("Growth curves"),
-                           plotOutput("visualGrowth")
-                          ), 
-                    column(width = 5, h4("Time grid density"),
-                           plotOutput("visualTimes")
-                    ),
-                  box(width = 12, title = "Save the plots:",collapsible = TRUE,
+              box(width = 12, title = "Save the plots:",collapsible = TRUE,collapsed = TRUE,
                       column(width =12,
                              textInput(inputId = "titleGrowth", label = "Plot title",value = "" )
                              ),
@@ -212,7 +217,6 @@ ui <- dashboardPage(
                                             style = "cursor: pointer;",
                                             class="dlButton"))
                   )
-               )
       ),
     tabItem(tabName = "pSelection",
               h2("Setting p:"),h4("Cross-log likelihood"),
@@ -231,112 +235,63 @@ ui <- dashboardPage(
                 box(width = 12, title = "CrossLog-likelihood visualization:",collapsible = TRUE,collapsed = T,
                    plotOutput("visualCLLik"),
                    sliderInput(inputId = "pValue", label = h4("Select p value:"),
-                               min = 0,max = 0, value = "",step = 1),
+                               min = 0,max = 0, value = 0,step = 1),
                    column(width=2,
                           actionButton( label = "Select",inputId = "pSelection", icon = icon("check") )
                           ),
                    column(width=1,
                           actionButton( label = "Next", inputId = "FromS3toS4", icon = icon("arrow-circle-right") )
-                          ),"",
-                   box(width = 12, title = "Save the plots:",collapsible = TRUE,
-                       column(width =12,
-                              textInput(inputId = "titleCLL", label = "Plot title",value = "" )
-                       ),
-                       column(width = 6,
-                              textInput(inputId = "xlabCLL", label = "x-axis label",value = ""  )
-                       ),
-                       column(width = 6,
-                              textInput(inputId = "ylabCLL", label = "y-axis label",value = ""  )
-                       ),
-                       column(width = 2,
-                              actionButton(label="Change the plot", inputId = "ChangeCLL", icon = icon("palette"))
-                       ),
-                       column(width = 1,
-                              downloadButton(label="Download",outputId = "PlotDownloadCLL",
-                                             href = "CLL.pdf",
-                                             download = "CLL.pdf" ,
-                                             title = "Save the CrossLog-likelihood plot",
-                                             style = "cursor: pointer;",
-                                             class="dlButton"))
-                   )
-                   )
-            )
-    ),
-    tabItem(tabName = "hSelection",
-            h2("Setting h:"),h4("PCA"),
-            fluidRow(
-              box(width = 6,
-                  title = "Run the PCA:",
-                  numericInput("pValueInHpanel", "Value of p: ", 1, min = 1),
-                  actionButton( label = "Run", inputId = "RunForH" ),
-                  add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80),
-                  fluidRow(column(width = 10,offset = 1,verbatimTextOutput("ErrorInH")))
-              ),
-              box(width = 12, title = "PCA visualization:",collapsible = TRUE,collapsed = T,
-                  column(width = 8,
-                         plotOutput("visualPCA") 
-                         ),
-                  column(width = 4,
-                         h3("Value of h to select:"),
-                         numericInput("hValue", "Value of h: ", 1, min = 1),
-                         column(width=2,
-                                actionButton( label = "Select",inputId = "hSelection", icon = icon("check") )
-                         ),
-                         column(width=1, offset = 2,
-                                actionButton( label = "Next", inputId = "FromS4toS5", icon = icon("arrow-circle-right") )
-                         ),
-                         h3("    "),
-                         box(width = 12, title = "Save the plots:",collapsible = TRUE,
-                             column(width =12,
-                                    textInput(inputId = "titlePCA", label = "Plot title",value = "" )
-                             ),
-                             column(width = 6,
-                                    textInput(inputId = "xlabPCA", label = "x-axis label",value = ""  )
-                             ),
-                             column(width = 6,
-                                    textInput(inputId = "ylabPCA", label = "y-axis label",value = ""  )
-                             ),
-                             column(width = 2,
-                                    actionButton(label="Change the plot", inputId = "ChangePCA", icon = icon("palette"))
-                             ),
-                             column(width = 1,offset = 1,
-                                    downloadButton(label="Download",outputId = "PlotDownloadPCA",
-                                                   href = "PCA.pdf",
-                                                   download = "PCA.pdf" ,
-                                                   title = "Save the PCA plot",
-                                                   style = "cursor: pointer;",
-                                                   class="dlButton"))
-                         )
-                  )
-              )
-            )
-    ),
+                          )
+                   ),
+                
+                box(width = 12, title = "Knots distribution visualization:",collapsible = TRUE,collapsed = T,
+                    plotOutput("visualKnots")
+                ),
+                box(width = 12, title = "Save the plots:",collapsible = TRUE,collapsed = T,
+                    column(width =12,
+                           textInput(inputId = "titleCLL", label = "Plot title",value = "" )
+                           ),
+                    column(width = 6,
+                           textInput(inputId = "xlabCLL", label = "x-axis label",value = ""  )
+                           ),
+                    column(width = 6,
+                           textInput(inputId = "ylabCLL", label = "y-axis label",value = ""  )
+                           ),
+                    column(width = 2,
+                           actionButton(label="Change the plot", inputId = "ChangeCLL", icon = icon("palette"))
+                           ),
+                    column(width = 1,
+                           downloadButton(label="Download",outputId = "PlotDownloadCLL",
+                                          href = "CLL.pdf",
+                                          download = "CLL.pdf" ,
+                                          title = "Save the CrossLog-likelihood plot",
+                                          style = "cursor: pointer;",
+                                          class="dlButton"))
+                    )
+                )
+            ),
     tabItem(tabName = "FCM",
             h2("Setting G:"),h4("FCM"),
             verbatimTextOutput("FCMallError"),
             fluidRow(
-              box(width = 12,
-                  title = "Run the FCM:",
-                  column(width = 6,
-                    numericInput("pValueInGpanel", "Value of p: ", 0, min = 0),
-                    numericInput("hValueInGpanel", "Value of h: ", 0, min = 0),
-                    numericInput("Nruns", "Number of runs: ", 100, min = 1)
-                  ),
-                  column(width = 6,
-                    box(width = 12,
-                      title = "Number of clusters:",
-                      numericInput("MinG", "Min G: ", 1, min = 1),
-                      numericInput("MaxG", "Max G: ", 2, min = 2)
-                    )
-                  ),
-                  actionButton( label = "Run", inputId = "RunForG" ),
-                  add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80)
-                  )
+              column(width = 6,
+                     box(width = 12,
+                         title = "Number of clusters:",
+                         numericInput("MinG", "Min: ", 2, min = 1),
+                         numericInput("MaxG", "Max: ", 2, min = 2)
+                         )
+                     ),
+              column(width = 6,
+                     numericInput("Nruns", "Number of runs: ", 100, min = 1),
+                     numericInput("Cores", "Number of processors: ", 1, min = 1)
+                     ),
+              actionButton( label = "Run", inputId = "RunForG" ),
+              add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80)
               ),
-              tabBox(
-                # The id lets us use input$tabset1 on the server to find the current tab
-                id = "tabBoxSelectingG",width = 12 ,
-                tabPanel("Boxplots:", "",
+            tabBox(
+              # The id lets us use input$tabset1 on the server to find the current tab
+              id = "tabBoxSelectingG",width = 12 ,
+              tabPanel("Indexes plots:", "",
                          fluidRow(
                            column(width=11,
                                   plotOutput("visualIndexes"),
@@ -355,7 +310,7 @@ ui <- dashboardPage(
                          fluidRow(
                            column(width=11,
                                   sliderInput(inputId = "GConsMat", label = h4("Number of clusters:"),
-                                              min = 0,max = 0, value = "",step = 1),
+                                              min = 0,max = 0, value = 0,step = 1),
                                   plotOutput("visualConsMatrix"),
                                   column(width = 1,
                                          downloadButton(label="Download",outputId = "PlotDownloadConsMatrix",
@@ -444,31 +399,38 @@ ui <- dashboardPage(
     tabItem(tabName = "ClPlots",
             h2(""),
             verbatimTextOutput("IndexesClusterErrorCLplot"),
+            verbatimTextOutput("G_not_selected"),
             tabBox(
               id = "tabBoxCLplot",width = 12,
-              tabPanel("Clusters", "",
+              tabPanel("Clusters",
+                       "",
                        fluidRow(
-                         column(width= 6,
-                                selectInput(inputId = "featureCLplot",
+                           column(width= 3,
+                              selectInput(inputId = "featureCLplot",
                                             label = "Features:",choices = "ID",
                                             selected = "ID")
-                                ),
-                         column(width= 6,
+                              ),
+                           column(width= 3,
                                 selectInput(inputId = "typeCLplot",
                                             label = "Plot:",
                                             choices = c("All clusters","Cluster means") ,
                                             selected = "All clusters"  )
-                                ),
-                         plotOutput("visualClplot"),
-                         column(width = 1,
-                                downloadButton(label="Download",outputId = "PlotDownloadClplot",
-                                               href = "Clplot.pdf",
-                                               download = "Clplot.pdf" ,
-                                               title = "Save the Cluster plot",
-                                               style = "cursor: pointer;",
-                                               class="dlButton")
                                 )
+                       ),
+                       fluidRow(
+                         column(width = 2, 
+                                checkboxInput(inputId = "ClusterPlotLegend", label = "Show legend",value = F)
                          ),
+                         column(width = 1,
+                              downloadButton(label="Download",outputId = "PlotDownloadClplot",
+                                             href = "Clplot.pdf",
+                                             download = "Clplot.pdf" ,
+                                             title = "Save the Cluster plot",
+                                             style = "cursor: pointer;",
+                                             class="dlButton")
+                         )
+                       ),
+                       plotOutput("visualClplot"),
                        add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80)
                        ),
               tabPanel("Discriminant", "",
@@ -480,34 +442,34 @@ ui <- dashboardPage(
                                 ),
                          column(width = 4,
                                 uiOutput("FeatSelection")
-                                ),
-                         plotOutput("DiscrPlot"),
+                                )
+                         ),
                          column(width = 1,
                                 downloadButton(label="Download",outputId = "PlotDownloadDiscrPlot",
                                                href = "DiscrPlot.pdf",
                                                download = "DiscrPlot.pdf" ,
                                                title = "Save the Discriminant plot",
                                                style = "cursor: pointer;",
-                                               class="dlButton")
-                                )
-                         )
+                                               class="dlButton")),
+                         plotOutput("DiscrPlot")
+                         
                        ),
               tabPanel("Spline", "",
                        fluidRow(
-                         column(width= 11,
+                         column(width= 5,
                               selectInput(inputId = "SplineID",
                                    label = "Sample:",
-                                   choices = ""),
-                              plotOutput("visualSplinePlot"),
+                                   choices = "")
+                              )
+                              ),
                               column(width = 1,
                                      downloadButton(label="Download",outputId = "PlotDownloadSplinePlot",
                                                     href = "SplinePlot.pdf",
                                                     download = "SplinePlot.pdf" ,
                                                     title = "Save the Spline plot",
                                                     style = "cursor: pointer;",
-                                                    class="dlButton")
-                              )
-                              )
+                                                    class="dlButton"),
+                              plotOutput("visualSplinePlot")
                          )
                        ),
               tabPanel("Inspection", "",

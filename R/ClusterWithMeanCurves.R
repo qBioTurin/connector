@@ -161,12 +161,12 @@ ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c(""
       order(symbols)[i]->index.symb # sorting from the lower to the higher mean curve w.r.t. the zero axis
       
       plots[[paste(symbols[index.symb],"Cluster")]]<- ggplot()+
-        geom_line(data=plot_data[plot_data$Cluster==symbols[index.symb],], aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
         scale_linetype_manual(values =1:G ,limits=sort(symbols),breaks=sort(symbols),name="Cluster") +
         labs(title=paste("Cluster",symbols[index.symb]), x=axis.x, y = axis.y)+
         geom_line(data = curves[curves$Cluster==index.symb,],aes(x=Times,y=Vol,group=ID,color=factor(Info)))+
         scale_colour_manual(values = colFetaure,limits=col,breaks=sort(col),name=feature)+
         theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank())+
+        geom_line(data=plot_data[plot_data$Cluster==symbols[index.symb],], aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
         ylim(ymin,ymax)+xlim(xmin,xmax)
     }
       

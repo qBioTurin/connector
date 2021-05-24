@@ -1,58 +1,59 @@
 
-UpdatingFCMall<-function(S.cl,input, output, session,rResult,Flags)
+UpdatingFCMall<-function(S.cl,CONNECTORList_now,input, output, session,rResult,Flags)
 {
+  IndexesInfo<- IndexesPlot.ExtrapolationNew(stability.list =S.cl)
+  TableGeneration<-function(df){
+    Tight = 
+    Tight_rep = lapply(1:length(df[, 1]), function(i) {
+      freq <- df[i, "Freq"]
+      do.call("rbind", lapply(1:freq, function(j) df[i,]))
+    })
+    df_rep <- do.call("rbind", Tight_rep)
+    dt.fr.max <- aggregate(V~ClusterH, data = df_rep,
+                           FUN = "max")
+    colnames(dt.fr.max)<-c("Model","Max")
+    dt.fr.min<- aggregate(V~ClusterH, data = df_rep,
+                          FUN = "min")
+    colnames(dt.fr.min)<-c("Model","Min")
+    dt.fr.median <- aggregate(V~ClusterH, data = df_rep,
+                              FUN = "median")
+    colnames(dt.fr.median)<-c("Model","Median")
+    dt.fr.mean <- aggregate(V~ClusterH, data = df_rep,
+                            FUN = "mean")
+    colnames(dt.fr.mean)<-c("Model","Mean")
+    OutTable<-Reduce(merge, list(dt.fr.mean, dt.fr.median, dt.fr.min, dt.fr.max))
+    
+    rownames(OutTable) <- OutTable$Model
+    return(OutTable)
+  }
+  
   output$table_tight_all<- renderTable({ 
-    Tight = S.cl$BoxPlots[[paste("h=",input$hValueInGpanel)]]$Data$Tight
-    OutTable<-data.frame(Min = apply(Tight,1,"min"),
-                         Mean = apply(Tight,1,"mean"),
-                         Median = apply(Tight,1,"median"),
-                         Max = apply(Tight,1,"max") )
-    rownames(OutTable) <- rownames(Tight)
-    OutTable
+    OutTable<-TableGeneration(IndexesInfo$IndexesValues$Tight)
+    OutTable[,-1]
   },bordered = TRUE,rownames = TRUE, colnames = TRUE)
   output$table_fdb_all <- renderTable({ 
-    fDB = S.cl$BoxPlots[[paste("h=",input$hValueInGpanel)]]$Data$fDB
-    OutTable<-data.frame(Min = apply(fDB,1,"min"),
-                         Mean = apply(fDB,1,"mean"),
-                         Median = apply(fDB,1,"median"),
-                         Max = apply(fDB,1,"max") )
-    rownames(OutTable) <- rownames(fDB)
-    OutTable
+    OutTable<-TableGeneration(IndexesInfo$IndexesValues$fDB)
+    OutTable[,-1]
   },bordered = TRUE,rownames = TRUE, colnames = TRUE)
   output$table_fdb1_all<- renderTable({ 
-    fDB.1 = S.cl$BoxPlots[[paste("h=",input$hValueInGpanel)]]$Data$fDB.1
-    OutTable<-data.frame(Min = apply(fDB.1,1,"min"),
-                         Mean = apply(fDB.1,1,"mean"),
-                         Median = apply(fDB.1,1,"median"),
-                         Max = apply(fDB.1,1,"max") )
-    rownames(OutTable) <- rownames(fDB.1)
-    OutTable
+    OutTable<-TableGeneration(IndexesInfo$IndexesValues$fDB1)
+    OutTable[,-1]
   },bordered = TRUE,rownames = TRUE, colnames = TRUE)
   output$table_fdb2_all<- renderTable({ 
-    fDB.2 = S.cl$BoxPlots[[paste("h=",input$hValueInGpanel)]]$Data$fDB.2
-    OutTable<-data.frame(Min = apply(fDB.2,1,"min"),
-                         Mean = apply(fDB.2,1,"mean"),
-                         Median = apply(fDB.2,1,"median"),
-                         Max = apply(fDB.2,1,"max") )
-    rownames(OutTable) <- rownames(fDB.2)
-    OutTable
+    OutTable<-TableGeneration(IndexesInfo$IndexesValues$fDB2)
+    OutTable[,-1]
   },bordered = TRUE,rownames = TRUE, colnames = TRUE)
   
-  IndexBoxPlot<- BoxPlot.Extrapolation(stability.list = S.cl, h = input$hValueInGpanel)
-  
-  rResult$IndexBoxPlot <- IndexBoxPlot
+  rResult$IndexBoxPlot <- IndexesInfo
   rResult$CONNECTORListFCM_all <- S.cl
-  output$visualIndexes <- renderPlot(IndexBoxPlot)
-  
-  
+  output$visualIndexes <- renderPlot(IndexesInfo$Plot)
   
   ## Selecting a number of clusters:
   observeEvent(input$GConsMat,{
-    ConsMatrix <- ConsMatrix.Extrapolation(stability.list = S.cl,
-                                          h = input$hValueInGpanel,
-                                          G = input$GConsMat)
-    output$visualConsMatrix <- renderPlot(ConsMatrix)
-    rResult$ConsMatrix <- ConsMatrix
+    ConsMatrices <- ConsMatrix.ExtrapolationNew(stability.list = S.cl,
+                                              data = CONNECTORList_now)
+    output$visualConsMatrix <- renderPlot({ConsMatrices[[paste0("G",input$GConsMat)]]$ConsensusPlot})
+    rResult$ConsMatrices <- ConsMatrices
   })
   
   observeEvent(input$GExtrap,{
@@ -62,11 +63,11 @@ UpdatingFCMall<-function(S.cl,input, output, session,rResult,Flags)
                                 message = 'The number of clusters choise has been updated!') 
     }
     
-    CONNECTORList.FCM <- MostProbableClustering.Extrapolation(stability.list = S.cl,
-                                                              h = input$hValueInGpanel,
-                                                              G = input$Gvalue )
+    CONNECTORList.FCM <- MostProbableClustering.ExtrapolationNew(stability.list = S.cl,
+                                                                 G = input$Gvalue )
     rResult$CONNECTORList.FCM  <- CONNECTORList.FCM 
     rResult$G <- input$Gvalue
+    rResult$h <- length(CONNECTORList.FCM$FCM$fit$parameters$Lambda[1,])
   })
   
   Flags$Continue <- FALSE
@@ -138,15 +139,12 @@ withConsoleRedirect <- function(expr) {
 
 Visual_1Step <- function(CONNECTORList,input, output, session,rResult,Flags,From=NULL)
 {
-  GrowPlot<- GrowthCurve(CONNECTORList, feature = "ID")
-  TimeGrid <- TimeGridDensity(CONNECTORList)
-  OutGrowPlot <- GrowPlot$GrowthCurve_plot
+  TimeGridPlot <- TimeGridDensity(CONNECTORList)
+  TimeGridPlot <- TimeGridPlot$TimeGrid_plot
+  #output$visualGrowthEND <- renderPlot({OutGrowPlot})
+  #rResult$GrowPlot <- OutGrowPlot
+  output$visualTimes <- renderPlot({TimeGridPlot})
   
-  output$visualGrowth <- renderPlot({OutGrowPlot})
-  output$visualGrowthEND <- renderPlot({OutGrowPlot})
-  rResult$GrowPlot <- OutGrowPlot
-  
-  output$visualTimes <- renderPlot({TimeGrid})
   # updating the feature to select:
   Feat = colnames(CONNECTORList$LabCurv)
   updateSelectInput(session, "feature",
@@ -156,52 +154,68 @@ Visual_1Step <- function(CONNECTORList,input, output, session,rResult,Flags,From
                     max = max(CONNECTORList$TimeGrid),
                     value = c(min(CONNECTORList$TimeGrid), max(CONNECTORList$TimeGrid) ) )
   
-  ## Growth plot:  
-  observeEvent(c(input$feature, input$TruncateData),{
+  ## Growth plot:
+  #1) change the feature
+  observeEvent(c(input$feature,input$truncTime,input$GrowthCurvesLegend),{
+    ### preparing dataframe for ggplot
+    dataplot <- data.frame(merge(CONNECTORList$Dataset,CONNECTORList$LabCurv,by="ID"))
+    col <- as.character(unique(dataplot[,input$feature]) )
+    colFetaure <- rainbow(dim(unique(CONNECTORList$Lab[input$feature]))[1])
+    
+    ### Set growth curve plot with ggplot
+    GrowPlot <- ggplot(data=dataplot, aes(x=Time, y=Vol,group=ID,col=as.factor(dataplot[,input$feature]) )) +
+      geom_line() +
+      geom_point() +
+      labs(col=input$feature)+
+      #labs(title=title,x=axes.x, y = axes.y,col=input$feature)+
+      theme(plot.title = element_text(hjust = 0.5),
+            title =element_text(size=10, face='bold'))+
+      scale_colour_manual(values = colFetaure,limits = col, breaks = sort(col), name = input$feature)
+    
+    ###############################
+    #GrowPlot<- GrowthCurve(CONNECTORList, feature = "ID")
+    
+    ## Time Grid plot
+    MinTrunc<-input$truncTime[1]
+    MaxTrunc<-input$truncTime[2]
+    
+    GrowPlot <- GrowPlot+
+      geom_vline(xintercept = input$truncTime) 
+    
+    if(input$GrowthCurvesLegend)
+      GrowPlot <- GrowPlot + theme(legend.position = "right")
+    else 
+      GrowPlot <- GrowPlot + theme(legend.position = "none")
+      
+    TimeGridPlot <- TimeGridPlot +
+      geom_vline(xintercept = input$truncTime)+
+      geom_hline(yintercept = input$truncTime)
+      
+    output$visualTimes <- renderPlot({TimeGridPlot})
+    output$visualGrowth <- renderPlot({GrowPlot})
+    rResult$GrowPlot <- GrowPlot
+  })
+  
+  #2) truncate the curves
+  observeEvent(input$TruncateData,{
     MinTrunc<-input$truncTime[1]
     MaxTrunc<-input$truncTime[2]
     if(MaxTrunc != 0 &
        MinTrunc != 0 &
        (MaxTrunc != max(CONNECTORList$TimeGrid) || MinTrunc != min(CONNECTORList$TimeGrid)) )
     {
-      if(input$feature == "" ){
-        txt <- withConsoleRedirect(
-          CONNECTORList_trunc<- DataTruncation(CONNECTORList, feature="ID",
-                                               truncTime = input$truncTime )
+      txt <- withConsoleRedirect(
+        CONNECTORList_trunc<- DataTruncation(CONNECTORList,
+                                             feature= input$feature,
+                                             truncTime = input$truncTime)
         )
-        output$SummaryCutting <- renderUI({HTML(paste(txt[-1], collapse = "<br/>"))} ) 
-        
-      }else{
-        txt <- withConsoleRedirect(
-          CONNECTORList_trunc<- DataTruncation(CONNECTORList,
-                                               feature= input$feature,
-                                               truncTime = input$truncTime)
-        )
-        output$SummaryCutting <- renderUI({HTML(paste(txt[-1], collapse = "<br/>"))} ) 
-        
-      }
+      output$SummaryCutting <- renderUI({HTML(paste(txt[-1], collapse = "<br/>"))} ) 
       
       rResult$CONNECTORList_trunc <- CONNECTORList_trunc
-      
-      OutGrowPlot <- CONNECTORList_trunc$GrowthCurve_plot
-      output$visualGrowth <- renderPlot({OutGrowPlot})
-      rResult$GrowPlot <- OutGrowPlot
-      
-      TimeGridOut <- TimeGrid +
-        geom_vline(xintercept = input$truncTime) +
-        geom_hline(yintercept = input$truncTime)
-      
-      output$visualTimes <- renderPlot({TimeGridOut})
+
     }else{
-      if(input$feature != "" ){
-        GrowPlot <-GrowthCurve(CONNECTORList, feature = input$feature)
-        OutGrowPlot <- GrowPlot$GrowthCurve_plot
-        rResult$GrowPlot <- OutGrowPlot
-        output$visualGrowth <- renderPlot({OutGrowPlot})
-      }
+      output$SummaryCutting <- renderUI({HTML(paste("Please select better cutting times!"))} ) 
     } 
-    
-    output$visualGrowth <- renderPlot({OutGrowPlot })
   })
   
   ## Now it is possible to save something:
@@ -231,20 +245,18 @@ server <- function(input, output, session) {
                             GrowPlot=NULL,
                             TimeGrid=NULL,
                             CrossLL = NULL,
-                            PCAplot = NULL,
                             IndexBoxPlot = NULL,
                             FCMplots = NULL,
                             DiscriminantPlot = NULL,
                             DiscriminantPlotF = NULL,
-                            ConsMatrix = NULL
+                            ConsMatrices = NULL
                             )
   
-  Flags  <- reactiveValues(save1 = 1, GoS1toS2 = 1,GoS1toS2_RDS=1, GoS3toS4 = 1, GoS4toS5 = 1)
+  Flags  <- reactiveValues(save1 = 1, GoS1toS2 = 1,GoS1toS2_RDS=1, GoS3toS4 = 1)
 ## Data import:
 
   Flags$ContinueLoadingData <- FALSE
   Flags$ContinueEstimP<- FALSE
-  Flags$ContinueEstimH<- FALSE
   Flags$ContinueEstimG<- FALSE
   Flags$ContinueUploadingRDS <- FALSE
   
@@ -275,7 +287,10 @@ server <- function(input, output, session) {
 ## Run CLLik:
   observeEvent(input$Minp, {
     if(input$Minp >= input$Maxp) updateNumericInput(session,"Maxp",value = input$Minp+1, min = input$Minp+1 )
-    
+    updateSliderInput(session,"pValue",
+                      min = input$Minp,
+                      max = input$Maxp,
+                      value = input$Minp)
   }) 
   observeEvent(input$RunForP, {
     output$ErrorInP <- renderText({
@@ -291,15 +306,13 @@ server <- function(input, output, session) {
     { 
       if(!is.null(rResult$CONNECTORList_trunc)) CONNECTORList_now <- rResult$CONNECTORList_trunc
       else if(!is.null(rResult$CONNECTORList)) CONNECTORList_now <- rResult$CONNECTORList
-      
+      cat("#### The CrossLogLikelihood Method is running... \n")
       CrossLogLike<-BasisDimension.Choice(CONNECTORList_now,input$Minp:input$Maxp)
+      cat("#### The CrossLogLikelihood Method has successfully finished \n")
       CrossLogLikePlot<-CrossLogLike$CrossLogLikePlot
-      rResult$CrossLL <- CrossLogLikePlot
+      output$visualKnots<-renderPlot({CrossLogLike$KnotsPlot})
       
-      updateSliderInput(session,"pValue",
-                        min = input$Minp,
-                        max = input$Maxp,
-                        value = input$Minp)
+      rResult$CrossLL <- CrossLogLike
       
       observeEvent(input$pValue,{
         if(input$pSelection == input$Minp)
@@ -307,73 +320,18 @@ server <- function(input, output, session) {
         else CrossLogLikePlot_out <- CrossLogLikePlot + geom_vline(xintercept = input$pValue)
         
         output$visualCLLik <- renderPlot({CrossLogLikePlot_out})
-        
-        observeEvent(input$pSelection,{
-          rResult$p <- input$pValue
-          Flags$GoS3toS4 <- 0
-          
-          mess <- paste("The value of p selected is",input$pValue)
-          output$ErrorInP <- renderText({mess})
-        })
-        
-        updateNumericInput(session,"pValueInHpanel",value = input$pValue, min = input$Minp, max = input$Maxp)
-        updateNumericInput(session,"pValueInGpanel",value = input$pValue, min = input$Minp, max = input$Maxp)
       })
     }
+  })
+  observeEvent(input$pSelection,{
+    rResult$p <- input$pValue
+    Flags$GoS3toS4 <- 0
     
+    mess <- paste("The value of p selected is",input$pValue)
+    output$ErrorInP <- renderText({mess})
   })
-
-## Run PCA:
-  observeEvent(input$pValueInHpanel,{
-    if(!is.null(rResult$p) & input$pValueInHpanel != 0)
-      if(input$pValueInHpanel != rResult$p)
-        session$sendCustomMessage(type = 'testmessage', message = "The value of p selected is different from the one selected in the CrossLog Likelihood step!") 
-  })
-  observeEvent(input$RunForH, {
-    output$ErrorInH <- renderText({
-      validate(
-        need(!is.null(rResult$CONNECTORList_trunc) || !is.null(rResult$CONNECTORList) , 
-             "Please upload the RData with a ConnectorList object or run the preprocessing step!" )
-      )
-      Flags$ContinueEstimH <- TRUE
-      ""
-    })
-    
-    if(Flags$ContinueEstimH)
-    {
-      if(!is.null(rResult$CONNECTORList_trunc)) CONNECTORList_now <- rResult$CONNECTORList_trunc
-      else if(!is.null(rResult$CONNECTORList)) CONNECTORList_now <- rResult$CONNECTORList
-      
-      pca <- PCA.Analysis(CONNECTORList_now ,p = input$pValueInHpanel)
-      
-      PCAplot<- pca$plot
-      rResult$PCAplot <- PCAplot
-      
-      output$visualPCA<- renderPlot(PCAplot)
-      
-      observeEvent(input$hSelection,{
-        rResult$h <- input$hValue
-        mess <- paste("The value of h selected is",input$hValue)
-        output$ErrorInP <- renderText({mess})
-        Flags$GoS4toS5 <- 0
-        updateNumericInput(session,"hValueInGpanel",value = input$hValue, min = 1)
-      })
-    }
-
-  })
-  
 ## Run FCM:
-  observeEvent(c(input$pValueInGpanel,input$hValueInGpanel),{
-    if(!is.null(rResult$p) & input$pValueInGpanel != 0 )
-      if(input$pValueInGpanel != rResult$p)
-        session$sendCustomMessage(type = 'testmessage', message = "The value of p selected is different from the one selected in the CrossLog Likelihood step!") 
-    
-    if(!is.null(rResult$h) & input$hValueInGpanel != 0 )
-      if(input$hValueInGpanel != rResult$h)
-        session$sendCustomMessage(type = 'testmessage', message = "The value of h selected is different from the one selected in the PCA step!") 
-    
-  })
-  observeEvent(input$MinG, {
+  observeEvent(c(input$MinG,input$MaxG), {
     if(input$MinG >= input$MaxG)
       updateNumericInput(session,"MaxG",value = input$MinG, min = input$MinG+1 )
   }) 
@@ -381,6 +339,9 @@ server <- function(input, output, session) {
     output$FCMallError <- renderText({
       validate(need(!(is.null(rResult$CONNECTORList_trunc) & is.null(rResult$CONNECTORList)) ,
                     "Please upload the RData with a ConnectorList object or run the preprocessing step!") )
+      validate(need(!(is.null(rResult$p)) ,
+                    "Please select the value of p!") )
+      
       Flags$ContinueEstimG <- T
       ""
       })
@@ -395,13 +356,16 @@ server <- function(input, output, session) {
       updateNumericInput(session, "Gvalue",
                          value =  input$MinG, min = input$MinG,max = input$MaxG)
       
-      S.cl <-StabilityAnalysis(CONNECTORList_now,
-                               G = input$MinG:input$MaxG ,
-                               h = input$hValueInGpanel,
-                               p = input$pValueInGpanel,
-                               runs=input$Nruns)
+      cat("#### The FCM Method is running... \n")
+      S.cl <-ClusterAnalysis(CONNECTORList_now,
+                             G=input$MinG:input$MaxG,
+                             p=rResult$p,
+                             runs=input$Nruns,
+                             seed=2404,
+                             Cores=input$Cores)
+      cat("#### The FCM Method has successfully finished \n")
       
-      UpdatingFCMall(S.cl,input, output, session,rResult,Flags)
+      UpdatingFCMall(S.cl,CONNECTORList_now,input, output, session,rResult,Flags)
     }
   })
 
@@ -455,7 +419,14 @@ server <- function(input, output, session) {
       })
     }
   })
-  observeEvent(c(input$featureCLplot,input$typeCLplot,Flags$ContinueCLplot),{
+  observeEvent(c(input$featureCLplot,Flags$ContinueCLplot),{
+    output$G_not_selected <- renderText({
+      validate(need(!is.null(rResult$G) ,
+                      "Please select a number of clusters!"
+                    )
+               )
+      ""
+      })
     if(Flags$ContinueCLplot)
     {
       
@@ -473,23 +444,29 @@ server <- function(input, output, session) {
                         choices = names(FCMplots$spline.plots),
                         selected = names(FCMplots$spline.plots)[1]
                         )
-
-      if(input$typeCLplot == "All clusters")
-      {
-        visualClplot <- FCMplots$plotsCluster$ALL
-      }else if(input$typeCLplot == "Cluster means"){
-        visualClplot <- FCMplots$plotMeanCurve
-      }else{
-        visualClplot <- FCMplots$plotsCluster[[input$typeCLplot]]
-      }
-      output$visualClplot <- renderPlot({visualClplot})
-      rResult$visualClplot<- visualClplot
       
       observeEvent(input$SplineID,{
         output$visualSplinePlot <- renderPlot({FCMplots$spline.plots[[input$SplineID]]})
         rResult$visualSplinePlot <- FCMplots$spline.plots[[input$SplineID]]
       })
-        
+      observeEvent(c(input$typeCLplot,input$ClusterPlotLegend),{
+    if(!is.null(rResult$FCMplots)){
+      if(input$typeCLplot == "All clusters")
+      {
+        visualClplot <- rResult$FCMplots$plotsCluster$ALL
+      }else if(input$typeCLplot == "Cluster means"){
+        visualClplot <- rResult$FCMplots$plotMeanCurve
+      }else{
+        visualClplot <- rResult$FCMplots$plotsCluster[[input$typeCLplot]]
+      }
+      
+      if(!input$ClusterPlotLegend){
+        visualClplot <- visualClplot + theme(legend.position = "none")
+      }
+      output$visualClplot <- renderPlot({visualClplot})
+      rResult$visualClplot<- visualClplot
+    }
+  })
     }
     
     })
@@ -506,14 +483,12 @@ server <- function(input, output, session) {
         if(input$ColorDiscrPlot == "Clusters"){
           DiscrPlot <- DiscriminantPlot(clusterdata = rResult$CONNECTORList.FCM,
                                         data = CONNECTORList_now,
-                                        h = rResult$h,
                                         feature = "ID")
           visualDiscrPlot <- DiscrPlot$ColCluster
           
         }else{
           DiscrPlot <- DiscriminantPlot(clusterdata = rResult$CONNECTORList.FCM,
                                         data = CONNECTORList_now,
-                                        h = rResult$h,
                                         feature = input$FeatDiscrCol)
           visualDiscrPlot <- DiscrPlot$ColFeature
 
@@ -570,17 +545,6 @@ server <- function(input, output, session) {
     filename = function() { paste("CrossLogLike.pdf") },
     content = function(file) {
       ggsave(file, plot = rResult$CrossLL , device = "pdf",width = 10,height = 8,units = "cm")
-    }
-  )
-# PCA
-  observeEvent(input$ChangePCA,{
-    pl<-rResult$PCAplot
-    output$visualCLLikEND <- renderPlot( PlotModify(pl,input$titlePCA,input$xlabPCA,input$ylabPCA) )
-  }) 
-  output$PlotDownloadPCA <- downloadHandler(
-    filename = function() { paste("PCA.pdf") },
-    content = function(file) {
-      ggsave(file, plot = rResult$PCAplot , device = "pdf",width = 10,height = 8,units = "cm")
     }
   )
 # Cons Matrix
@@ -640,14 +604,7 @@ server <- function(input, output, session) {
       shinyjs::disable("FromS3toS4")
     }
   })
-  observe({
-    if(Flags$GoS4toS5 == 0){
-      shinyjs::enable("FromS4toS5")
-    }else{
-      shinyjs::disable("FromS4toS5")
-    }
-  })
-  
+
   observeEvent(input$FromS1toS2, {
     updateTabsetPanel(session, "tabs",
                       selected = "PreProc"
@@ -664,11 +621,6 @@ server <- function(input, output, session) {
     )
   })
   observeEvent(input$FromS3toS4, {
-    updateTabsetPanel(session, "tabs",
-                      selected = "hSelection"
-    )
-  })
-  observeEvent(input$FromS4toS5, {
     updateTabsetPanel(session, "tabs",
                       selected = "FCM"
     )
@@ -722,15 +674,7 @@ server <- function(input, output, session) {
             updateNumericInput(session,"pValueInHpanel",value = Info$p, min =1 )
             updateNumericInput(session,"pValueInGpanel",value = Info$p, min =1 )
           }
-          
-          if(is.null(Info$h)){
-            mess <- c(mess,paste(" -No h value; "))
-          }else{
-            mess <- c(mess,paste(" -h = ",Info$h,"; "))
-            rResult$h <- Info$h
-            updateNumericInput(session,"hValueInGpanel",value = Info$h, min =1 )
-          }
-          
+
           if(is.null(Info$G)){
             mess <- c(mess,paste(" -No G value. "))
           }else{
