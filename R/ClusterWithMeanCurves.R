@@ -198,7 +198,7 @@ ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c(""
         x = axis.x,
         y = axis.y)
 
-  plots[["PlotData"]]<-plot_data
+  plots[["MeanCurves"]]<-plot_data
   print(plots[["ALL"]])
        
   ### 
