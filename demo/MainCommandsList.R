@@ -40,7 +40,7 @@ IndexesPlot.ExtrapolationNew(S.cl)-> indexes
 ConsMatrix.ExtrapolationNew(S.cl,data = CONNECTORList)-> ConsInfo
 MostProbableClustering.ExtrapolationNew(S.cl,4) ->MostProbableClustering
 
-S.cl$BoxPlots 
+indexes$Plot 
 S.cl$ConsensusInfo$G4$ConsensusPlot
 S.cl$ConsensusInfo$G3$MostProbableClustering
 

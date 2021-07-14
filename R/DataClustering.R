@@ -7,7 +7,6 @@
 #' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param G  The vector/number of possible clusters.
 #' @param p The dimension of the natural cubic spline basis. (see \code{\link{BasisDimension.Choice}})
-#' @param h
 #' @param runs Number of runs.
 #' @param seed Seed for the kmeans function.
 #' @param save If TRUE then the growth curves plot truncated at the "TruncTime" is saved into a pdf file.
@@ -62,21 +61,39 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
   grid <- data$TimeGrid
   
-  ############### Calculation and integration of the Gauss points into the timegrid 
+  ############### Calculation and integration of the Gauss points into the timegrid for each curve
   ############### for calculating the distances between curves
   ## we need the splines values calculated in the gauss$nodes in the time interval [a,b]
   
-  gauss.quad(10) -> gauss
+  GaussPoints.generation <- function(grid){
+    gauss.quad(10) -> gauss
+    a <- min(grid)
+    b <- max(grid)
+    itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
+    # params$grid <- grid <- sort(c(CompleteGrid,itempi))
+    # match(itempi,CompleteGrid) -> itimeindex 
+    
+    gauss.info<-list(gauss=gauss,a=a,b=b,newTimes=itempi)
+    return(gauss.info)
+  }
+  gauss.infoList<-lapply(unique(database$ID), function(i){
+    curve.grid <- database$Time[database$ID == i]
+    
+    l<-GaussPoints.generation(curve.grid)
+    return(l)
+  })
   
-  a <- min(grid)
-  b <- max(grid)
-  itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
+  newPoints<-unique(unlist(lapply(gauss.infoList, `[`, 4)))
+  grid <- sort(c(grid,newPoints))
+  for(i in 1:length(gauss.infoList))
+    gauss.infoList[[i]]$itimeindex <- match(gauss.infoList[[i]][[4]],grid)
   
-  params$grid <- grid <- sort(c(grid,itempi))
-  match(itempi,grid) -> itimeindex 
+  GaussPoint.wholeGrid<-GaussPoints.generation(grid)
+  params$grid <- grid <- sort(c(grid,GaussPoint.wholeGrid[[4]]))
+  GaussPoint.wholeGrid$itimeindex<- match(gauss.infoList[[i]][[4]],grid)
+  ## adding at the end the entire grid gauss points
+  gauss.infoList[[length(gauss.infoList)+1]] <- GaussPoint.wholeGrid
   
-  gauss.info<-list(gauss=gauss,itimeindex=itimeindex,a=a,b=b)
-
   params$points <- database$Vol
   params$ID <- database$ID
   params$timeindex <- match(database$Time,grid)
@@ -93,7 +110,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                                   Cores=Cores,
                                   runs = runs,
                                   params = params,
-                                  gauss.info = gauss.info,
+                                  gauss.infoList = gauss.infoList,
                                   h.gBefore = h.gBefore
                                   )
     # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
@@ -186,7 +203,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   return(list(Clusters.List=Clusters.List, seed=seed,runs = runs))
 }
 
-FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50,MinErrFreq= 0)
+FCM.estimation<-function(data,G,params,gauss.infoList,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50,MinErrFreq= 0)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
@@ -220,7 +237,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
       Indexes.Uniq.Par<-Unique.Param(ALL.runs)
       
       ## Let calculate the clustering and the fDB indexes
-      ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
+      ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.infoList,G)
       l.fdb <- fdb.calc(ClusterAll$ClusterAll)
       rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
       
@@ -282,7 +299,7 @@ FCM.estimation<-function(data,G,params,gauss.info,h.gBefore,p=5,h.user=NULL,Core
     ## Check the same parameter configurations:
     Indexes.Uniq.Par<-Unique.Param(ALL.runs)
     ## Obtain the cluster and all its info
-    ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.info,G)
+    ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.infoList,G)
   }
   
   ####################
@@ -379,7 +396,7 @@ Unique.Param = function(List.runs.fitfclust)
   return(Indexes.Param.list)
 }
 
-ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.info,G)
+ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.infoList,G)
 {
   L1<- length(List.runs.fitfclust)
   # deleting if there was some errors in the predictions:
@@ -400,6 +417,7 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       ## Select just one configuration among the same ones
       Indexes.Uniq.Par[[i]][1]->j
       List.runs.fitfclust[[j]]->fcm.fit
+      
       ## Run the FCM prediction
       fclust.curvepred(fcm.fit) -> fcm.prediction
       fclust.pred(fcm.fit) -> fcm.PRED
@@ -420,11 +438,11 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       
       ## Goodness coefficents calculation
       fcm.prediction$meancurves->meancurves
-      distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
-      distances.zero<-L2dist.mu20(fcm.prediction,gauss.info,fcm.fit,deriv=0)
-      Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 0)
-      Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 1)
-      Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.info = gauss.info, fcm.fit = fcm.fit, deriv = 2)
+      distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, gauss.infoList = gauss.infoList, fcm.fit = fcm.fit, deriv = 0)
+      distances.zero<-L2dist.mu20(fcm.prediction,gauss.infoList,fcm.fit,deriv=0)
+      Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.infoList = gauss.infoList, fcm.fit = fcm.fit, deriv = 0)
+      Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.infoList = gauss.infoList, fcm.fit = fcm.fit, deriv = 1)
+      Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, gauss.infoList = gauss.infoList, fcm.fit = fcm.fit, deriv = 2)
       ## Let name the cluster with A->Z from the lower mean curve to the higher.
       if( G !=1 )
       {
