@@ -9,22 +9,22 @@
 \alias{Rclust.coeff}
 \title{Functional Davies–Bouldin (fDB) index and L2 (or with derivatives) distances}
 \usage{
-L2dist.curve2mu(clust, fcm.curve, gauss.infoList, fcm.fit = NULL, deriv = 0)
+L2dist.curve2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
 
-L2dist.mu2mu(fcm.curve, gauss.infoList, fcm.fit = NULL, deriv = 0)
+L2dist.mu2mu(fcm.curve, database, fcm.fit = NULL, deriv = 0)
 
-L2dist.mu20(fcm.curve, gauss.infoList, fcm.fit = NULL, deriv = 0)
+L2dist.mu20(fcm.curve, database, fcm.fit = NULL, deriv = 0)
 
-Sclust.coeff(clust, fcm.curve, gauss.infoList, fcm.fit = NULL, deriv = 0)
+Sclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
 
-Rclust.coeff(clust, fcm.curve, gauss.infoList, fcm.fit = NULL, deriv = 0)
+Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
 }
 \arguments{
 \item{clust}{The vector reporting the cluster membership for each sample.}
 
 \item{fcm.curve}{The list obtained applying the function fclust.curvepred to the fitfclust output, the FCM algorithm, more details in [Sugar and James].}
 
-\item{gauss.infoList}{The list storing the (i) Gauss values, (ii) their corresponding time points, (iii) a and b, i.e. the lower and upper values for the integration.    (see \code{\link{gauss.quad}})}
+\item{database}{...}
 
 \item{fcm.fit}{The fitfclust output, the FCM algorithm, more details in [Sugar and James].}
 
