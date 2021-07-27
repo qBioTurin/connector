@@ -154,30 +154,44 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   
   grid<-fcm$FCM$fit$grid
   
-  gauss.quad(10) -> gauss
-  a <- min(grid)
-  b <- max(grid)
-  itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
+  # gauss.quad(10) -> gauss
+  # a <- min(grid)
+  # b <- max(grid)
+  # itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
+  # 
+  # match(itempi,grid) -> itimeindex 
+  # 
+  # itimeindex <- match(database$Time[database$ID == i],grid)
+  # fxG <- (curve[,itimeindex] )^2
+  # int <- (b-a)/2 * rowSums( gauss$weights * fxG )
+  # dist.curve <- sqrt(int)
   
-  match(itempi,grid) -> itimeindex 
+  dist.curve<-L2dist.curve20(clust = fcm$FCM$cluster$cluster.member,
+                             fcm.curve = fcm$FCM$prediction,
+                             database = data$Dataset)
   
-  fxG <- (curve[,itimeindex] )^2
-  int <- (b-a)/2 * rowSums( gauss$weights * fxG )
-  dist.curve <- sqrt(int)
-  names(which.min(dist.curve))->lowest.curve
-  
-  m.lowercurve<-matrix(curve[lowest.curve,itimeindex],nrow = length(curve[,1]),ncol = length(itimeindex),byrow = T)
-  fxG <- (curve[,itimeindex]-m.lowercurve )^2
-  int <- (b-a)/2 * rowSums( gauss$weights * fxG )
-  dist.curve <- sqrt(int)
+  names(dist.curve) <- curvename
+  # names(which.min(dist.curve))->lowest.curve
+  # 
+  # m.lowercurve<-matrix(curve[lowest.curve,itimeindex],
+  #                      nrow = length(curve[,1]),
+  #                      ncol = length(itimeindex),byrow = T)
+  # fxG <- (curve[,itimeindex]-m.lowercurve )^2
+  # int <- (b-a)/2 * rowSums( gauss$weights * fxG )
+  # dist.curve <- sqrt(int)
   ################## Sorting the names!!!
   
   #1) sorting depending by the l2 distance with the zero x-axis!
   curvename.ordered<-names(sort(dist.curve)) 
   
   #2) Sorting depending on the cluster membership
-  names(cl.memer)<-curvename
-  cl.memer<-sort(cl.memer)
+ 
+  cl.memer.tmp <- data.frame(curvename,names(cl.memer),cl.memer)
+
+  cl.memer.tmp<-cl.memer.tmp[order(cl.memer.tmp$names.cl.memer.),]
+  cl.memer <- cl.memer.tmp$cl.memer
+  names(cl.memer) <- cl.memer.tmp$curvename
+  
   #3) Defining a dataframe in order to sort the curves depending by the cluster and distance!
   
   namefroml2<-1:length(curvename)
@@ -224,7 +238,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   })
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
-  Freq.cl[order(match(Freq.cl$Cluster, lab)),]
+  #Freq.cl[order(match(Freq.cl$Cluster, lab)),]
   MeanFreq<-mean(Freq.cl$Mean)
   Freq.cl$Mean[is.na(Freq.cl$Mean)] <- 1
   lab.new<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") ))

@@ -160,6 +160,48 @@ L2dist.mu20 <- function(fcm.curve,database,fcm.fit=NULL,deriv=0){
 }
 
 #' @rdname DBindexL2dist
+L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
+  n.curves<-length(fcm.curve$gpred[,1])
+  dist.curve2mu <-rep(0,n.curves)
+  grid <-sort(unique(database$Time))
+  for(i in 1:n.curves){
+    ## Gauss points calculation for each curve
+    # gauss.infoList[[i]] -> gauss.info
+    # itimeindex <- gauss.info$itimeindex
+    # weights <- gauss.info$gauss$weights 
+    # a<-gauss.info$a
+    # b<-gauss.info$b
+    # 
+    itimeindex <- match(database$Time[database$ID == i],grid)
+    if(deriv==0)
+    {
+      fxk <- (fcm.curve$gpred[i,1:max(itimeindex)] )^2
+    }
+    else{
+      if(is.null(fcm.fit)) warning("The fcm.fit is needed to calculate the derivatives!! ")
+      dspl <-basis.derivation(fcm.fit,deriv)
+      u.dspl<-dspl$u.dspl
+      dmeancurves<-dspl$dmeancurves
+      
+      etapred <- fcm.curve$etapred
+      
+      matrix(0,n.curves,nrow(u.dspl)) -> dgpred
+      
+      for (ind in 1:n.curves){
+        dgpred[ind,] <- as.vector(u.dspl %*% etapred[ind,])
+      }
+      
+      fxk <- ( dgpred[i,1:max(itimeindex)]- t(dmeancurves[1:max(itimeindex),clust[i]]) )^2
+    }
+    # int <- (b-a)/2 * rowSums( weights * fxk )
+    # dist.curve2mu[i] <- sqrt(int)
+    dist.curve2mu[i] <- sqrt(integrate.xy(grid[1:max(itimeindex)],fxk))
+  }
+  
+  return(dist.curve2mu)
+}
+
+#' @rdname DBindexL2dist
 Sclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
 
   distances <- L2dist.curve2mu(clust,fcm.curve,database,fcm.fit,deriv)

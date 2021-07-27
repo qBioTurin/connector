@@ -38,11 +38,18 @@ S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
 
 IndexesPlot.ExtrapolationNew(S.cl)-> indexes
 ConsMatrix.ExtrapolationNew(S.cl,data = CONNECTORList)-> ConsInfo
-MostProbableClustering.ExtrapolationNew(S.cl,4) ->MostProbableClustering
+MostProbableClustering.ExtrapolationNew(S.cl,5) ->MostProbableClustering
 
 indexes$Plot 
-S.cl$ConsensusInfo$G4$ConsensusPlot
-S.cl$ConsensusInfo$G3$MostProbableClustering
+ConsInfo$G4$ConsensusPlot
+ConsInfo$G5$ConsensusPlot
+
+
+FCMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
+                                data= CONNECTORList,
+                                feature = "Progeny",
+                                labels = c("Time","Volume"),title= (" FCM model"))
+
 
 ### Calculation of h
 pca <- PCA.Analysis(CONNECTORList,p = p)
