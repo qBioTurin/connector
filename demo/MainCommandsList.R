@@ -45,7 +45,7 @@ ConsInfo$G4$ConsensusPlot
 ConsInfo$G5$ConsensusPlot
 
 
-FCMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
+FMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
                                 data= CONNECTORList,
                                 feature = "Progeny",
                                 labels = c("Time","Volume"),title= (" FCM model"))
