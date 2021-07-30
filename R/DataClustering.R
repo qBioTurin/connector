@@ -59,41 +59,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   params <- list()
   database<-data$Dataset
   data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
-  grid <- data$TimeGrid
-  
-  ############### Calculation and integration of the Gauss points into the timegrid for each curve
-  ############### for calculating the distances between curves
-  ## we need the splines values calculated in the gauss$nodes in the time interval [a,b]
-  
-  # GaussPoints.generation <- function(grid){
-  #   gauss.quad(10) -> gauss
-  #   a <- min(grid)
-  #   b <- max(grid)
-  #   itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
-  #   # params$grid <- grid <- sort(c(CompleteGrid,itempi))
-  #   # match(itempi,CompleteGrid) -> itimeindex 
-  #   
-  #   gauss.info<-list(gauss=gauss,a=a,b=b,newTimes=itempi)
-  #   return(gauss.info)
-  # }
-  # gauss.infoList<-lapply(unique(database$ID), function(i){
-  #   curve.grid <- database$Time[database$ID == i]
-  #   
-  #   l<-GaussPoints.generation(curve.grid)
-  #   return(l)
-  # })
-  # 
-  # newPoints<-unique(unlist(lapply(gauss.infoList, `[`, 4)))
-  # grid <- sort(c(grid,newPoints))
-  # for(i in 1:length(gauss.infoList))
-  #   gauss.infoList[[i]]$itimeindex <- match(gauss.infoList[[i]][[4]],grid)
-  # 
-  # GaussPoint.wholeGrid<-GaussPoints.generation(grid)
-  # params$grid <- grid <- sort(c(grid,GaussPoint.wholeGrid[[4]]))
-  # GaussPoint.wholeGrid$itimeindex<- match(gauss.infoList[[i]][[4]],grid)
-  # ## adding at the end the entire grid gauss points
-  # gauss.infoList[[length(gauss.infoList)+1]] <- GaussPoint.wholeGrid
-  params$grid <- grid
+  params$grid <- grid <- data$TimeGrid
   params$points <- database$Vol
   params$ID <- database$ID
   params$timeindex <- match(database$Time,grid)
@@ -120,86 +86,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   }
   
   names(Clusters.List)<-paste0("G",G)
-  # ###### box plot generation #####
-  # ##### Calculation of the tightness and DB (0,1,2) indexes
-  # l.tight <- lapply(1:length(G),function(i){
-  #   ClusterAll <- Clusters.List[[i]]$ClusterAll
-  #   V.all<- lapply(1:(length(ClusterAll)),function(j){
-  #     if(!is.character(ClusterAll[[j]]$Error) )
-  #       data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Tight.indexes, Freq= ClusterAll[[j]]$ParamConfig.Freq)
-  #     else NA
-  #   })
-  #   V.all <- do.call("rbind",V.all)
-  #   V.all$Cluster <-G[i]
-  #   V.all$Index = "Tightness"
-  #   V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
-  #   return(V.all)
-  # })
-  # l.fdb <- lapply(1:length(G),function(i){
-  #   ClusterAll <- Clusters.List[[i]]$ClusterAll
-  #   V.all<- lapply(1:(length(ClusterAll)),function(j){
-  #     if(!is.character(ClusterAll[[j]]$Error) )
-  #       data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index, Freq= ClusterAll[[j]]$ParamConfig.Freq)
-  #     else NA
-  #   })
-  #   V.all <- do.call("rbind",V.all)
-  #   V.all$Cluster <-G[i]
-  #   V.all$Index = "fDB"
-  #   V.all$ClusterH = paste("G:",G[i],"; h:",Clusters.List[[i]]$h.selected)
-  #   return(V.all)
-  # })
-  # 
-  # dt.fr <- rbind(do.call("rbind", l.tight), do.call("rbind",l.fdb))
-  # dt.fr.rep <- lapply(1:length(dt.fr[, 1]), function(i) {
-  #   freq <- dt.fr[i, "Freq"]
-  #   do.call("rbind", lapply(1:freq, function(j) dt.fr[i, 
-  #                                                     ]))
-  # })
-  # dt.fr.rep <- do.call("rbind", dt.fr.rep)
-  # dt.fr.max <- aggregate(dt.fr$Freq, by = list(Cluster = dt.fr$Cluster, 
-  #                                              Index = dt.fr$Index, 
-  #                                              ClusterH = dt.fr$ClusterH), 
-  #                        FUN = "max")
-  # colnames(dt.fr.max)[4] <- "Freq"
-  # dt.fr.max <- merge(dt.fr.max, dt.fr)
-  # dt.fr.max <- aggregate(dt.fr.max$V, by = list(Cluster = dt.fr.max$Cluster, 
-  #                                               Index = dt.fr.max$Index, ClusterH = dt.fr.max$ClusterH, 
-  #                                               Freq = dt.fr.max$Freq), FUN = "min")
-  # colnames(dt.fr.max)[5] <- "V"
-  # dt.fr.max <- merge(dt.fr.max, dt.fr)
-  # 
-  # Box.pl<- ggplot(data= dt.fr.rep)+
-  #   facet_wrap(~Index,scales = "free")+
-  #   geom_violin(aes(x=Cluster,y=V,fill=ClusterH,group=Cluster))+
-  #   geom_line(data= dt.fr.max,aes(x=Cluster,y=V,col="Most probable"))+
-  #   geom_jitter(aes(x=Cluster,y=V),color="black", width = .1, height = 0, alpha=0.5)+   
-  #   scale_fill_viridis("",discrete = TRUE, alpha=0.6) +
-  #  #geom_point(col="red",aes(x=Cluster,y=V,size=Freq/runs) )+
-  #   labs(size="Counts freq.",col= "",x = "Number of Clusters",y="Indexes Values")+
-  #   scale_x_continuous(breaks = G)+
-  #   scale_color_manual(values = c("Most probable" = "blue") ) +
-  #   theme(axis.text=element_text(size = 14, hjust = 0.5),
-  #         axis.text.x=element_text(vjust=0.5, hjust=1),
-  #         axis.title=element_text(size=16,face="bold"),
-  #         axis.line = element_line(colour="black"),
-  #         plot.title=element_text(size=30, face="bold", vjust=1, lineheight=0.6),
-  #         legend.text=element_text(size=16),
-  #         legend.position="bottom",
-  #         legend.key=element_blank(),
-  #         legend.title = element_text(size=16,face="bold"),
-  #         legend.key.size = unit(.9, "cm"),
-  #         legend.key.width = unit(.9,"cm"),
-  #         panel.background = element_rect(colour = NA),
-  #         plot.background = element_rect(colour = NA),
-  #         plot.margin=unit(c(5,5,5,5),"mm"),
-  #         strip.text = element_text(size = 20)) 
-  # 
-  # Freq.ConfigCl<-unique(dt.fr.max[,c("Cluster","Config")])
-  # ConsensusInfo<-lapply(1:length(G), function(Gind){
-  #   ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl)
-  #   })
-  # names(ConsensusInfo)<-paste0("G",G)
-  # return( list(ConsensusInfo=ConsensusInfo,BoxPlots=Box.pl )
+  
   return(list(Clusters.List=Clusters.List, seed=seed,runs = runs))
 }
 
@@ -238,8 +125,8 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
       
       ## Let calculate the clustering and the fDB indexes
       ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.infoList,G)
-      l.fdb <- fdb.calc(ClusterAll$ClusterAll)
-      rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
+      # l.fdb <- fdb.calc(ClusterAll$ClusterAll)
+      # rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
       
       ## Check the number of errors:
       ALL.runs.tmp <-lapply(1:length(ALL.runs),function(x){
@@ -438,11 +325,12 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       
       ## Goodness coefficents calculation
       fcm.prediction$meancurves->meancurves
-      distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
-      distances.zero<-L2dist.mu20(fcm.prediction,database = database,fcm.fit,deriv=0)
-      Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
-      Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1)
-      Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2)
+      #distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
+      distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q=NULL)
+      #Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
+      #Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1)
+      #Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2)
+      
       ## Let name the cluster with A->Z from the lower mean curve to the higher.
       if( G !=1 )
       {
@@ -465,10 +353,10 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       out.funcit$TimeGrid<-data$TimeGrid
       
       output$FCM <- out.funcit
-      output$Cl.Info<- list(Tight.indexes = sum(distances),
-                            Coefficents=Coefficents,
-                            Deriv.Coefficents=Deriv.Coefficents,
-                            Deriv2.Coefficents=Deriv2.Coefficents)
+      # output$Cl.Info<- list(Tight.indexes = sum(distances),
+      #                       Coefficents=Coefficents,
+      #                       Deriv.Coefficents=Deriv.Coefficents,
+      #                       Deriv2.Coefficents=Deriv2.Coefficents)
       output$ParamConfig.Freq <- length(Indexes.Uniq.Par[[i]]) 
       return(output)
     }, error=function(e) {

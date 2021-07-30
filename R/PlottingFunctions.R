@@ -5,7 +5,7 @@
 #' @param stability.list The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})
 #' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param G  The number of clusters.
-#' 
+#' @param q The quantiles used to calculate the time grid interval on which the distances are calculated. If NULL then the time grid outliers will be ignored through the distance calculation. If double (0<q<1) then the cutting is symmetrical w.r.t. the quantile setled (e.g., q = 0.25). If a vector, then the minimum value is used for the lower cutting and the maximum value for the upper cutting.
 #' @details 
 #' \itemize{
 #' \item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
@@ -22,11 +22,13 @@ NULL
 #' 
 #' @rdname ExtrapolationNewFuncs
 #' @export
-IndexesPlot.ExtrapolationNew <- function(stability.list){
+IndexesPlot.ExtrapolationNew <- function(stability.list,q=NULL){
+  
   Clusters.List<-stability.list$Clusters.List 
   G <- as.numeric(sub("G","",names(Clusters.List)))
   
-  IndexesValues <- IndexeValues.generation(Clusters.List, G)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
+  IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   Indexes.Rep <- IndexesValues$Indexes.Rep
   
@@ -61,13 +63,14 @@ IndexesPlot.ExtrapolationNew <- function(stability.list){
 
 #' @rdname ExtrapolationNewFuncs
 #' @export
-ConsMatrix.ExtrapolationNew <- function(stability.list,data){
+ConsMatrix.ExtrapolationNew <- function(stability.list,data,q=NULL){
   Clusters.List<-stability.list$Clusters.List 
   runs <-stability.list$runs 
 
   G <- as.numeric(sub("G","",names(Clusters.List)))
   
-  IndexesValues <- IndexeValues.generation(Clusters.List, G)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
+  IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   
   Freq.ConfigCl<-unique(Indexes.MostProb[,c("Cluster","Config")])
@@ -82,19 +85,22 @@ ConsMatrix.ExtrapolationNew <- function(stability.list,data){
 
 #' @rdname ExtrapolationNewFuncs
 #' @export
-MostProbableClustering.ExtrapolationNew <- function(stability.list, G){
+MostProbableClustering.ExtrapolationNew <- function(stability.list, G,q=NULL){
   Clusters.List<-stability.list$Clusters.List 
   runs <-stability.list$runs 
   
   G.all <- as.numeric(sub("G","",names(Clusters.List)))
   
-  IndexesValues <- IndexeValues.generation(Clusters.List, G.all)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G.all,q)
+  IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G.all)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   
   Freq.ConfigCl<-unique(Indexes.MostProb[,c("Cluster","Config")])
   ############# the most probably clustering:
   IndexBestClustering <- Freq.ConfigCl[which(G.all == G),"Config"]
   MostProbableClustering<-Clusters.List[[which(G.all == G)]]$ClusterAll[[IndexBestClustering]]
+  
+  MostProbableClustering$Cl.Info<- IndexesValues.list[[which(G.all == G)]][[IndexBestClustering]]
   
   return(MostProbableClustering)
 }
@@ -266,12 +272,51 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
               ConsensusPlot = ConsensusPlot) )
 } 
 
-IndexeValues.generation <- function(Clusters.List, G){
+IndexesValues.calculation <- function(Clusters.List, G,q){
+  
+  Indexes <- lapply(1:length(G),function(i){
+   ## Check the same parameter configurations:
+   Indexes.Uniq.Par<-length(Clusters.List[[i]]$ClusterAll)
+   
+   Cl.Info<- lapply(1:Indexes.Uniq.Par,function(j){
+     if(is.character(Clusters.List[[i]]$ClusterAll[[j]]$Error) ){
+      return(Clusters.List[[i]]$ClusterAll[[j]]$Error)
+     }else{
+       Clusters.List[[i]]$ClusterAll[[j]]$FCM$prediction -> fcm.prediction
+       Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$cl.info$class.pred -> cluster
+       Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$ClustCurve[,c("ID","Vol","Times")] -> database
+       Clusters.List[[i]]$ClusterAll[[j]]$FCM$fit -> fcm.fit  
+     ## Goodness coefficents calculation
+     fcm.prediction$meancurves->meancurves
+     distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
+    distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q)
+    Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
+    Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1,q)
+    Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2,q)
+  
+    return(list(Tight.indexes = sum(distances),
+                Coefficents=Coefficents,
+                Deriv.Coefficents=Deriv.Coefficents,
+                Deriv2.Coefficents=Deriv2.Coefficents))
+     }
+       
+   })
+   return(Cl.Info)
+ })
+  names(Indexes) <-paste0("G",G)
+  
+  return(Indexes)
+}
+
+IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
+
   l.tight <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    ClusterAll <- IndexesValues.list[[i]]
     V.all<- lapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Tight.indexes, Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      if(!is.character(ClusterAll[[j]]) )
+        data.frame(Config = j, 
+                   V = ClusterAll[[j]]$Tight.indexes, 
+                   Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
@@ -281,10 +326,12 @@ IndexeValues.generation <- function(Clusters.List, G){
     return(V.all)
   })
   l.fdb <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    ClusterAll <- IndexesValues.list[[i]]
     V.all<- lapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Coefficents$fDB.index, Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      if(!is.character(ClusterAll[[j]]) )
+        data.frame(Config = j, 
+                   V = ClusterAll[[j]]$Coefficents$fDB.index,
+                   Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
@@ -294,11 +341,11 @@ IndexeValues.generation <- function(Clusters.List, G){
     return(V.all)
   })
   l.fdb1 <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    ClusterAll <- IndexesValues.list[[i]]
     V.all<- lapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Deriv.Coefficents$fDB.index,
-                   Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      if(!is.character(ClusterAll[[j]]) )
+        data.frame(Config = j, V = ClusterAll[[j]]$Deriv.Coefficents$fDB.index,
+                   Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
@@ -308,10 +355,11 @@ IndexeValues.generation <- function(Clusters.List, G){
     return(V.all)
   })
   l.fdb2 <- lapply(1:length(G),function(i){
-    ClusterAll <- Clusters.List[[i]]$ClusterAll
+    ClusterAll <-IndexesValues.list[[i]]
     V.all<- lapply(1:(length(ClusterAll)),function(j){
-      if(!is.character(ClusterAll[[j]]$Error) )
-        data.frame(Config = j, V = ClusterAll[[j]]$Cl.Info$Deriv2.Coefficents$fDB.index, Freq= ClusterAll[[j]]$ParamConfig.Freq)
+      if(!is.character(ClusterAll[[j]]) )
+        data.frame(Config = j, V = ClusterAll[[j]]$Deriv2.Coefficents$fDB.index, 
+                   Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
       else NA
     })
     V.all <- do.call("rbind",V.all)
