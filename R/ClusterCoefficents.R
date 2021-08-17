@@ -79,7 +79,10 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     }
     # int <- (b-a)/2 * rowSums( weights * fxk )
     # dist.curve2mu[i] <- sqrt(int)
-    dist.curve2mu[i] <- sqrt(integrate.xy(grid[itimeindex],fxk))
+    if(length(fxk) > 1)
+      dist.curve2mu[i] <- sqrt(integrate.xy(x = grid[itimeindex],fx = fxk,use.spline = F))
+    else 
+      dist.curve2mu[i] <- sqrt(fxk)
   }
   
   return(dist.curve2mu)
@@ -169,7 +172,7 @@ L2dist.mu20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   int <- sapply( 1:length(fxk[1,]), function(i){
     cl.grid <- cluster.grid[[i]]
     itime <- which(grid %in% cl.grid)
-    integrate.xy(grid[itime],fxk[itime,i])
+    integrate.xy(grid[itime],fxk[itime,i],use.spline = F)
   })
   
   dist.mu20 <- sqrt(int)
@@ -213,7 +216,10 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
     }
     # int <- (b-a)/2 * rowSums( weights * fxk )
     # dist.curve2mu[i] <- sqrt(int)
-    dist.curve2mu[i] <- sqrt(integrate.xy(grid[(itimeindex)],fxk))
+    if(length(fxk) > 1)
+      dist.curve2mu[i] <- sqrt(integrate.xy(x = grid[itimeindex],fx = fxk,use.spline = F))
+    else 
+      dist.curve2mu[i] <- sqrt(fxk)
   }
   
   return(dist.curve2mu)
@@ -400,7 +406,7 @@ ClusterGrid.truncation<-function(clust,database,q){
       lw<- as.numeric(quantile(grid, q.lw))
       up<- as.numeric(quantile(grid, q.up))
     }
-    unique(grid[grid > lw & grid < up])
+    sort(unique(grid[grid >= lw & grid <= up]))
   })
   names(grid.list) <- paste0("G",unique(clust))
   return(grid.list)
