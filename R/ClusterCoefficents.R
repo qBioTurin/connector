@@ -46,46 +46,57 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   # Definition of the grid depending on the cluster membership
   cluster.grid<-ClusterGrid.truncation(clust,database,q)
   grid <-sort(unique(database$Time))
-  for(i in 1:n.curves){
-    ## Gauss points calculation for each curve
-    # gauss.infoList[[i]] -> gauss.info
-    # itimeindex <- gauss.info$itimeindex
-    # weights <- gauss.info$gauss$weights 
-    # a<-gauss.info$a
-    # b<-gauss.info$b
-    # 
-    grid.cl <- cluster.grid[[paste0("G",clust[i])]]
-    time.cl <- na.omit(grid.cl[match(database$Time[database$ID == i],grid.cl)])
-    itimeindex <- match(time.cl,grid)
-    if(deriv==0)
-      {
-        fxk <- (fcm.curve$gpred[i,itimeindex]-t(fcm.curve$meancurves[itimeindex,clust[i]]) )^2
-      }
-    else{
-      if(is.null(fcm.fit)) warning("The fcm.fit is needed to calculate the derivatives!! ")
-      dspl <-basis.derivation(fcm.fit,deriv)
-      u.dspl<-dspl$u.dspl
-        dmeancurves<-dspl$dmeancurves
-        
-        etapred <- fcm.curve$etapred
-        
-        matrix(0,n.curves,nrow(u.dspl)) -> dgpred
-        
-        for (ind in 1:n.curves){
-          dgpred[ind,] <- as.vector(u.dspl %*% etapred[ind,])
-        }
+  G<-length(fcm.curve$meancurves[1,])
   
-        fxk <- ( dgpred[i,itimeindex]- t(dmeancurves[itimeindex,clust[i]]) )^2
-    }
-    # int <- (b-a)/2 * rowSums( weights * fxk )
-    # dist.curve2mu[i] <- sqrt(int)
-    if(length(fxk) > 1)
-      dist.curve2mu[i] <- sqrt(integrate.xy(x = grid[itimeindex],fx = fxk,use.spline = F))
-    else 
-      dist.curve2mu[i] <- sqrt(fxk)
+  Database.cl<-merge(data.frame(ID = unique(database$ID),Cluster=clust),
+                     database,
+                     by="ID")
+  
+  grid.cl <- lapply(1:length(cluster.grid),function(i)
+    data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
+  )
+  grid.cl <- do.call("rbind",grid.cl)
+  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
+  
+  if(deriv==0)
+  {
+    dmeancurves <- fcm.curve$meancurves
+    dgpred <- fcm.curve$gpred
+  }
+  else{
+    if(is.null(fcm.fit)) warning("The fcm.fit is needed to calculate the derivatives!! ")
+    dspl <-basis.derivation(fcm.fit,deriv)
+    u.dspl<-dspl$u.dspl
+    dmeancurves<-dspl$dmeancurves
+    etapred <- fcm.curve$etapred
+    
+    matrix(0,n.curves,nrow(u.dspl)) -> dgpred
+    dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
   }
   
-  return(dist.curve2mu)
+  meancurves <- data.frame(Times = rep(grid,G),
+                           MeanCurve = c(dmeancurves),
+                           Cluster = rep(1:G,each=length(grid)) )
+  
+  gpred <- data.frame(Times = rep(grid,n.curves),
+                      gpred = c(t(dgpred)),
+                      ID = rep(unique(database$ID),each=length(grid)), 
+                      Cluster = rep(clust,each=length(grid)) )
+  
+  gpred.subset <- merge(gpred,Database.subset,by = c("Times","ID","Cluster"),all.y= T)
+  Dataset.all<- merge(meancurves,gpred.subset,by = c("Times","Cluster"),all.y= T)
+  
+  fxk <- Dataset.all %>%
+    group_by(ID , Times)
+  
+  fxk <- fxk %>% summarise(Diff = (gpred - MeanCurve)^2, Times = Times, ID = ID)
+  
+  
+  dist.curve2mu <- fxk %>%
+    group_by(ID) %>%
+    group_map( ~ integrate.xy(x = .x$Times ,fx = .x$Diff ,use.spline = F))
+  
+  return(sqrt(unlist(dist.curve2mu)))
 }
 
 #' @rdname DBindexL2dist
@@ -185,44 +196,51 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
   n.curves<-length(fcm.curve$gpred[,1])
   dist.curve2mu <-rep(0,n.curves)
   grid <-sort(unique(database$Time))
-  for(i in 1:n.curves){
-    ## Gauss points calculation for each curve
-    # gauss.infoList[[i]] -> gauss.info
-    # itimeindex <- gauss.info$itimeindex
-    # weights <- gauss.info$gauss$weights 
-    # a<-gauss.info$a
-    # b<-gauss.info$b
-    # 
-    itimeindex <- match(database$Time[database$ID == i],grid)
-    if(deriv==0)
-    {
-      fxk <- (fcm.curve$gpred[i,(itimeindex)] )^2
-    }
-    else{
-      if(is.null(fcm.fit)) warning("The fcm.fit is needed to calculate the derivatives!! ")
-      dspl <-basis.derivation(fcm.fit,deriv)
-      u.dspl<-dspl$u.dspl
-      dmeancurves<-dspl$dmeancurves
-      
-      etapred <- fcm.curve$etapred
-      
-      matrix(0,n.curves,nrow(u.dspl)) -> dgpred
-      
-      for (ind in 1:n.curves){
-        dgpred[ind,] <- as.vector(u.dspl %*% etapred[ind,])
-      }
-      
-      fxk <- ( dgpred[i,(itimeindex)])^2
-    }
-    # int <- (b-a)/2 * rowSums( weights * fxk )
-    # dist.curve2mu[i] <- sqrt(int)
-    if(length(fxk) > 1)
-      dist.curve2mu[i] <- sqrt(integrate.xy(x = grid[itimeindex],fx = fxk,use.spline = F))
-    else 
-      dist.curve2mu[i] <- sqrt(fxk)
-  }
+  cluster.grid<-ClusterGrid.truncation(clust,database,q)
+  grid <-sort(unique(database$Time))
+  G<-length(fcm.curve$meancurves[1,])
   
-  return(dist.curve2mu)
+  Database.cl<-merge(data.frame(ID = unique(database$ID),Cluster=clust),
+                     database,
+                     by="ID")
+  
+  grid.cl <- lapply(1:length(cluster.grid),function(i)
+    data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
+  )
+  grid.cl <- do.call("rbind",grid.cl)
+  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
+  
+  if(deriv==0)
+  {
+    dgpred <- fcm.curve$gpred
+  }
+  else{
+    if(is.null(fcm.fit)) warning("The fcm.fit is needed to calculate the derivatives!! ")
+    dspl <-basis.derivation(fcm.fit,deriv)
+    u.dspl<-dspl$u.dspl
+    etapred <- fcm.curve$etapred
+    
+    matrix(0,n.curves,nrow(u.dspl)) -> dgpred
+    dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
+  }
+
+  gpred <- data.frame(Times = rep(grid,n.curves),
+                      gpred = c(t(dgpred)),
+                      ID = rep(unique(database$ID),each=length(grid)), 
+                      Cluster = rep(clust,each=length(grid)) )
+  
+  Dataset.all <- merge(gpred,Database.subset,by = c("Times","ID","Cluster"),all.y= T)
+
+  fxk <- Dataset.all %>%
+    group_by(ID , Times)
+  
+  fxk <- fxk %>% summarise(Diff = (gpred)^2, Times = Times, ID = ID)
+  
+  dist.curve2mu <- fxk %>%
+    group_by(ID) %>%
+    group_map( ~ integrate.xy(x = .x$Times ,fx = .x$Diff ,use.spline = F))
+  
+  return(sqrt(unlist(dist.curve2mu)))
 }
 
 #' @rdname DBindexL2dist
