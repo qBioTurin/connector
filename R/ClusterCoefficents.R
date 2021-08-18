@@ -34,7 +34,7 @@
 #'  @references
 #' Gareth M. James and Catherine A. Sugar, (2003). Clustering for Sparsely Sampled Functional Data. Journal of the American Statistical Association.
 #' 
-#' @import sfsmisc
+#' @import sfsmisc dplyr
 #' @name DBindexL2dist
 NULL
 #> NULL
@@ -192,7 +192,7 @@ L2dist.mu20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
 }
 
 #' @rdname DBindexL2dist
-L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
+L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   n.curves<-length(fcm.curve$gpred[,1])
   dist.curve2mu <-rep(0,n.curves)
   grid <-sort(unique(database$Time))
@@ -203,7 +203,8 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0){
   Database.cl<-merge(data.frame(ID = unique(database$ID),Cluster=clust),
                      database,
                      by="ID")
-  
+  if("Time" %in% colnames(Database.cl))
+    colnames(Database.cl)[colnames(Database.cl) == "Time"] <- "Times"
   grid.cl <- lapply(1:length(cluster.grid),function(i)
     data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
   )

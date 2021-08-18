@@ -5,19 +5,22 @@
 \alias{L2dist.curve2mu}
 \alias{L2dist.mu2mu}
 \alias{L2dist.mu20}
+\alias{L2dist.curve20}
 \alias{Sclust.coeff}
 \alias{Rclust.coeff}
 \title{Functional Davies–Bouldin (fDB) index and L2 (or with derivatives) distances}
 \usage{
-L2dist.curve2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
+L2dist.curve2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 
-L2dist.mu2mu(fcm.curve, database, fcm.fit = NULL, deriv = 0)
+L2dist.mu2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 
-L2dist.mu20(fcm.curve, database, fcm.fit = NULL, deriv = 0)
+L2dist.mu20(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 
-Sclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
+L2dist.curve20(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 
-Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0)
+Sclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+
+Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 }
 \arguments{
 \item{clust}{The vector reporting the cluster membership for each sample.}

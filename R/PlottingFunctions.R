@@ -76,7 +76,7 @@ ConsMatrix.ExtrapolationNew <- function(stability.list,data,q=NULL){
   Freq.ConfigCl<-unique(Indexes.MostProb[,c("Cluster","Config")])
   
   ConsensusInfo<-lapply(1:length(G), function(Gind){
-    ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl)
+    ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl,q)
     })
   names(ConsensusInfo)<-paste0("G",G)
   
@@ -105,7 +105,7 @@ MostProbableClustering.ExtrapolationNew <- function(stability.list, G,q=NULL){
   return(MostProbableClustering)
 }
 
-ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl) 
+ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q) 
 {
   FixedG.runs<-ALL.runs[[Gind]]$ClusterAll
   L1<- length(FixedG.runs)
@@ -174,7 +174,8 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl)
   
   dist.curve<-L2dist.curve20(clust = fcm$FCM$cluster$cluster.member,
                              fcm.curve = fcm$FCM$prediction,
-                             database = data$Dataset)
+                             database = data$Dataset,
+                             q = q)
   
   names(dist.curve) <- curvename
   # names(which.min(dist.curve))->lowest.curve
