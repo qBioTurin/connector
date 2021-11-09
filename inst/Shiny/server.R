@@ -588,6 +588,7 @@ server <- function(input, output, session) {
 
   })
   
+  
 ## Costume Plots
 # Data Visual
   observeEvent(input$ChangeGrowth,{

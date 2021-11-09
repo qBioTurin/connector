@@ -2,34 +2,32 @@
 % Please edit documentation in R/ExtrapolationFunctions.R
 \name{ExtrapolationFuncs}
 \alias{ExtrapolationFuncs}
-\alias{IndexesPlot.Extrapolation}
+\alias{BoxPlot.Extrapolation}
 \alias{ConsMatrix.Extrapolation}
 \alias{MostProbableClustering.Extrapolation}
-\title{Extrapolate objects from ClusterAnalysis}
+\title{Extrapolate objects from StabilityAnalysis}
 \usage{
-IndexesPlot.Extrapolation(stability.list, q = NULL)
+BoxPlot.Extrapolation(stability.list, h)
 
-ConsMatrix.Extrapolation(stability.list, data, q = NULL)
+ConsMatrix.Extrapolation(stability.list, h, G)
 
-MostProbableClustering.Extrapolation(stability.list, G, q = NULL)
+MostProbableClustering.Extrapolation(stability.list, h, G)
 }
 \arguments{
-\item{stability.list}{The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})}
+\item{stability.list}{The list obtained from the StabilityAnalysis function. (see \code{\link{StabilityAnalysis}})}
 
-\item{q}{The quantiles used to calculate the time grid interval on which the distances are calculated. If NULL then the time grid outliers will be ignored through the distance calculation. If double (0<q<1) then the cutting is symmetrical w.r.t. the quantile setled (e.g., q = 0.25). If a vector, then the minimum value is used for the lower cutting and the maximum value for the upper cutting.}
-
-\item{data}{CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})}
+\item{h}{The number representing the dimension of the cluster mean space (see \code{\link{PCA.Analysis}}).}
 
 \item{G}{The number of clusters.}
 }
 \description{
-Extrapolate objects from ClusterAnalysis output list (see \code{\link{ClusterAnalysis}}).
+Extrapolate objects from StabilityAnalysis output list (see \code{\link{StabilityAnalysis}}).
 }
 \details{
 \itemize{
-\item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
-\item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Consensus Matrix for G fixed.}
-\item{MostProbableClustering.Extrapolation}{extrapolates from ClusterAnalysis output list the most frequent clustering among the several runs obtained  for G fixed.}
+\item{BoxPlot.Extrapolation}{ extrapolates from StabilityAnalysis output list the box plot fixing the h value.}
+\item{ConsMatrix.Extrapolation}{extrapolates from StabilityAnalysis output list the Consensus Matrix for G and h fixed.}
+\item{MostProbableClustering.Extrapolation}{extrapolates from StabilityAnalysis output list the most probable cluster among the several runs obtained  for G and h fixed.}
 }
 }
 \author{

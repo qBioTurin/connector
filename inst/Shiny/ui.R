@@ -128,7 +128,7 @@ ui <- dashboardPage(
                 tabPanel("From ConnectorList.RData:", "",
                          fluidRow(
                              p("The RData could contain the following R objects:"),
-                             p("  - the connector list, namely ", strong("CONNECTORList", style = "font: bold"),"(the name must correspond) obtained from the function DataImport(). This object is mandatory. "),
+                             p(" - the connector list, namely ", strong("CONNECTORList", style = "font: bold"),"(the name must correspond) obtained from the function DataImport(). This object is mandatory. "),
                              p("  - the truncated connector list, namely ", strong("CONNECTORList_trunc", style = "font: bold"),"(the name must correspond) obtained from the function DataTruncation()."),
                              p("  - the clustered connector list, namely ", strong("CONNECTORListFCM_all", style = "font: bold"),"(the name must correspond) obtained from the function ClusterAnalysis()."),
                            column(width=12,
