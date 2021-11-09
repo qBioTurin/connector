@@ -9,7 +9,6 @@
 #' @export
 #' 
 #' 
-
 RunConnectorShiny <- function() {
   x = T
   shiny::runApp(
