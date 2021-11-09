@@ -282,7 +282,7 @@ curve_prediction<-function(cluster,object)
       labs(title=paste("Sample ",i), x="Time", y="Growth value")+
       scale_colour_manual(values = c("black","red","blue") ,limits =c("Cluster mean","Spline estimated","Real points"),breaks= c("Cluster mean","Spline estimated","Real points") , name=" ")+
       guides(
-             linetype = FALSE,
+             linetype = "none",
              colour = guide_legend(override.aes = list(linetype = c("solid","dashed","dashed"))))+
       theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank(),legend.key.width = unit(1, "cm"))
     

@@ -127,8 +127,12 @@ ui <- dashboardPage(
                 ),
                 tabPanel("From ConnectorList.RData:", "",
                          fluidRow(
+                             p("The RData could contain the following R objects:"),
+                             p("  - the connector list, namely ", strong("CONNECTORList", style = "font: bold"),"(the name must correspond) obtained from the function DataImport(). This object is mandatory. "),
+                             p("  - the truncated connector list, namely ", strong("CONNECTORList_trunc", style = "font: bold"),"(the name must correspond) obtained from the function DataTruncation()."),
+                             p("  - the clustered connector list, namely ", strong("CONNECTORListFCM_all", style = "font: bold"),"(the name must correspond) obtained from the function ClusterAnalysis()."),
                            column(width=12,
-                                  fileInput("RDataImport1", "Connector List:",
+                                  fileInput("RDataImport1", "RData file:",
                                             placeholder = "Select a Connector.RData",
                                             width = "100%"
                                             ),
@@ -415,22 +419,18 @@ ui <- dashboardPage(
                                             label = "Plot:",
                                             choices = c("All clusters","Cluster means") ,
                                             selected = "All clusters"  )
-                                )
-                       ),
-                       fluidRow(
-                         column(width = 2, 
+                                ),
+                           column(width = 2, 
                                 checkboxInput(inputId = "ClusterPlotLegend", label = "Show legend",value = F)
-                         ),
-                         column(width = 1,
-                              downloadButton(label="Download",outputId = "PlotDownloadClplot",
-                                             href = "Clplot.pdf",
-                                             download = "Clplot.pdf" ,
-                                             title = "Save the Cluster plot",
-                                             style = "cursor: pointer;",
-                                             class="dlButton")
                          )
                        ),
                        plotOutput("visualClplot"),
+                       downloadButton(label="Download",outputId = "PlotDownloadClplot",
+                                      href = "Clplot.pdf",
+                                      download = "Clplot.pdf" ,
+                                      title = "Save the Cluster plot",
+                                      style = "cursor: pointer;",
+                                      class="dlButton"),
                        add_busy_spinner(spin = "fading-circle",color = "white",height = 80,width=80)
                        ),
               tabPanel("Discriminant", "",
@@ -444,15 +444,13 @@ ui <- dashboardPage(
                                 uiOutput("FeatSelection")
                                 )
                          ),
-                         column(width = 1,
-                                downloadButton(label="Download",outputId = "PlotDownloadDiscrPlot",
-                                               href = "DiscrPlot.pdf",
-                                               download = "DiscrPlot.pdf" ,
-                                               title = "Save the Discriminant plot",
-                                               style = "cursor: pointer;",
-                                               class="dlButton")),
-                         plotOutput("DiscrPlot")
-                         
+                       plotOutput("DiscrPlot"),
+                       downloadButton(label="Download",outputId = "PlotDownloadDiscrPlot",
+                                      href = "DiscrPlot.pdf",
+                                      download = "DiscrPlot.pdf" ,
+                                      title = "Save the Discriminant plot",
+                                      style = "cursor: pointer;",
+                                      class="dlButton")
                        ),
               tabPanel("Spline", "",
                        fluidRow(
@@ -462,15 +460,13 @@ ui <- dashboardPage(
                                    choices = "")
                               )
                               ),
-                              column(width = 1,
-                                     downloadButton(label="Download",outputId = "PlotDownloadSplinePlot",
-                                                    href = "SplinePlot.pdf",
-                                                    download = "SplinePlot.pdf" ,
-                                                    title = "Save the Spline plot",
-                                                    style = "cursor: pointer;",
-                                                    class="dlButton"),
-                              plotOutput("visualSplinePlot")
-                         )
+                       plotOutput("visualSplinePlot"),
+                       downloadButton(label="Download",outputId = "PlotDownloadSpliePlot",
+                                      href = "SplinePlot.pdf",
+                                      download = "SplinePlot.pdf" ,
+                                      title = "Save the Spline plot",
+                                      style = "cursor: pointer;",
+                                      class="dlButton")
                        ),
               tabPanel("Inspection", "",
                        fluidRow(

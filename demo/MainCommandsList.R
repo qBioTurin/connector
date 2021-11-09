@@ -36,9 +36,9 @@ S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
                        seed=123,
                        Cores=2)
 
-IndexesPlot.ExtrapolationNew(S.cl)-> indexes
-ConsMatrix.ExtrapolationNew(S.cl,data = CONNECTORList)-> ConsInfo
-MostProbableClustering.ExtrapolationNew(S.cl,5) ->MostProbableClustering
+IndexesPlot.Extrapolation(S.cl)-> indexes
+ConsMatrix.Extrapolation(S.cl,data = CONNECTORList)-> ConsInfo
+MostProbableClustering.Extrapolation(S.cl,5) ->MostProbableClustering
 
 indexes$Plot 
 ConsInfo$G4$ConsensusPlot

@@ -70,7 +70,7 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
     labs(title="Time grid",x="Time", y = "Time")+
     theme(plot.title = element_text(hjust = 0.5),
           title =element_text(size=12, face='bold'))+
-    guides(color = FALSE)
+    guides(color = "none")
   
   BarPlot<-ggplot(data=data.frame(x=data$Dataset$Time), aes(x) )+
     geom_boxplot(width=0.4)+ coord_flip()+

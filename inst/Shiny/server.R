@@ -1,7 +1,7 @@
 
 UpdatingFCMall<-function(S.cl,CONNECTORList_now,input, output, session,rResult,Flags)
 {
-  IndexesInfo<- IndexesPlot.ExtrapolationNew(stability.list =S.cl)
+  IndexesInfo<- IndexesPlot.Extrapolation(stability.list =S.cl)
   TableGeneration<-function(df){
     Tight = 
     Tight_rep = lapply(1:length(df[, 1]), function(i) {
@@ -49,12 +49,12 @@ UpdatingFCMall<-function(S.cl,CONNECTORList_now,input, output, session,rResult,F
   output$visualIndexes <- renderPlot(IndexesInfo$Plot)
   
   ## Selecting a number of clusters:
-  observeEvent(input$GConsMat,{
-    ConsMatrices <- ConsMatrix.ExtrapolationNew(stability.list = S.cl,
-                                              data = CONNECTORList_now)
-    output$visualConsMatrix <- renderPlot({ConsMatrices[[paste0("G",input$GConsMat)]]$ConsensusPlot})
-    rResult$ConsMatrices <- ConsMatrices
-  })
+  # observeEvent(input$GConsMat,{
+  #   ConsMatrices <- ConsMatrix.Extrapolation(stability.list = S.cl,
+  #                                             data = CONNECTORList_now)
+  #   output$visualConsMatrix <- renderPlot({ConsMatrices[[paste0("G",input$GConsMat)]]$ConsensusPlot})
+  #   rResult$ConsMatrices <- ConsMatrices
+  # })
   
   observeEvent(input$GExtrap,{
     if(!is.null(rResult$CONNECTORList.FCM))
@@ -63,11 +63,12 @@ UpdatingFCMall<-function(S.cl,CONNECTORList_now,input, output, session,rResult,F
                                 message = 'The number of clusters choise has been updated!') 
     }
     
-    CONNECTORList.FCM <- MostProbableClustering.ExtrapolationNew(stability.list = S.cl,
+    CONNECTORList.FCM <- MostProbableClustering.Extrapolation(stability.list = S.cl,
                                                                  G = input$Gvalue )
     rResult$CONNECTORList.FCM  <- CONNECTORList.FCM 
     rResult$G <- input$Gvalue
     rResult$h <- length(CONNECTORList.FCM$FCM$fit$parameters$Lambda[1,])
+    Flags$ContinueCLplot = F
   })
   
   Flags$Continue <- FALSE
@@ -259,6 +260,8 @@ server <- function(input, output, session) {
   Flags$ContinueEstimP<- FALSE
   Flags$ContinueEstimG<- FALSE
   Flags$ContinueUploadingRDS <- FALSE
+  Flags$Discrplot <- FALSE
+  Flags$ContinueCLplot <- FALSE
   
   observeEvent(input$LoadingData, {
       output$LoadingError1 <- renderText({
@@ -368,10 +371,33 @@ server <- function(input, output, session) {
       UpdatingFCMall(S.cl,CONNECTORList_now,input, output, session,rResult,Flags)
     }
   })
-
-## Run CLuster Visualization
-  Flags$ContinueCLplot = FALSE
+## FCM visual
+# Selecting a number of clusters:
+  observeEvent(input$GConsMat,{
+    validate(
+      need(expr = !is.null(rResult$CONNECTORListFCM_all), "Run the FCM" )
+      )
+    
+    if(!is.null(rResult$CONNECTORList_trunc)) {
+      CONNECTORList_now <- rResult$CONNECTORList_trunc
+    }else{
+      CONNECTORList_now <- rResult$CONNECTORList
+    }
+    
+    rResult$CONNECTORListFCM_all -> S.cl
+    if(is.null(rResult$ConsMatrices)){
+      ConsMatrices <- ConsMatrix.Extrapolation(stability.list = S.cl,
+                                             data = CONNECTORList_now)
+      rResult$ConsMatrices <- ConsMatrices
+    }else{
+      rResult$ConsMatrices -> ConsMatrices
+    }
+    
+    output$visualConsMatrix <- renderPlot({ConsMatrices[[paste0("G",input$GConsMat)]]$ConsensusPlot})
+    
+  })
   
+## Run CLuster Visualization
   observeEvent(rResult$CONNECTORList.FCM,{
     
     if(!is.null(rResult$CONNECTORList_trunc)) {
@@ -379,45 +405,49 @@ server <- function(input, output, session) {
     }else{
       CONNECTORList_now <- rResult$CONNECTORList
     }
-          output$IndexesClusterErrorCLplot <- renderText({
-            validate(need(!is.null(rResult$CONNECTORList.FCM) ,
-                          if((is.null(rResult$CONNECTORList_trunc) & is.null(rResult$CONNECTORList)) ){
-                            "Please upload the RData with a ConnectorList object or run the preprocessing step!"
+    
+    output$IndexesClusterErrorCLplot <- renderText({
+      validate(need(!is.null(rResult$CONNECTORList.FCM) ,
+                    if((is.null(rResult$CONNECTORList_trunc) & is.null(rResult$CONNECTORList)) ){
+                      "Please upload the RData with a ConnectorList object or run the preprocessing step!"
                       }else{
                         "Please run the FCM and select a number of clusters!!!"
                         }
-                      ) )
-            Flags$ContinueCLplot = TRUE
-
+                    ) 
+               )
+      
+            if(!Flags$ContinueCLplot){
+                          FCMplots<- ClusterWithMeanCurve(clusterdata = rResult$CONNECTORList.FCM,
+                                            data= CONNECTORList_now,
+                                            feature = input$featureCLplot)
+                          rResult$FCMplots <- FCMplots
+                          Flags$ContinueCLplot = TRUE
+            
+            
+            updateSelectInput(session, "SplineID",
+                              choices = names(FCMplots$spline.plots),
+                              selected = names(FCMplots$spline.plots)[1]
+            )
             clNames <- rResult$CONNECTORList.FCM$FCM$cluster$cluster.names
             Feat <- names(CONNECTORList_now$LabCurv)
     
-    updateSelectInput(session, "featureCLplot",
-                      choices = Feat,
-                      selected = "ID" )
-    updateSelectInput(session, "FeatInsp",
-                      choices = Feat,
-                      selected = "ID" ) 
-    updateSelectInput(session, "typeCLplot",
-                      choices = c("All clusters","Cluster means",paste(clNames,"Cluster") ),
-                      selected = "All clusters" )
-    
+            updateSelectInput(session, "featureCLplot",
+                              choices = Feat,
+                              selected = "ID" )
+            updateSelectInput(session, "FeatInsp",
+                              choices = Feat,
+                              selected = "ID" ) 
+            updateSelectInput(session, "typeCLplot",
+                              choices = c("All clusters","Cluster means",paste(clNames,"Cluster") ),
+                              selected = "All clusters" )
+    }
     ""
   })
 })
-  observeEvent(c(input$ColorDiscrPlot,Flags$ContinueCLplot),{
-    if(!is.null(rResult$CONNECTORList_trunc)) {
-      CONNECTORList_now <- rResult$CONNECTORList_trunc
-    }else{
-      CONNECTORList_now <- rResult$CONNECTORList
-    }
-    
-    if(input$ColorDiscrPlot == "Features" & Flags$ContinueCLplot){
-      output$FeatSelection <- renderUI({
-        selectInput("FeatDiscrCol", "Features:",
-                    choices =  names(CONNECTORList_now$LabCurv) )
-      })
-    }
+  observeEvent(c(input$SplineID,Flags$ContinueCLplot),{
+    rResult$FCMplots -> FCMplots
+    output$visualSplinePlot <- renderPlot({FCMplots$spline.plots[[input$SplineID]]})
+    rResult$visualSplinePlot <- FCMplots$spline.plots[[input$SplineID]]
   })
   observeEvent(c(input$featureCLplot,Flags$ContinueCLplot),{
     output$G_not_selected <- renderText({
@@ -429,46 +459,68 @@ server <- function(input, output, session) {
       })
     if(Flags$ContinueCLplot)
     {
-      
-      if(!is.null(rResult$CONNECTORList_trunc)) {
-        CONNECTORList_now <- rResult$CONNECTORList_trunc
-      }else{
-        CONNECTORList_now <- rResult$CONNECTORList
-      }
-      FCMplots<- ClusterWithMeanCurve(clusterdata = rResult$CONNECTORList.FCM,
-                                        data= CONNECTORList_now,
-                                        feature = input$featureCLplot)
-      rResult$FCMplots <- FCMplots
-      
-      updateSelectInput(session, "SplineID",
-                        choices = names(FCMplots$spline.plots),
-                        selected = names(FCMplots$spline.plots)[1]
-                        )
-      
-      observeEvent(input$SplineID,{
-        output$visualSplinePlot <- renderPlot({FCMplots$spline.plots[[input$SplineID]]})
-        rResult$visualSplinePlot <- FCMplots$spline.plots[[input$SplineID]]
-      })
       observeEvent(c(input$typeCLplot,input$ClusterPlotLegend),{
-    if(!is.null(rResult$FCMplots)){
-      if(input$typeCLplot == "All clusters")
-      {
-        visualClplot <- rResult$FCMplots$plotsCluster$ALL
-      }else if(input$typeCLplot == "Cluster means"){
-        visualClplot <- rResult$FCMplots$plotMeanCurve
-      }else{
-        visualClplot <- rResult$FCMplots$plotsCluster[[input$typeCLplot]]
+        if(!is.null(rResult$FCMplots)){
+          rResult$FCMplots -> FCMplots
+          data = FCMplots$plotsCluster$ALL$plot_env$data
+          curves <- data.frame(Times=data$Dataset$Time,
+                               Vol=data$Dataset$Vol,
+                               ID=data$Dataset$ID,
+                               Cluster=FCMplots$plotsCluster$ALL$plot_env$classificate,
+                               Info=rep(t(data$LabCurv[input$featureCLplot]),data$LenCurv))
+          curves$Cluster <- FCMplots$plotsCluster$ALL$plot_env$symbols[curves$Cluster]
+          col<- as.character(unique(curves$Info))
+          colFetaure <- rainbow(dim(unique(data$Lab[input$featureCLplot]))[1])
+          if(input$typeCLplot == "All clusters"){
+            visualClplot <- ggplot()+
+              scale_linetype_manual(values =1:FCMplots$plotsCluster$ALL$plot_env$G ,
+                                    limits=sort(FCMplots$plotsCluster$ALL$plot_env$symbols),
+                                    breaks=sort(FCMplots$plotsCluster$ALL$plot_env$symbols),name="Cluster") +
+              facet_wrap(~Cluster)+
+              geom_line(data = curves,
+                        aes(x=Times,y=Vol,group=ID,color=factor(Info)))+
+              scale_colour_manual(values = colFetaure,
+                                  limits=col,
+                                  breaks=sort(col),
+                                  name=input$featureCLplot)+
+              theme(plot.title = element_text(hjust = 0.5),
+                    axis.line = element_line(colour = "black"),
+                    panel.background = element_blank())+
+              geom_line(data=FCMplots$plotsCluster$ALL$plot_env$plot_data,
+                        aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
+              ylim(FCMplots$plotsCluster$ALL$plot_env$ymin,FCMplots$plotsCluster$ALL$plot_env$ymax)+
+              xlim(FCMplots$plotsCluster$ALL$plot_env$xmin,FCMplots$plotsCluster$ALL$plot_env$xmax)+
+              labs(title=paste("Other parameters: p = ", FCMplots$plotsCluster$ALL$plot_env$p, ", h = ", FCMplots$plotsCluster$ALL$plot_env$h, ", G = ", FCMplots$plotsCluster$ALL$plot_env$G  ,sep = ""),
+                   x = FCMplots$plotsCluster$ALL$plot_env$axis.x,
+                   y = FCMplots$plotsCluster$ALL$plot_env$axis.y)
+            }else if(input$typeCLplot == "Cluster means"){
+              visualClplot <- rResult$FCMplots$plotMeanCurve
+              }else{
+                gsub(" Cluster", "",input$typeCLplot )->symb
+                visualClplot <- ggplot()+
+                scale_linetype_manual(values =1:FCMplots$plotsCluster$ALL$plot_env$G ,
+                                      limits=sort(FCMplots$plotsCluster$ALL$plot_env$symbols),
+                                      breaks=sort(FCMplots$plotsCluster$ALL$plot_env$symbols),
+                                      name="Cluster") +
+                labs(title=paste("Cluster",symb),
+                     x = FCMplots$plotsCluster$ALL$plot_env$axis.x,
+                     y = FCMplots$plotsCluster$ALL$plot_env$axis.y)+
+                geom_line(data = curves[curves$Cluster==symb,],aes(x=Times,y=Vol,group=ID,color=factor(Info)))+
+                scale_colour_manual(values = colFetaure,limits=col,breaks=sort(col),name=input$featureCLplot)+
+                theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank())+
+                geom_line(data=FCMplots$plotsCluster$ALL$plot_env$plot_data[FCMplots$plotsCluster$ALL$plot_env$plot_data$Cluster==symb,],
+                          aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
+                ylim(FCMplots$plotsCluster$ALL$plot_env$ymin,FCMplots$plotsCluster$ALL$plot_env$ymax)+
+                xlim(FCMplots$plotsCluster$ALL$plot_env$xmin,FCMplots$plotsCluster$ALL$plot_env$xmax)
+                }
+          if(!input$ClusterPlotLegend){
+            visualClplot <- visualClplot + theme(legend.position = "none")
+            }
+          output$visualClplot <- renderPlot({visualClplot})
+          rResult$visualClplot<- visualClplot
+          }
+      })
       }
-      
-      if(!input$ClusterPlotLegend){
-        visualClplot <- visualClplot + theme(legend.position = "none")
-      }
-      output$visualClplot <- renderPlot({visualClplot})
-      rResult$visualClplot<- visualClplot
-    }
-  })
-    }
-    
     })
   observeEvent(c(input$ColorDiscrPlot,input$FeatDiscrCol,Flags$ContinueCLplot),{
     if(Flags$ContinueCLplot)
@@ -478,21 +530,33 @@ server <- function(input, output, session) {
       }else{
         CONNECTORList_now <- rResult$CONNECTORList
       }
+      
+      if(input$ColorDiscrPlot == "Features" &  Flags$Discrplot){
+        output$FeatSelection <- renderUI({
+          selectInput("FeatDiscrCol", "Features:",
+                      choices =  names(CONNECTORList_now$LabCurv))
+        })
+        Flags$Discrplot = F
+      }else if(input$ColorDiscrPlot == "Clusters"){
+        Flags$Discrplot = T
+      }
+      
       output$DiscrPlot <- renderPlot({
         validate(need( rResult$h <= 2,   "h value must be lower or equal to 2."   ) )
-        if(input$ColorDiscrPlot == "Clusters"){
-          DiscrPlot <- DiscriminantPlot(clusterdata = rResult$CONNECTORList.FCM,
-                                        data = CONNECTORList_now,
-                                        feature = "ID")
-          visualDiscrPlot <- DiscrPlot$ColCluster
+        if(is.null(input$FeatDiscrCol)) 
+          FeatDiscrCol = "ID"
+        else
+          FeatDiscrCol = input$FeatDiscrCol
           
-        }else{
-          DiscrPlot <- DiscriminantPlot(clusterdata = rResult$CONNECTORList.FCM,
+        DiscrPlot <- DiscriminantPlot(clusterdata = rResult$CONNECTORList.FCM,
                                         data = CONNECTORList_now,
-                                        feature = input$FeatDiscrCol)
+                                        feature = FeatDiscrCol)
+        
+        if(input$ColorDiscrPlot == "Clusters")
+          visualDiscrPlot <- DiscrPlot$ColCluster
+        else
           visualDiscrPlot <- DiscrPlot$ColFeature
-
-        }
+          
         output$DiscrPlot <- renderPlot({visualDiscrPlot})
         rResult$visualDiscrPlot<- visualDiscrPlot
         rResult$DiscriminantPlotF <- DiscrPlot$ColFeature
@@ -643,10 +707,11 @@ server <- function(input, output, session) {
 
       if(Flags$ContinueUploading)
       {
-        load(input$RDataImport1$datapath)
         if(is.null(rResult$CONNECTORList_trunc) & is.null(rResult$CONNECTORList) )
         {
           load  = TRUE
+          load(input$RDataImport1$datapath)
+          
         }else{ ### alert!!! if it is aleready present! 
           showModal(modalDialog(
             title = "Important message",
@@ -659,12 +724,44 @@ server <- function(input, output, session) {
           
         }
         
-        observeEvent(input$confirmUpload, {
+        observeEvent(input$confirmUpload & Flags$ContinueUploading, {
           removeModal()
+          load(input$RDataImport1$datapath)
+          
           mess = "Value uploaded:  "
           
-          rResult$CONNECTORList <- Info$CONNECTORList
-          rResult$CONNECTORList_trunc <- Info$CONNECTORList_trunc
+          # Check if the list Info is present in the loaded file,
+          # otherwise it is checked if the mandatory files are present
+          # and in case the list Info is created
+          
+          
+          if(!exists("Info")){
+            validate(
+              need(exists("CONNECTORList"),
+                   "The CONNECTORList object is mandatory. If the object is present, please check its name which must correspond to CONNECTORList. "))
+            
+            Info = list()
+            Info$CONNECTORList <- CONNECTORList
+            rResult$CONNECTORList <- Info$CONNECTORList
+             
+            if(exists("CONNECTORList_trunc")) 
+              Info$CONNECTORList_trunc <- CONNECTORList_trunc
+            else Info$CONNECTORList_trunc <- NULL
+            
+            if(exists("CONNECTORListFCM_all")){
+              Info$CONNECTORListFCM_all <- CONNECTORListFCM_all
+              Info$p <- length(CONNECTORListFCM_all$Clusters.List[[1]]$ClusterAll[[1]]$FCM$fit$FullS[1,])
+              }else{
+                Info$CONNECTORListFCM_all <- NULL
+                Info$p <- NULL
+              }
+            }
+          
+          if(is.null(Info$CONNECTORList_trunc)){
+            rResult$CONNECTORList_trunc <- NULL
+          } else {
+            rResult$CONNECTORList_trunc <- Info$CONNECTORList_trunc
+          }
 
           if(is.null(Info$p)){  
             mess <- c(mess,paste(" -No p value; "))
@@ -681,11 +778,15 @@ server <- function(input, output, session) {
             mess <- c(mess,paste(" -G = ",Info$G,". "))
             rResult$G <- Info$G
           }
+          
           if(!is.null(Info$CONNECTORListFCM_all)){
             rResult$CONNECTORListFCM_all <- Info$CONNECTORListFCM_all
-            UpdatingFCMall(rResult$CONNECTORListFCM_all,input, output, session,rResult,Flags)
-            Cl<-names(Info$CONNECTORListFCM_all$ConsensusInfo[[1]])
-            Cl.number<-as.numeric(gsub("G= ", "", Cl))
+            UpdatingFCMall(S.cl = rResult$CONNECTORListFCM_all,
+                           CONNECTORList_now = rResult$CONNECTORList,
+                           input, output, session,rResult,Flags)
+            
+            Cl<-names(Info$CONNECTORListFCM_all$Clusters.List)
+            Cl.number<-as.numeric(gsub("G", "", Cl))
             
             updateSliderInput(session, "GConsMat",
                               min =  min(Cl.number),max = max(Cl.number))
@@ -702,7 +803,10 @@ server <- function(input, output, session) {
           {
             output$visualGrowth <- renderPlot({Info$GrowPlot})
             output$visualGrowthEND <- renderPlot({Info$GrowPlot})
+          }else{
+            Visual_1Step(rResult$CONNECTORList,input, output, session,rResult,Flags)
           }
+          
           if(!is.null(Info$TimeGrid))
           {
             output$visualTimes <- renderPlot({Info$TimeGrid})
@@ -789,7 +893,7 @@ server <- function(input, output, session) {
       CONNECTORList_trunc<-rResult$CONNECTORList_trunc
       Info <- reactiveValuesToList(rResult)
       
-      save(CONNECTORList, CONNECTORList_trunc,Info, file = "Connector.RData")
+      save(Info, file = "Connector.RData")
       
       Flags$save1 = 0
     }
