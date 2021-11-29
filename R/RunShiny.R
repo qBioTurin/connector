@@ -5,7 +5,7 @@
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
-#' @import shiny shinydashboard shinyFiles  shinybusy shinyjs tools ggplot2 shinyWidgets dashboardthemes
+#' @import shiny shinydashboard shinyFiles shinybusy shinyjs tools ggplot2 shinyWidgets dashboardthemes
 #' @export
 #' 
 #' 

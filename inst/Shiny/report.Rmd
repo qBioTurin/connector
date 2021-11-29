@@ -22,72 +22,124 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup, include = FALSE}
+library(connector)
+library(parallel)
+detectCores(logical = FALSE) -> nworkers
+nworkers <- nworkers - 1 # just for my laptop to survive 
+
+p = 6
+G = params$infoReport$G
+data.selected = params$infoReport$data
+f.selected = params$infoReport$feature
+
+```
+
 # Recap
 The following parameters value has been selected:
 
  1. the number of basis spline,
- `r if(!is.null(params$infoReport$p)){paste("p = ",params$infoReport$p) }else{ paste("p was not selected ")} ` ;
- 2. the dimension of the mean space, 
- `r if(!is.null(params$infoReport$h)){paste("h = ",params$infoReport$h) }else{ paste("h was not selected ")} ` ;
- 3. the number of clusters, 
+ `r if(!is.null(p)){paste("p = ",p) }else{ paste("p was not selected ")} ` ;
+ 2. the number of clusters, 
  `r if(!is.null(params$infoReport$G)){paste("G = ",params$infoReport$G) }else{ paste("G was not selected ")} ` .
  
-# Data import and preprocessing
+# Data overview
+
+Number of curves: 
+ `r  `
+
+# Data visualisation
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center", fig.cap="Sampled curves coloured by  feature selected."}
 
-params$infoReport$GrowPlot
+GrowPlot<-GrowthCurve(data.selected,feature = f.selected)
+
+GrowPlot$PlotData
 
 ```
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center", fig.cap="Time grid."}
 
-params$infoReport$TimeGrid
+Timegrid <- TimeGridDensity(data = data.selected)
+Timegrid$TimeGrid_plot
 
 ```
 
+
 # Paramenters selection
+
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(!is.null(params$infoReport$CrossLL)){
-  params$infoReport$CrossLL$CrossLogLikePlot
-  params$infoReport$CrossLL$KnotsPlot
-} 
-if(!is.null(params$infoReport$IndexBoxPlot)) params$infoReport$IndexBoxPlot$Plot
+if(is.character(path) && file.exists(path)){
+  readInputRdsFile = function(input_rds){
+    input = tryCatch(readRDS(input_rds), 
+    error = function(c) stop("The input *rds is invalid. Please fix your input file.")
+    )
+  }
+  
+  readInputRdsFile(path)
+  
+}else if(is.vector(params$infoReport$CrossLL)){
+  
+  CrossLogLike<-BasisDimension.Choice(data.selected,
+                                    p = CrossLL,
+                                    Cores = nworkers)
+  CrossLogLike$CrossLogLikePlot
+  CrossLogLike$KnotsPlot
+  
+}
+
+```
+
+
+The number of basis spline (p) is: 
+ `r ipaste("p = ",p)` .
+ 
+ 
+```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+IndexesPlot.Extrapolation(clusterdata.selected)-> indexes
+
+indexes$Plot
+
+```
+
+```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+
+knitr::kable(indexes$IndexesValues$fDB)
 
 ```
 
 # Cluster plots
 
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+<!-- ```{r , fig.height = 3, fig.width = 7, fig.align = "center"} -->
 
-if(!is.null(params$infoReport$ConsMatrix)) params$infoReport$ConsMatrices[[paste0("G",params$infoReport$GConsMat)]]$ConsensusPlot
-if(!is.null(params$infoReport$FCMplots)){
-  params$infoReport$FCMplots$plotMeanCurve
-  params$infoReport$FCMplots$plotsCluster
-} 
-                           
-```
+<!-- if(!is.null(params$infoReport$ConsMatrix)) params$infoReport$ConsMatrices[[paste0("G",params$infoReport$GConsMat)]]$ConsensusPlot -->
+<!-- if(!is.null(params$infoReport$FCMplots)){ -->
+<!--   params$infoReport$FCMplots$plotMeanCurve -->
+<!--   params$infoReport$FCMplots$plotsCluster -->
+<!-- }  -->
+
+<!-- ``` -->
 
 
 
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+<!-- ```{r , fig.height = 3, fig.width = 7, fig.align = "center"} -->
 
-if(!is.null(params$infoReport$DiscriminantPlot)) params$infoReport$DiscriminantPlot
-if(!is.null(params$infoReport$DiscriminantPlotF)) params$infoReport$DiscriminantPlotF
+<!-- if(!is.null(params$infoReport$DiscriminantPlot)) params$infoReport$DiscriminantPlot -->
+<!-- if(!is.null(params$infoReport$DiscriminantPlotF)) params$infoReport$DiscriminantPlotF -->
 
-```
+<!-- ``` -->
 
-# Spline fitting
+<!-- # Spline fitting -->
 
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+<!-- ```{r , fig.height = 3, fig.width = 7, fig.align = "center"} -->
 
-if(!is.null(params$infoReport$FCMplots)){
-  
-for(i in lengeth(params$infoReport$FCMplots$spline.plots)) params$infoReport$FCMplots$spline.plots[[i]]
-  
-  }
-  
-```
+<!-- if(!is.null(params$infoReport$FCMplots)){ -->
+
+<!-- for(i in lengeth(params$infoReport$FCMplots$spline.plots)) params$infoReport$FCMplots$spline.plots[[i]] -->
+
+<!--   } -->
+
+<!-- ``` -->
 

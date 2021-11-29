@@ -10,7 +10,7 @@ CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 ### Visualization
 
 GrowPlot<-GrowthCurve(CONNECTORList,"Progeny")
-
+Timegrid <- TimeGridDensity(CONNECTORList)
 Datavisual<-DataVisualization(CONNECTORList,feature="Progeny", labels = c("Time","Volume","Tumor Growth"))
 
 Datavisual
@@ -18,10 +18,11 @@ Datavisual
 # trunc = 50
 
 ### Truncation
-CONNECTORList<- DataTruncation(CONNECTORList,feature="Progeny",70,labels = c("Time","Volume","Tumor Growth"))
+CONNECTORList.trunc<- DataTruncation(CONNECTORList,feature="Progeny",70,labels = c("Time","Volume","Tumor Growth"))
 
 ### Calculation of p
-CrossLogLike<-BasisDimension.Choice(CONNECTORList,2:6,Cores = 2)
+CrossLogLike<-BasisDimension.Choice(CONNECTORList.trunc,2:6,Cores = 2)
+save(CrossLogLike,file = "CrossLL.Rds")
 
 CrossLogLike$CrossLogLikePlot
 CrossLogLike$KnotsPlot
@@ -30,7 +31,7 @@ CrossLogLike$KnotsPlot
 p<-3
 
 #### New part:
-S.cl <-ClusterAnalysis(CONNECTORList,G=3:6,
+S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=3:6,
                        p=p,
                        runs=50,
                        seed=123,
@@ -51,13 +52,8 @@ FMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
                                 labels = c("Time","Volume"),title= (" FCM model"))
 
 
-### Calculation of h
-pca <- PCA.Analysis(CONNECTORList,p = p)
 
-pca$plot
 
-# h is 
-h<-1
 
 ####### Calculation of G and fitting using FCM
 

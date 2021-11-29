@@ -34,7 +34,7 @@
 #'  @references
 #' Gareth M. James and Catherine A. Sugar, (2003). Clustering for Sparsely Sampled Functional Data. Journal of the American Statistical Association.
 #' 
-#' @import sfsmisc dplyr
+#' @import sfsmisc dplyr 
 #' @name DBindexL2dist
 NULL
 #> NULL

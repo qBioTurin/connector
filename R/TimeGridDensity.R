@@ -18,7 +18,9 @@
 #' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 #' TimeGridDensity(CONNECTORList)
 #'
-#' @import ggplot2 plyr ggplotify grid
+#' @import ggplot2 grid plyr
+#' @importFrom ggplotify as.ggplot 
+#' @importFrom gridExtra arrangeGrob
 #' @export
 TimeGridDensity <- function(data,save=FALSE,path=NULL)
 {

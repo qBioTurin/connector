@@ -32,7 +32,9 @@
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'
-#' @import ggplot2 fda plyr parallel ggplotify grid
+#' @import ggplot2 fda parallel grid
+#' @importFrom ggplotify  as.ggplot
+#' @importFrom plyr ldply
 #' @importFrom MASS ginv
 #' @export
 #' 

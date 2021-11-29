@@ -245,10 +245,12 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   })
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
-  #Freq.cl[order(match(Freq.cl$Cluster, lab)),]
+  Freq.cl<-Freq.cl[order(match(Freq.cl$Cluster, lab)),]
   MeanFreq<-mean(Freq.cl$Mean)
   Freq.cl$Mean[is.na(Freq.cl$Mean)] <- 1
-  lab.<-rev(sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") ))
+  
+  labText<-sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") )
+  
   ##
   
   ConsensusPlot <- ggplot() +
@@ -266,7 +268,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
     labs(title = "Consensus Matrix",
          subtitle = paste("Black line for the most probable clustering: ",MeanFreq) ) + 
     annotate(geom = "text", x = x.text, y = y.text, 
-             label = lab. , 
+             label = labText , 
              size = 6)
   
   return(list(ConsensusMatrix = consensusM,

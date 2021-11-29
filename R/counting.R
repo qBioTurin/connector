@@ -29,7 +29,7 @@
 #' CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 #'
 #' NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.k4.h2,CONNECTORList,feature = "Progeny")
-#' @import plyr
+#' @importFrom plyr count
 #' @export
 #' 
 CountingSamples<-function(clusterdata,data,feature="ID")

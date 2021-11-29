@@ -50,7 +50,7 @@
 #'
 #' @seealso MostProbableClustering.Extrapolation, BoxPlot.Extrapolation, ConsMatrix.Extrapolation.
 #' 
-#' @import  reshape2 RColorBrewer statmod parallel  Matrix splines 
+#' @import RColorBrewer statmod parallel Matrix splines 
 #' @export
 
 ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0)

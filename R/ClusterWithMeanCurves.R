@@ -45,12 +45,12 @@
 #'
 #' @examples
 #' 
-#' @import ggplot2  gridExtra
-#' @importFrom cowplot plot_grid add_sub ggdraw
+#' @import ggplot2
 #' @importFrom knitr kable
 #' @export
 ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c("","") ,save=FALSE,path=NULL )
 {
+  # @importFrom cowplot plot_grid add_sub ggdraw
   axis.x<-labels[1]
   axis.y<-labels[2]
 
