@@ -57,7 +57,9 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   )
   grid.cl <- do.call("rbind",grid.cl)
   Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
-  ShortCurves = Database.subset %>% dplyr::group_by(ID) %>% dplyr::count(ID) %>% filter(n < 0)
+  ShortCurves = Database.subset %>%
+    dplyr::group_by(ID) %>%
+    dplyr::count(ID) %>% filter(n < 3)
   
   if(length(ShortCurves$ID) > 0 ) 
     stop(paste0("The quantile values must be smaller in order to calculate correcty the fdb indexes. The following curves with the IDs:", 
