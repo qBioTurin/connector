@@ -57,6 +57,11 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   )
   grid.cl <- do.call("rbind",grid.cl)
   Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
+  ShortCurves = Database.subset %>% dplyr::group_by(ID) %>% dplyr::count(ID) %>% filter(n < 0)
+  
+  if(length(ShortCurves$ID) > 0 ) 
+    stop(paste0("The quantile values must be smaller in order to calculate correcty the fdb indexes. The following curves with the IDs:", 
+                ShortCurves$ID, " are too sparse and during the cutting procedure for calculating the indexes, these curves are too short." ))
   
   if(deriv==0)
   {
@@ -209,6 +214,7 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
   )
   grid.cl <- do.call("rbind",grid.cl)
+  
   Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
   
   if(deriv==0)
@@ -412,7 +418,8 @@ ns.deriv <- function (x, df = NULL, knots = NULL, intercept = FALSE, Boundary.kn
 ClusterGrid.truncation<-function(clust,database,q){
   grid.list<-lapply(unique(clust),function(j){
     id.curves <- which(clust == j)
-    grid<-database$Time[database$ID %in% id.curves ]
+    dbSubset= database[database$ID %in% id.curves, ]
+    grid<- dbSubset$Times
     if(is.null(q)){ # Delete the outliers
       lw<- max(min(grid), as.numeric(quantile(grid, 0.25)) - (IQR(grid)*1.5)) #lower whisker
       up<- min(max(grid), as.numeric(quantile(grid, 0.75)) + (IQR(grid)*1.5)) # upper whisker
@@ -425,7 +432,8 @@ ClusterGrid.truncation<-function(clust,database,q){
       lw<- as.numeric(quantile(grid, q.lw))
       up<- as.numeric(quantile(grid, q.up))
     }
-    sort(unique(grid[grid >= lw & grid <= up]))
+    return(sort(unique(grid[grid >= lw & grid <= up])))
+    
   })
   names(grid.list) <- paste0("G",unique(clust))
   return(grid.list)
