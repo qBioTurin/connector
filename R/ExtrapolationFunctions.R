@@ -73,7 +73,11 @@ ConsMatrix.Extrapolation <- function(stability.list,data,q=NULL){
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   
-  Freq.ConfigCl<-unique(Indexes.MostProb[,c("Cluster","Config")])
+  Freq = Indexes.MostProb %>% 
+    dplyr::select(Cluster,Config) %>%
+    dplyr::distinct(Cluster, .keep_all = T)
+  
+  Freq.ConfigCl<- Freq[order(Freq$Cluster),]
   
   ConsensusInfo<-lapply(1:length(G), function(Gind){
     ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl,q)
