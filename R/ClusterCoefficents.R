@@ -421,7 +421,7 @@ ClusterGrid.truncation<-function(clust,database,q){
   grid.list<-lapply(unique(clust),function(j){
     id.curves <- which(clust == j)
     dbSubset= database[database$ID %in% id.curves, ]
-    grid<- dbSubset$Times
+    grid<- dbSubset$Time
     if(is.null(q)){ # Delete the outliers
       lw<- max(min(grid), as.numeric(quantile(grid, 0.25)) - (IQR(grid)*1.5)) #lower whisker
       up<- min(max(grid), as.numeric(quantile(grid, 0.75)) + (IQR(grid)*1.5)) # upper whisker
