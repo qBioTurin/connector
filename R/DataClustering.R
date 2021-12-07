@@ -292,12 +292,12 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       List.runs.fitfclust[[x]]
     else NA
   } )
-  if(length(which(is.na(List.runs.fitfclust)))!=0){
-    ErrorConfigurationFit <- List.runs.fitfclust[which(is.na(List.runs.fitfclust))]
-    List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
-  }else{
-    ErrorConfigurationFit<-NULL
-  }
+  # if(length(which(is.na(List.runs.fitfclust)))!=0){
+  #   ErrorConfigurationFit <- List.runs.fitfclust[which(is.na(List.runs.fitfclust))]
+  #   List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
+  # }else{
+  #   ErrorConfigurationFit<-NULL
+  # }
   ###
   ClusterAll<-lapply(1:length(Indexes.Uniq.Par),function(i){
     tryCatch({
@@ -369,7 +369,7 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
     )
   })
   
-  return(list(ClusterAll=ClusterAll,ErrorConfigurationFit=ErrorConfigurationFit) )
+  return(list(ClusterAll=ClusterAll) )
 }
 
 fdb.calc <-function(ClusterAll){
