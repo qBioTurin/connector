@@ -324,7 +324,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
         data.frame(Config = j, 
                    V = ClusterAll[[j]]$Tight.indexes, 
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-      else NA
+     # else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -339,7 +339,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
         data.frame(Config = j, 
                    V = ClusterAll[[j]]$Coefficents$fDB.index,
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-      else NA
+     # else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -353,7 +353,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
       if(!is.character(ClusterAll[[j]]) )
         data.frame(Config = j, V = ClusterAll[[j]]$Deriv.Coefficents$fDB.index,
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-      else NA
+    #  else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -367,7 +367,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
       if(!is.character(ClusterAll[[j]]) )
         data.frame(Config = j, V = ClusterAll[[j]]$Deriv2.Coefficents$fDB.index, 
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-      else NA
+    #  else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
