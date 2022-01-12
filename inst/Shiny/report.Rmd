@@ -12,14 +12,19 @@ params:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  echo = FALSE,
   comment = "##",
   results = TRUE,
   warning = FALSE,
   message = FALSE,
   highlight = TRUE,
   background = 'grey',
-  fig.cap = TRUE
+  fig.cap = TRUE,
+  out.height = "\\textheight",
+  out.width = "\\textwidth"
 )
+#knitr::opts_chunk$set(out.height = "\\textheight",  ,
+#                      out.extra = "keepaspectratio=false")
 ```
 
 ```{r setup, include = FALSE}
@@ -28,11 +33,19 @@ library(parallel)
 detectCores(logical = FALSE) -> nworkers
 nworkers <- nworkers - 1 # just for my laptop to survive 
 
-p = 6
+p = params$infoReport$p
 G = params$infoReport$G
 data.selected = params$infoReport$data
 f.selected = params$infoReport$feature
+clusterdata = params$infoReport$clusterdata
 
+if(!is.null(G) && !is.null(clusterdata) ) {
+  clusterdata.selected <- MostProbableClustering.Extrapolation(stability.list = clusterdata,
+                                                               G = G)
+}else{
+  clusterdata.selected <- NULL
+}
+ 
 ```
 
 # Recap
@@ -52,9 +65,10 @@ Number of curves:
 
 ```{r , fig.height = 3, fig.width = 7, fig.align = "center", fig.cap="Sampled curves coloured by  feature selected."}
 
-GrowPlot<-GrowthCurve(data.selected,feature = f.selected)
+GrowPlot<-GrowthCurve(data.selected,
+                      feature = f.selected)
 
-GrowPlot$PlotData
+GrowPlot$GrowthCurve_plot
 
 ```
 
@@ -65,11 +79,23 @@ Timegrid$TimeGrid_plot
 
 ```
 
+```{r , fig.height = 3, fig.width = 7, fig.align = "center", fig.cap="Time grid."}
+if(!is.null(params$infoReport$truncTime) ){
+  data.selected <- DataTruncation(data = data.selected,
+               truncTime = params$infoReport$truncTime,
+               feature =  f.selected)
+  print(data.selected$GrowthCurve_plot)
+}
+
+
+```
+
+
 
 # Paramenters selection
 
 
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
+```{r CrossLL, fig.height = 3, fig.width = 7, fig.align = "center"}
 
 if(is.character(path) && file.exists(path)){
   readInputRdsFile = function(input_rds){
@@ -83,7 +109,7 @@ if(is.character(path) && file.exists(path)){
 }else if(is.vector(params$infoReport$CrossLL)){
   
   CrossLogLike<-BasisDimension.Choice(data.selected,
-                                    p = CrossLL,
+                                    p = params$infoReport$CrossLL,
                                     Cores = nworkers)
   CrossLogLike$CrossLogLikePlot
   CrossLogLike$KnotsPlot
@@ -94,33 +120,41 @@ if(is.character(path) && file.exists(path)){
 
 
 The number of basis spline (p) is: 
- `r ipaste("p = ",p)` .
+ `r paste("p = ",p)` .
  
+
  
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
-IndexesPlot.Extrapolation(clusterdata.selected)-> indexes
-
-indexes$Plot
-
-```
-
-```{r , fig.height = 3, fig.width = 7, fig.align = "center"}
-
-knitr::kable(indexes$IndexesValues$fDB)
+```{r FDBindexes ,  fig.align = "center"}
+if(!is.null(clusterdata)){
+  IndexesPlot.Extrapolation(clusterdata)-> indexes
+  
+  print(indexes$Plot)
+  
+  knitr::kable(indexes$IndexesValues$fDB)
+}
 
 ```
 
 # Cluster plots
 
-<!-- ```{r , fig.height = 3, fig.width = 7, fig.align = "center"} -->
+```{r ClusterPlots, fig.height = 3, fig.width = 7, fig.align = "center"}
 
-<!-- if(!is.null(params$infoReport$ConsMatrix)) params$infoReport$ConsMatrices[[paste0("G",params$infoReport$GConsMat)]]$ConsensusPlot -->
-<!-- if(!is.null(params$infoReport$FCMplots)){ -->
-<!--   params$infoReport$FCMplots$plotMeanCurve -->
-<!--   params$infoReport$FCMplots$plotsCluster -->
-<!-- }  -->
+if(!is.null(params$infoReport$G)) {
+  ConsMatrix.Extrapolation(clusterdata,
+                           data = data.selected)-> ConsInfo
 
-<!-- ``` -->
+  print(ConsInfo[[paste0("G",G)]]$ConsensusPlot)
+
+
+FMplots<- ClusterWithMeanCurve(clusterdata = clusterdata.selected,
+                              data= data.selected,
+                              feature = f.selected)
+
+print(FMplots$plotMeanCurve)
+print(FMplots$plotsCluster$ALL)
+}
+
+```
 
 
 

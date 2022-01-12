@@ -63,7 +63,7 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   
   if(length(ShortCurves$ID) > 0 ) 
     stop(paste0("The quantile values must be smaller in order to calculate correcty the fdb indexes. The following curves with the IDs:", 
-                ShortCurves$ID, " are too sparse and during the cutting procedure for calculating the indexes, these curves are too short." ))
+                paste(ShortCurves$ID,collapse = ", "), " are too sparse and during the cutting procedure for calculating the indexes, these curves are too short." ))
   
   if(deriv==0)
   {
@@ -150,7 +150,7 @@ L2dist.mu2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     t.min<-min(min(cluster.grid[[cl.1]]),min(cluster.grid[[cl.2]]))
     t.max<-max(max(cluster.grid[[cl.1]]),max(cluster.grid[[cl.2]]))
     itime<- which(grid >= t.min & grid <= t.max )
-    integrate.xy(grid[itime],fxk[itime,i])
+    integrate.xy(grid[itime],fxk[itime,i],use.spline = F)
   } )
   dist.mu2mu[,] <- sqrt(int)
   return(dist.mu2mu)
@@ -277,8 +277,6 @@ Rclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   cl   <- L2dist.mu20(clust,fcm.curve,database,fcm.fit,deriv,q)
   ######### Let name the cluster with A->Z from the lower mean curve to the higher.
  
-  M <- emme
-  
   if( k !=1 )
   {
     Cl.order<-order(cl)
