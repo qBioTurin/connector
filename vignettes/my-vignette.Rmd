@@ -30,21 +30,20 @@ knitr::opts_chunk$set(
 )
 rm(list=ls())
 ```
+
 # Introduction
 
 Connector is built on the model-based approach for clustering functional data presented in [@james2003clustering]. Such method is particularly effective when the observations are sparse and irregularly spaced, as growth curves usually are. A review on the method and on the tools developed by the authors to suitably set the free parameters, please refer to [our NM paper].
 
-[qui magari due parole sulla rilevanza biologica?] 
+[esempietto per capire che sono i dati!] 
 
 The method models individual curves $g_i$ using basis functions
 \begin{equation}\label{eq:gspline}
 	g_i(t) = \mathbf{s}(t)^T  \boldsymbol{\eta}_i,
 \end{equation}
-where $\mathbf{s}(t)$ is a $p-$dimensional spline basis vector and $\boldsymbol{\eta}_i$ is a vector of spline coefficients. The $\boldsymbol{\eta}_i$'s are treated with a random-effects model rather than considering them as parameters and fitting a separate spline curve for each individual. Moreover, a suitable parametrization of the mean curves allows a lower-dimensional representation of the curves with means in a restricted subspace. The model is fitted through an EM procedure.
+where $\mathbf{s}(t)$ is a $p-$dimensional spline basis vector and $\boldsymbol{\eta}_i$ is a vector of spline coefficients. The $\boldsymbol{\eta}_i$'s are treated with a random-effects model rather than considering them as parameters and fitting a separate spline curve for each individual. The model is fitted through an EM procedure.
 
-Particular attention will be devoted to model selection. In particular, one must choose the number of clusters to fit, the dimension of the spline basis and the reduced dimension of the mean space. `connector` provides a complete toolkit to lead the user through such decisions, one of the most difficult problems in cluster analysis.
-
-
+Particular attention will be devoted to model selection. In particular, one must choose the number of clusters to fit, and the dimension of the spline basis. `connector` provides a complete toolkit to lead the user through such decisions, one of the most difficult problems in cluster analysis.
 
 
 # Installation
@@ -327,18 +326,18 @@ which will be exploited hereafter.
 
 ```{r, fig.height = 7, fig.width = 16, fig.align = "center",fig.cap="\\label{fig:TandfDB} Violin Plots of the {\\it total tightness} $T$ calculated on each run and for different number of clusters $G$ (right panel). Violin Plots of the {\\it functional DB index} fDB calculated on each run and for different number of clusters $G$ (left panel)."}
 
-IndexesPlot.ExtrapolationNew(stability.list =ClusteringList )
+IndexesPlot.Extrapolation(stability.list =ClusteringList )
 
 ```
 
 The indexes show that $G=3$ and $G=4$ may be good choices for the parameter. Specifically, the left panel shows that $G=3$ may be good choice for the parameter, while the fDB indexes plotted in the left panel lead the choice to $G=4$, a number of clusters that explicitly minimizes the fDB index.
 
-The variability of the two measures among runs, exhibited in Figure \ref{fig:TandfDB}, is related to the random initialization of the k-means algorithm to get initial cluster memberships from points. The stability of the clustering procedure can be visualized through the consensus matrix extrapolated by the function `ConsMatrix.ExtrapolationNew`, as shown in Figure \ref{fig:ConsMatg4}.
+The variability of the two measures among runs, exhibited in Figure \ref{fig:TandfDB}, is related to the random initialization of the k-means algorithm to get initial cluster memberships from points. The stability of the clustering procedure can be visualized through the consensus matrix extrapolated by the function `ConsMatrix.Extrapolation`, as shown in Figure \ref{fig:ConsMatg4}.
 Let us note that the number associated with each cluster represents the average number of time that the curves belonging to the same cluster are counted in the most probable cluster; whilethe average of these indexes is reported in the title.
 
 ```{r, fig.height =4, fig.width = 6, fig.align = "center",fig.cap="\\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "}
 
-ConsMatrix<-ConsMatrix.ExtrapolationNew(stability.list = ClusteringList,
+ConsMatrix<-ConsMatrix.Extrapolation(stability.list = ClusteringList,
                                         data = trCONNECTORList)
 str(ConsMatrix, max.level = 2, vec.len=1)
 
@@ -353,7 +352,7 @@ Once the free parameters are all set, the function `MostProbableClustering.Extra
 
 ```{r, fig.height = 6, fig.width = 6, fig.align = "center", out.width= '90%'}
 
-CONNECTORList.FCM.opt<-MostProbableClustering.ExtrapolationNew(
+CONNECTORList.FCM.opt<-MostProbableClustering.Extrapolation(
                                                   stability.list = ClusteringList,
                                                   G = G )
 ```

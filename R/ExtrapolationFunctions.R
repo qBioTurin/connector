@@ -250,7 +250,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
   Freq.cl<-Freq.cl[order(match(Freq.cl$Cluster, lab)),]
-  MeanFreq<-mean(Freq.cl$Mean)
+  MeanFreq<-mean(Freq.cl$Mean,na.rm = T)
   Freq.cl$Mean[is.na(Freq.cl$Mean)] <- 1
   
   labText<-sapply(1:length(G),function(i) paste(Freq.cl[i,c("Cluster","Mean")],collapse = ": ") )
