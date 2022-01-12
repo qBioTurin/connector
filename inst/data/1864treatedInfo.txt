@@ -1,0 +1,1 @@
+ID,SampleName,Treatment1,CARBO1,Carboplatin2,CARBO3,Carboplatin3,CARBO6,Carboplatin4,CARBO7,Carboplatin5,CARBO8,Carboplatin6,CARBO17,Carboplatin7,GEM1,Gemcitabine8,GEM8,Gemcitabine9,GEM17,Gemcitabine10,GEM18,Gemcitabine11,TRB11,Trabectedin12,TRB12,Trabectedin13,TRB14,Trabectedin14,TRB15,Trabectedin
