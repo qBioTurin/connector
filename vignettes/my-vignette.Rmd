@@ -33,7 +33,7 @@ rm(list=ls())
 
 # Introduction
 
-Connector is built on the model-based approach for clustering functional data presented in [@james2003clustering]. Such method is particularly effective when the observations are sparse and irregularly spaced, as growth curves usually are. A review on the method and on the tools developed by the authors to suitably set the free parameters, please refer to [our NM paper].
+Connector is built on the model-based approach for clustering functional data presented in [@james2003clustering], called Functional Clustering Model (FCM). Such method is particularly effective when the observations are sparse and irregularly spaced, as growth curves usually are. A review on the method and on the tools developed by the authors to suitably set the free parameters, please refer to [our NM paper].
 
 [esempietto per capire che sono i dati!] 
 
@@ -309,6 +309,7 @@ ClusteringList <-ClusterAnalysis(data = trCONNECTORList,
 }else{
   load(ClusFile)
 }
+
 G=3
 ```
 

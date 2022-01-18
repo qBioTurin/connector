@@ -55,7 +55,7 @@ DataFrameImport <- function(GrowDataFrame,AnnotationFrame=NULL) {
         warning("The first column name of the AnnotationFrame must be 'ID' \n ")
         return()
       }else{
-        if(unique(ID.sample %in% AnnotationFrame[,1]) %in% FALSE)
+        if(unique(ID.sample %in% AnnotationFrame$ID) %in% FALSE)
           {
             warning("The AnnotationFrame 'ID's do not correspond to the one stored in the GrowDataFrame!\n ")
             return()

@@ -11,14 +11,16 @@ CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 
 GrowPlot<-GrowthCurve(CONNECTORList,"Progeny")
 Timegrid <- TimeGridDensity(CONNECTORList)
+
 Datavisual<-DataVisualization(CONNECTORList,feature="Progeny", labels = c("Time","Volume","Tumor Growth"))
 
 Datavisual
 
-# trunc = 50
+# trunc = 60
 
 ### Truncation
-CONNECTORList.trunc<- DataTruncation(CONNECTORList,feature="Progeny",70,labels = c("Time","Volume","Tumor Growth"))
+CONNECTORList.trunc<- DataTruncation(CONNECTORList,feature="Progeny",70,
+                                     labels = c("Time","Volume","Tumor Growth"))
 
 ### Calculation of p
 CrossLogLike<-BasisDimension.Choice(CONNECTORList.trunc,2:6,Cores = 2)
@@ -31,17 +33,17 @@ CrossLogLike$KnotsPlot
 p<-3
 
 #### New part:
-S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=3:6,
+S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=2:5,
                        p=p,
-                       runs=50,
-                       seed=123,
+                       runs=100,
                        Cores=2)
 
 IndexesPlot.Extrapolation(S.cl)-> indexes
-ConsMatrix.Extrapolation(S.cl,data = CONNECTORList)-> ConsInfo
+indexes$Plot 
+
+ConsMatrix.Extrapolation(S.cl,data = CONNECTORList.trunc)-> ConsInfo
 MostProbableClustering.Extrapolation(S.cl,5) ->MostProbableClustering
 
-indexes$Plot 
 ConsInfo$G4$ConsensusPlot
 ConsInfo$G5$ConsensusPlot
 
