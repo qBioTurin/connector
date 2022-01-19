@@ -68,9 +68,8 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   if(Cores > 10) Cores <- 10
   
   cl <- makeCluster(Cores)
-  
-  
   crossvalid<-parLapply(cl,1:10, function(step){
+    tryCatch({
     SampleTestSet<-sample(samples,perc)
     SampleTestSet<-SampleTestSet[order(SampleTestSet)]
     
@@ -89,9 +88,15 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
     CrossLikelihood<-sapply(p.values, CalcLikelihood, data.funcit,TestSet,grid)
     
     return(data.frame(p=p.values,CrossLikelihood=CrossLikelihood,sim=step))
+    }, error=function(e) {
+      err<-paste("ERROR in prediction :",conditionMessage(e), "\n")
+      #print(err)
+      return(NULL)
+    }
+    )
   })
-  
   stopCluster(cl)
+  crossvalid <- crossvalid[!sapply(crossvalid,is.null)] 
   
   Knots.list<-lapply(p.values,function(p){
       Spline<-ns(grid, df = (p - 1))
@@ -145,7 +150,8 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   Knots.Plot.new <-arrangeGrob(rbind(ggplotGrob(GrowthCurve), ggplotGrob(Knots.Plot), size = "last"))
   Knots.Plot.new <-ggplotify::as.ggplot(Knots.Plot.new)
 
-ALLcrossvalid<-ldply(crossvalid, rbind)
+  ALLcrossvalid<-ldply(crossvalid, rbind)
+  
   mean<-sapply(p.values, function(x){ mean(ALLcrossvalid$CrossLikelihood[ALLcrossvalid$p==x]) } )
   meandata<-data.frame(p=p.values,mean=mean)
   

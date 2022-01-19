@@ -12,7 +12,9 @@ CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 GrowPlot<-GrowthCurve(CONNECTORList,"Progeny")
 Timegrid <- TimeGridDensity(CONNECTORList)
 
-Datavisual<-DataVisualization(CONNECTORList,feature="Progeny", labels = c("Time","Volume","Tumor Growth"))
+Datavisual<-DataVisualization(CONNECTORList,
+                              feature="Progeny",
+                              labels = c("Time","Volume","Tumor Growth"))
 
 Datavisual
 
