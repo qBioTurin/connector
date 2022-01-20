@@ -39,12 +39,6 @@ data.selected = params$infoReport$data
 f.selected = params$infoReport$feature
 clusterdata = params$infoReport$clusterdata
 
-if(!is.null(G) && !is.null(clusterdata) ) {
-  clusterdata.selected <- MostProbableClustering.Extrapolation(stability.list = clusterdata,
-                                                               G = G)
-}else{
-  clusterdata.selected <- NULL
-}
  
 ```
 
@@ -97,14 +91,14 @@ if(!is.null(params$infoReport$truncTime) ){
 
 ```{r CrossLL, fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(is.character(path) && file.exists(path)){
+if(is.character(params$infoReport$CrossLL) && file.exists(params$infoReport$CrossLL)){
+  
   readInputRdsFile = function(input_rds){
     input = tryCatch(readRDS(input_rds), 
     error = function(c) stop("The input *rds is invalid. Please fix your input file.")
     )
   }
-  
-  readInputRdsFile(path)
+  readInputRdsFile(params$infoReport$CrossLL)
   
 }else if(is.vector(params$infoReport$CrossLL)){
   
@@ -139,19 +133,22 @@ if(!is.null(clusterdata)){
 
 ```{r ClusterPlots, fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(!is.null(params$infoReport$G)) {
+if(!is.null(G) && !is.null(clusterdata) ) {
   ConsMatrix.Extrapolation(clusterdata,
                            data = data.selected)-> ConsInfo
 
-  print(ConsInfo[[paste0("G",G)]]$ConsensusPlot)
-
-
-FMplots<- ClusterWithMeanCurve(clusterdata = clusterdata.selected,
+  for( g in G){
+    print(ConsInfo[[paste0("G",g)]]$ConsensusPlot)
+    clusterdata.selected <- MostProbableClustering.Extrapolation(stability.list = clusterdata,
+                                                                 G = g)
+    FMplots<- ClusterWithMeanCurve(clusterdata = clusterdata.selected,
                               data= data.selected,
                               feature = f.selected)
 
-print(FMplots$plotMeanCurve)
-print(FMplots$plotsCluster$ALL)
+    print(FMplots$plotMeanCurve)
+    print(FMplots$plotsCluster$ALL)
+  }
+  
 }
 
 ```

@@ -55,11 +55,8 @@ FMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
                                 feature = "Progeny",
                                 labels = c("Time","Volume"),title= (" FCM model"))
 
-
-
-
-
 ####### Calculation of G and fitting using FCM
+
 
 ### Stability Analysis
 S.cl <-StabilityAnalysis(data = CONNECTORList,
