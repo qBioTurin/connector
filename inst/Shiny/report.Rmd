@@ -91,7 +91,7 @@ if(!is.null(params$infoReport$truncTime) ){
 
 ```{r CrossLL, fig.height = 3, fig.width = 7, fig.align = "center"}
 
-if(is.character(params$infoReport$CrossLL) && file.exists(params$infoReport$CrossLL)){
+if(is.character(params$infoReport$CrossLL)){
   
   readInputRdsFile = function(input_rds){
     input = tryCatch(readRDS(input_rds), 

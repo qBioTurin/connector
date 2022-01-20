@@ -53,7 +53,7 @@ ReportGeneration <- function(data, clusterdata, G, feature = "ID", namefile = "R
   # from the code in this app).
   rmarkdown::render(output_format = "html_document",
                     output_file = paste0(namefile,".html"),
-                    output_dir = ,
+                    output_dir = path,
                     input =  report.path,
                     params = list(infoReport = infoReport),
                     envir = new.env(parent = globalenv())
