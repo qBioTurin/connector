@@ -53,7 +53,10 @@ The following parameters value has been selected:
 # Data overview
 
 Number of curves: 
- `r  `
+ `r  length(unique(data.selected$$Dataset$ID ))`
+ 
+Overview number of points for each curve:
+ `r  summary(as.vector(table(data.selected$Dataset$ID)))`
 
 # Data visualisation
 
@@ -138,7 +141,7 @@ if(!is.null(G) && !is.null(clusterdata) ) {
                            data = data.selected)-> ConsInfo
 
   for( g in G){
-    cat("# Cluster ",g,"\n\n")
+    print("# Cluster ",g,"\n\n")
 
     print(ConsInfo[[paste0("G",g)]]$ConsensusPlot)
     

@@ -1,13 +1,14 @@
 #' Report generation
 #'
 #' @param data CONNECTORList. (see \code{\link{DataImport}})
-#' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).
+#' @param stability.list The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})
 #' @param feature The column name reported in the AnnotationFile  containing the feature to be investigated.
-#' @param truncTime
-#' @param p The vector of the dimension of the natural cubic spline basis, by which the cross-validated loglikelihood is calculated and plotted. It could be the path of the Rds file storing the output of the \code{\link{BasisDimension.Choice}} function. If NULL, the p selection step is omitted.
-#' @param pRange Or the path or the range
-#' @param path The folder path  where the plot will be saved. If it is missing, the plot is saved in the current working  directory.
-#' @param namefile
+#' @param truncTime  A two dimension vector of integers corresponding to the time points where the curves will be truncated. If an integer number is passed, than it will be considered as the upper time point by default.
+#' @param pRange The vector of the dimension of the natural cubic spline basis, by which the cross-validated loglikelihood is calculated and plotted. It could be the path of the Rds file storing the output of the \code{\link{BasisDimension.Choice}} function. If NULL, the p selection step is omitted.
+#' @param p The dimension of the natural cubic spline basis. (see \code{\link{BasisDimension.Choice}})
+#' @param G  Vector of integers representing the number of clusters.
+#' @param path The folder path  where the report will be saved. If it is missing, the report is saved in the current working  directory.
+#' @param namefile Report name.
 #' 
 #' @return  
 #' @examples
@@ -19,7 +20,7 @@
 #' @importFrom knitr kable
 #' @export
 
-ReportGeneration <- function(data, clusterdata, G, feature = "ID", namefile = "Report", path = NULL,truncTime = NULL, p=NULL,pRange=NULL)
+ReportGeneration <- function(data, stability.list, G, feature = "ID", namefile = "Report", path = NULL,truncTime = NULL, p=NULL,pRange=NULL)
 {
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
@@ -34,7 +35,7 @@ ReportGeneration <- function(data, clusterdata, G, feature = "ID", namefile = "R
   }
   
   infoReport <-  list(data = data,
-                      clusterdata = clusterdata,
+                      clusterdata = stability.list,
                       G = G,
                       p = p,
                       feature = feature,
