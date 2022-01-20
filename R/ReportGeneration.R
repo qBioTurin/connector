@@ -54,7 +54,7 @@ ReportGeneration <- function(data, clusterdata, G, feature = "ID", namefile = "R
   rmarkdown::render(output_format = "html_document",
                     output_file = paste0(namefile,".html"),
                     output_dir = ,
-                    input = "inst/Shiny/report.Rmd",
+                    input =  report.path,
                     params = list(infoReport = infoReport),
                     envir = new.env(parent = globalenv())
   )
