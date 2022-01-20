@@ -95,7 +95,7 @@ if(is.character(params$infoReport$CrossLL)){
   
   readInputRdsFile = function(input_rds){
     input = tryCatch(readRDS(input_rds), 
-    error = function(c) stop("The input *rds is invalid. Please fix your input file.")
+    error = function(c) stop("The input *rds is invalid. Please fix the pRange input file, it must be defined wuth the entire path.")
     )
   }
   readInputRdsFile(params$infoReport$CrossLL)
@@ -138,15 +138,19 @@ if(!is.null(G) && !is.null(clusterdata) ) {
                            data = data.selected)-> ConsInfo
 
   for( g in G){
+    cat("# Cluster ",g,"\n\n")}
+
     print(ConsInfo[[paste0("G",g)]]$ConsensusPlot)
+    
     clusterdata.selected <- MostProbableClustering.Extrapolation(stability.list = clusterdata,
                                                                  G = g)
+    
     FMplots<- ClusterWithMeanCurve(clusterdata = clusterdata.selected,
                               data= data.selected,
                               feature = f.selected)
 
     print(FMplots$plotMeanCurve)
-    print(FMplots$plotsCluster$ALL)
+    #print(FMplots$plotsCluster$ALL)
   }
   
 }
