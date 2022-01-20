@@ -138,7 +138,7 @@ if(!is.null(G) && !is.null(clusterdata) ) {
                            data = data.selected)-> ConsInfo
 
   for( g in G){
-    cat("# Cluster ",g,"\n\n")}
+    cat("# Cluster ",g,"\n\n")
 
     print(ConsInfo[[paste0("G",g)]]$ConsensusPlot)
     
