@@ -29,7 +29,7 @@
 #' CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 #'
 #' NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.k4.h2,CONNECTORList,feature = "Progeny")
-#' @importFrom plyr count
+#' @importFrom plyr ddply
 #' @export
 #' 
 CountingSamples<-function(clusterdata,data,feature="ID")
@@ -52,7 +52,7 @@ CountingSamples<-function(clusterdata,data,feature="ID")
   countRes<-countRes[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
   
   
-  Counting<-count(countRes,c( "Cluster",feature))
+  Counting<-ddply(countRes, c("Cluster", feature),summarise, freq = sum(ID), .drop=FALSE)
 
   return(list(Counting=Counting,ClusterNames=data.frame(Cluster=ClustCurve$Cluster[cumsum(data$LenCurv)],ID=unique(ClustCurve[,"ID"])) ))
 }
