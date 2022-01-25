@@ -101,10 +101,10 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
   
   Freq.ConfigCl<-unique(Indexes.MostProb[,c("Cluster","Config")])
   ############# the most probably clustering:
-  IndexBestClustering <- Freq.ConfigCl[which(G.all == G),"Config"]
-  MostProbableClustering<-Clusters.List[[which(G.all == G)]]$ClusterAll[[IndexBestClustering]]
+  IndexBestClustering <- Freq.ConfigCl[which(Freq.ConfigCl$Cluster == G),"Config"]
+  MostProbableClustering<-Clusters.List[[paste0("G",G)]]$ClusterAll[[IndexBestClustering]]
   
-  MostProbableClustering$Cl.Info<- IndexesValues.list[[which(G.all == G)]][[IndexBestClustering]]
+  MostProbableClustering$Cl.Info<- IndexesValues.list[[paste0("G",G)]][[IndexBestClustering]]
   
   return(MostProbableClustering)
 }
