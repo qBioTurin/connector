@@ -20,8 +20,9 @@
 #' @export
 #' 
 
-DiscriminantPlot<-function(clusterdata,data,feature,save=FALSE,path=NULL)
+DiscriminantPlot<-function(clusterdata,feature,save=FALSE,path=NULL)
 { 
+  data = clusterdata$CONNECTORList
   G<- length(clusterdata$FCM$prediction$meancurves[1,])
   h<- length(clusterdata$FCM$fit$parameters$Lambda[1,])
   discrplot<-list()

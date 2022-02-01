@@ -6,7 +6,6 @@
 \usage{
 ClusterWithMeanCurve(
   clusterdata,
-  data,
   feature,
   title = "",
   labels = c("", ""),
@@ -16,8 +15,6 @@ ClusterWithMeanCurve(
 }
 \arguments{
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).}
-
-\item{data}{CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}}).}
 
 \item{feature}{The column name reported in the AnnotationFile containing the feature  to be investigated.}
 

@@ -4,7 +4,6 @@
 #' Counts for each combination of cluster and feature the number of samples and their name are returned.
 #'
 #' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}). 
-#' @param data CONNECTORList.  (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param feature The column name reported in the AnnotationFile containing the feature  to be investigated.
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
@@ -32,8 +31,9 @@
 #' @importFrom plyr ddply
 #' @export
 #' 
-CountingSamples<-function(clusterdata,data,feature="ID")
+CountingSamples<-function(clusterdata,feature="ID")
 {
+  data = clusterdata$CONNECTORList
   if( is.null(clusterdata$FCM) &  is.null(clusterdata$cluster) )
   {
     warning("In input is needed the FCM or StabilityAnalysis file. ",immediate. = T)

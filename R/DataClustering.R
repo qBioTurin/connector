@@ -87,7 +87,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   
   names(Clusters.List)<-paste0("G",G)
   
-  return(list(Clusters.List=Clusters.List, seed=seed,runs = runs))
+  return(list(Clusters.List=Clusters.List, CONNECTORList = data, seed=seed,runs = runs))
 }
 
 FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50,MinErrFreq= 0)

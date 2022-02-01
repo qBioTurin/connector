@@ -3,7 +3,6 @@
 #' @description Extrapolate objects from ClusterAnalysis output list (see \code{\link{ClusterAnalysis}}).
 #'
 #' @param stability.list The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})
-#' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
 #' @param G  The number of clusters.
 #' @param q The quantiles used to calculate the time grid interval on which the distances are calculated. If NULL then the time grid outliers will be ignored through the distance calculation. If double (0<q<1) then the cutting is symmetrical w.r.t. the quantile setled (e.g., q = 0.25). If a vector, then the minimum value is used for the lower cutting and the maximum value for the upper cutting.
 #' @details 
@@ -63,8 +62,9 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
 
 #' @rdname ExtrapolationFuncs
 #' @export
-ConsMatrix.Extrapolation <- function(stability.list,data,q=NULL){
+ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   Clusters.List<-stability.list$Clusters.List 
+  data <-stability.list$CONNECTORList
   runs <-stability.list$runs 
 
   G <- as.numeric(sub("G","",names(Clusters.List)))
@@ -113,7 +113,8 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
   ##
   MostProbableClustering<-Clusters.List[[paste0("G",G)]]$ClusterAll[[IndexBestClustering]]
   
-  MostProbableClustering$Cl.Info<- IndexesValues.list[[paste0("G",G)]][[IndexBestClustering]]
+  MostProbableClustering$Cl.Info <- IndexesValues.list[[paste0("G",G)]][[IndexBestClustering]]
+  MostProbableClustering$CONNECTORList <- stability.list$CONNECTORList
   
   return(MostProbableClustering)
 }

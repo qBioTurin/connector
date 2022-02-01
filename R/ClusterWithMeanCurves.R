@@ -4,7 +4,6 @@
 #' Visualizes the plots regarding the fitted and clustered data by exploiting the FCM.
 #'
 #' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).
-#' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}}).
 #' @param feature The column name reported in the AnnotationFile containing the feature  to be investigated.
 #' @param title The string containing  the plot title. 
 #' @param labels  The vector containing the axis names. 
@@ -48,7 +47,7 @@
 #' @import ggplot2
 #' @importFrom knitr kable
 #' @export
-ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c("","") ,save=FALSE,path=NULL )
+ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,save=FALSE,path=NULL )
 {
   # @importFrom cowplot plot_grid add_sub ggdraw
   axis.x<-labels[1]
@@ -56,6 +55,7 @@ ClusterWithMeanCurve<-function(clusterdata, data, feature ,title="", labels=c(""
 
   clusterdata.info<-clusterdata$Cl.Info
   clusterdata<-clusterdata$FCM
+  data <- clusterdata$CONNECTORList
 
   if(!is.null(clusterdata$fit))
   {
