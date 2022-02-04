@@ -54,8 +54,8 @@ ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,
   axis.y<-labels[2]
 
   clusterdata.info<-clusterdata$Cl.Info
-  clusterdata<-clusterdata$FCM
   data <- clusterdata$CONNECTORList
+  clusterdata<-clusterdata$FCM
 
   if(!is.null(clusterdata$fit))
   {
