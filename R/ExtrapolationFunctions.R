@@ -66,7 +66,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   Clusters.List<-stability.list$Clusters.List 
   data <-stability.list$CONNECTORList
   runs <-stability.list$runs 
-
+  
   G <- as.numeric(sub("G","",names(Clusters.List)))
   
   IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
@@ -81,7 +81,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   
   ConsensusInfo<-lapply(1:length(G), function(Gind){
     ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl,q)
-    })
+  })
   names(ConsensusInfo)<-paste0("G",G)
   
   return(ConsensusInfo)
@@ -206,9 +206,9 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   curvename.ordered<-names(sort(dist.curve)) 
   
   #2) Sorting depending on the cluster membership
- 
+  
   cl.memer.tmp <- data.frame(curvename,names(cl.memer),cl.memer)
-
+  
   cl.memer.tmp<-cl.memer.tmp[order(cl.memer.tmp$names.cl.memer.),]
   cl.memer <- cl.memer.tmp$cl.memer
   names(cl.memer) <- cl.memer.tmp$curvename
@@ -292,41 +292,41 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
 IndexesValues.calculation <- function(Clusters.List, G,q){
   
   Indexes <- lapply(1:length(G),function(i){
-   ## Check the same parameter configurations:
-   Indexes.Uniq.Par<-length(Clusters.List[[i]]$ClusterAll)
-   
-   Cl.Info<- lapply(1:Indexes.Uniq.Par,function(j){
-     if(is.character(Clusters.List[[i]]$ClusterAll[[j]]$Error) ){
-      return(Clusters.List[[i]]$ClusterAll[[j]]$Error)
-     }else{
-       Clusters.List[[i]]$ClusterAll[[j]]$FCM$prediction -> fcm.prediction
-       Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$cl.info$class.pred -> cluster
-       Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$ClustCurve[,c("ID","Vol","Times")] -> database
-       Clusters.List[[i]]$ClusterAll[[j]]$FCM$fit -> fcm.fit  
-     ## Goodness coefficents calculation
-     fcm.prediction$meancurves->meancurves
-     distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
-    distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q)
-    Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
-    Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1,q)
-    Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2,q)
-  
-    return(list(Tight.indexes = sum(distances),
-                Coefficents=Coefficents,
-                Deriv.Coefficents=Deriv.Coefficents,
-                Deriv2.Coefficents=Deriv2.Coefficents))
-     }
-       
-   })
-   return(Cl.Info)
- })
+    ## Check the same parameter configurations:
+    Indexes.Uniq.Par<-length(Clusters.List[[i]]$ClusterAll)
+    
+    Cl.Info<- lapply(1:Indexes.Uniq.Par,function(j){
+      if(is.character(Clusters.List[[i]]$ClusterAll[[j]]$Error) ){
+        return(Clusters.List[[i]]$ClusterAll[[j]]$Error)
+      }else{
+        Clusters.List[[i]]$ClusterAll[[j]]$FCM$prediction -> fcm.prediction
+        Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$cl.info$class.pred -> cluster
+        Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$ClustCurve[,c("ID","Vol","Times")] -> database
+        Clusters.List[[i]]$ClusterAll[[j]]$FCM$fit -> fcm.fit  
+        ## Goodness coefficents calculation
+        fcm.prediction$meancurves->meancurves
+        distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
+        distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q)
+        Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
+        Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1,q)
+        Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2,q)
+        
+        return(list(Tight.indexes = sum(distances),
+                    Coefficents=Coefficents,
+                    Deriv.Coefficents=Deriv.Coefficents,
+                    Deriv2.Coefficents=Deriv2.Coefficents))
+      }
+      
+    })
+    return(Cl.Info)
+  })
   names(Indexes) <-paste0("G",G)
   
   return(Indexes)
 }
 
 IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
-
+  
   l.tight <- lapply(1:length(G),function(i){
     ClusterAll <- IndexesValues.list[[i]]
     V.all<- lapply(1:(length(ClusterAll)),function(j){
@@ -334,7 +334,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
         data.frame(Config = j, 
                    V = ClusterAll[[j]]$Tight.indexes, 
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-     # else NA
+      # else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -349,7 +349,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
         data.frame(Config = j, 
                    V = ClusterAll[[j]]$Coefficents$fDB.index,
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-     # else NA
+      # else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -363,7 +363,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
       if(!is.character(ClusterAll[[j]]) )
         data.frame(Config = j, V = ClusterAll[[j]]$Deriv.Coefficents$fDB.index,
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-    #  else NA
+      #  else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]
@@ -377,7 +377,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
       if(!is.character(ClusterAll[[j]]) )
         data.frame(Config = j, V = ClusterAll[[j]]$Deriv2.Coefficents$fDB.index, 
                    Freq= Clusters.List[[i]]$ClusterAll[[j]]$ParamConfig.Freq)
-    #  else NA
+      #  else NA
     })
     V.all <- do.call("rbind",V.all)
     V.all$Cluster <-G[i]

@@ -18,7 +18,6 @@ Datavisual<-DataVisualization(CONNECTORList,
 
 Datavisual
 
-# trunc = 60
 
 ### Truncation
 CONNECTORList.trunc<- DataTruncation(CONNECTORList,feature="Progeny",70,
@@ -43,55 +42,29 @@ S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=2:5,
 IndexesPlot.Extrapolation(S.cl)-> indexes
 indexes$Plot 
 
-ConsMatrix.Extrapolation(S.cl,data = CONNECTORList.trunc)-> ConsInfo
-MostProbableClustering.Extrapolation(S.cl,5) ->MostProbableClustering
+ConsMatrix.Extrapolation(S.cl)-> ConsInfo
+MostProbableClustering.Extrapolation(S.cl,4) ->MostProbableClustering
 
 ConsInfo$G4$ConsensusPlot
 ConsInfo$G5$ConsensusPlot
 
 
 FMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
-                                data= CONNECTORList,
-                                feature = "Progeny",
-                                labels = c("Time","Volume"),title= (" FCM model"))
-
-####### Calculation of G and fitting using FCM
+                               feature = "Progeny",
+                               labels = c("Time","Volume"),
+                               title= (" FCM model"))
 
 
-### Stability Analysis
-S.cl <-StabilityAnalysis(data = CONNECTORList,
-                                         G = h+0:2,
-                                         h = h,
-                                         p = p,
-                                         runs = 50,Cores = 2)
-
-### Using the Box Plots you can understand the optimal number of cluster, G.
-BoxPlot.Extrapolation(stability.list = S.cl, h = h)
-
-# Both G = 4 or 5 are characterized by a low fDB index and a small variation in the Elbow plot
-
-# Looking at the Consensus Matrix is possible to understand how much the clustering obtained is steable.
-ConsMatrix.Extrapolation(stability.list = S.cl, h = h, G = 4)
-
-ConsMatrix.Extrapolation(stability.list = S.cl, h = h, G = 5)
-
-G=4
-
-# Fixed the h and k values, here we are able to extrapolate the most probable clustering.
-CONNECTORList.FCM.p3.h1.G4 <-MostProbableClustering.Extrapolation(stability.list = S.cl, h = h, G = G)
-
-### Plotting Mean Curves and Sample Curves depending on the cluster
-
-FCMplots<- ClusterWithMeanCurve(clusterdata = CONNECTORList.FCM.p3.h1.G4, data= CONNECTORList,feature = "Progeny",labels = c("Time","Volume"),title= paste(" FCM model h=",h))
-
-Spline.plots(FCMplots,All=T,path="~/Desktop/")
+# Spline.plots(FCMplots,All=T,path="~/Desktop/")
 
 ### Disriminant Plot (goodness of the cluster) just for h = 1 or 2
-DiscriminantPlot(clusterdata = CONNECTORList.FCM.p3.h1.G4, data = CONNECTORList,h = h,feature = "Progeny")
-
+DiscriminantPlot(clusterdata = MostProbableClustering,
+                 feature = "Progeny")
 
 ### Counting samples distribution into the clusters
-NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.p3.h1.G4,CONNECTORList,feature = "Progeny")
+
+NumberSamples<-CountingSamples(clusterdata=MostProbableClustering,
+                               feature = "Progeny")
 
 
 ######
