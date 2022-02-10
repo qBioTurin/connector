@@ -212,7 +212,9 @@ CalcLikelihood<-function(p,data.funcit,TestSet,grid){
     Vi<-base.i%*%Gamma%*%t(base.i)+sigma^2*diag(n.i)
     mui<-base.i%*%mu
     invVi<-ginv(Vi)
-    -n.i/2*log(det(Vi)) - n.i/2*log(2*pi) - 1/2*t(Yi-mui)%*%invVi%*%(Yi-mui)
+    -n.i/2 * c(determinant(Vi)$modulus) - n.i/2 * log(2 * pi) - 1/2 * 
+      t(Yi - mui) %*% invVi %*% (Yi - mui)
+    #-n.i/2*log(det(Vi)) - n.i/2*log(2*pi) - 1/2*t(Yi-mui)%*%invVi%*%(Yi-mui)
   }
   
   Li<-sapply(1:perc,Likelihood,base,TestSet)
