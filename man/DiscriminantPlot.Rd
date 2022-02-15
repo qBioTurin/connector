@@ -14,7 +14,10 @@ DiscriminantPlot(clusterdata, feature, save = FALSE, path = NULL)
 \item{path}{The folder path where the plot(s) will be saved. If it is missing, the plot is saved in the current working  directory.
 
  @return
- DiscriminantPlot visualizes two versions of the same discriminant linear plot, showing in a h-dimensional space the cluster membership of each curve. In the first case the symbols identifying the elements of different clusters are colored depending on the cluster membership, and in the second plot the symbols are colored depending the selected feature.}
+ DiscriminantPlot visualizes two versions of the same discriminant linear plot, showing in a h-dimensional space the cluster membership of each curve.
+ In the first case the symbols identifying the elements of different clusters are colored depending on the cluster membership,
+ and in the second plot the symbols are colored depending the selected feature.
+ If h > 2 the principal component analysis is exploited to extrapolate the components of the h-space with more explained variability.}
 
 \item{data}{CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})}
 }

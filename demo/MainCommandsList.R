@@ -72,6 +72,6 @@ NumberSamples<-CountingSamples(clusterdata=MostProbableClustering,
 #######
 ### Plotting discriminant functions
 ######
-MaxDiscrPlots<-MaximumDiscriminationFunction(clusterdata = CONNECTORList.FCM.p3.h1.G4)
+MaxDiscrPlots<-MaximumDiscriminationFunction(clusterdata = MostProbableClustering)
 
 MaxDiscrPlots
