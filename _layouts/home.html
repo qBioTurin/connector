@@ -1,39 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2113">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
-  </style>
-</head>
-<body>
-<p class="p1"><span class="s1">---</span></p>
-<p class="p1"><span class="s1">layout: archive</span></p>
-<p class="p1"><span class="s1">---</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">{{ content }}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">&lt;h3 class="archive__subtitle"&gt;{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}&lt;/h3&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">{% if paginator %}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{% assign posts = paginator.posts %}</span></p>
-<p class="p1"><span class="s1">{% else %}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{% assign posts = site.posts %}</span></p>
-<p class="p1"><span class="s1">{% endif %}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">{% assign entries_layout = page.entries_layout | default: 'list' %}</span></p>
-<p class="p1"><span class="s1">&lt;div class="entries-{{ entries_layout }}"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{% for post in posts %}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>{% include archive-single.html type=entries_layout %}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{% endfor %}</span></p>
-<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">{% include paginator.html %}</span></p>
-</body>
-</html>
+---
+layout: archive
+---
+
+{{ content }}
+
+<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
+
+{% if paginator %}
+  {% assign posts = paginator.posts %}
+{% else %}
+  {% assign posts = site.posts %}
+{% endif %}
+
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+<div class="entries-{{ entries_layout }}">
+  {% for post in posts %}
+    {% include archive-single.html type=entries_layout %}
+  {% endfor %}
+</div>
+
+{% include paginator.html %}
