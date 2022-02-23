@@ -1,31 +1,45 @@
 ---
 layout: single
-title: "GreatMod -Groups"
+title: "GreatMod - Team"
 permalink: /group/
 author_profile: true
 --- 
 
-## Q-Bio Group
+## Department of Computer Science, Unito
 
-![](/assets/images/Group.png)
+### Development Team
 
-## Collaborations
+Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#tab-profilo)
 
-*Cancer Epidemiology Unit*, Department of Medical Science (Unito):
+Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
 
-  * Richiardi L.,
-  * Maule M.,
-  * Giovenale M.
-    
-Department of  Clinical and Biological Sciences (Unito):
+Ph.D. Castagno Paolo
 
-  * Rolla S.,
-  * Maglione A.
+Ph.D. [Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
 
-Department of Molecular Biotechnology and Health Sciences (Unito):
 
-  * Calogero R.
+### Q-Bio Group
 
-[Adres](http://www.adreshe.com/) 
+Prof.ssa [Cordero Francesca](https://www.cs.unito.it/do/docenti.pl/Show?_id=fcordero)
 
-[ISI Foundation](https://www.isi.it/en/home)
+Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#tab-profilo)
+
+Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
+
+Ph.D. Ferrero Giulio
+
+Ph.D. Follia Laura 
+
+Ph.D. Castagno Paolo
+
+Ph.D. Piaggeschi Giulia
+
+Ph.D. [Pernice Simone](http://www.di.unito.it/~pernice/)
+
+Licheri Nicola
+
+Nosi Vladimir
+
+Aucello Riccardo 
+
+Rossi Elena

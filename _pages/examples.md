@@ -9,14 +9,14 @@ feature_rowEasy:
     alt: "placeholder image 2"
     title: "SIR"
     excerpt: "The SIR model is one of the simplest compartmental models, and many models are derivatives of this basic form. The model consists of three compartments: S for the number of susceptible, I for the number of infectious, and R for the number of recovered or deceased."
-    url: https://github.com/qBioTurin/SIR
+    url: "/sir/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
   - image_path: /assets/images/lotkaV.png
     alt: "placeholder image 2"
     title: "Lotka Volterra"
     excerpt: "The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of first-order nonlinear differential equations, frequently used to describe the dynamics of biological systems in which two species interact, one as a predator and the other as prey. "
-    url: https://github.com/qBioTurin/Lotka-Volterra
+    url: "/Lotka/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
 feature_rowComplex:
