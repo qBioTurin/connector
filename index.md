@@ -1,37 +1,49 @@
-## Welcome to GitHub Pages
+---
+title: "CONNECTOR - Home"
+layout: splash
+header:
+  overlay_filter: "0.7"
+  overlay_image: /assets/images/HomeLogo.png
+  actions:
+    - label: "Learn More"
+      url: "/framework/"
+excerpt: "CONNECTOR"
+intro: 
+  - excerpt: '**CONNECOTR** represents ..........'
+feature_row:
+  - image_path: /assets/images/COVID/COVIDmodel.png
+    alt: "placeholder image 2"
+    title: "COVID-19"
+    excerpt: "Investigation of the COVID-19 diffusion in the Piedmonnt region"
+    url: "/covid19/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"  
+  - image_path: /assets/images/Pertussis/PertussisModel.png
+    alt: "placeholder image 2"
+    title: "Pertussis"
+    excerpt: "Investigation of the pertussis epidemiology in Italy"
+    url: "/Pertussis/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"  
+  - image_path: /assets/images/MS/MSmodel.jpg
+    alt: "placeholder image 2"
+    title: "Multiple Sclerosis"
+    excerpt: "Analysis of the immune response in Multiple Sclerosis given specific treatments"
+    url: "/ms/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"  
+feature_rowFramework:
+  - image_path: /assets/images/Framework.png
+    alt: "placeholder Framework"
+    title: "Framework"
+    excerpt: 'New general modeling framework for the analysis of epidemiological and biological systems, which exploits Petri Net graphical formalism, R environment, and Docker containerization to derive a tool easily accessible by any researcher even without advanced mathematical and computational skills.'
+    url: /framework/
+    btn_label: "Read More"
+    btn_class: "btn--primary"
+---
 
-You can use the [editor on GitHub](https://github.com/qBioTurin/connector/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+{% include feature_row id="intro" type="center" %}
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+{% include feature_row id="feature_rowFramework" type="left" %}
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/qBioTurin/connector/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+{% include feature_row %}
