@@ -1,17 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2113">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000}
-    span.s1 {font-kerning: none}
-  </style>
-</head>
-<body>
-<p class="p1"><span class="s1">--- title: "CONNECTOR" layout: home header: overlay_filter: "0.7" overlay_image: /assets/images/HomeLogo.png actions: - label: "Learn More" url: "/framework/" excerpt: "" intro: - excerpt: '.........' feature_row: - image_path: /assets/images/COVID/COVIDmodel.png alt: "placeholder image 2" title: "COVID-19" excerpt: "Investigation of the COVID-19 diffusion in the Piedmonnt region" url: "/covid19/" btn_label: "Read More" btn_class: "btn--primary" - image_path: /assets/images/Pertussis/PertussisModel.png alt: "placeholder image 2" title: "Pertussis" excerpt: "Investigation of the pertussis epidemiology in Italy" url: "/Pertussis/" btn_label: "Read More" btn_class: "btn--primary" - image_path: /assets/images/MS/MSmodel.jpg alt: "placeholder image 2" title: "Multiple Sclerosis" excerpt: "Analysis of the immune response in Multiple Sclerosis given specific treatments" url: "/ms/" btn_label: "Read More" btn_class: "btn--primary" feature_rowFramework: - image_path: /assets/images/Framework.png alt: "placeholder Framework" title: "Framework" excerpt: 'New general modeling framework for the analysis of epidemiological and biological systems, which exploits Petri Net graphical formalism, R environment, and Docker containerization to derive a tool easily accessible by any researcher even without advanced mathematical and computational skills.' url: /framework/ btn_label: "Read More" btn_class: "btn--primary" --- {% include feature_row id="intro" type="center" %} {% include feature_row id="feature_rowFramework" type="left" %}<span class="Apple-converted-space"> </span></span></p>
-</body>
-</html>
+---
+title: "CONNECTOR"
+layout: splash
+header:
+  overlay_filter: "0.7"
+  overlay_image: /assets/images/HomeLogo.png
+  actions:
+    - label: "Learn More"
+      url: "/framework/"
+excerpt: ""
+intro: 
+  - excerpt: '**CONNECTOR** represents.......'
+
+feature_rowFramework:
+  - image_path: /assets/images/Framework.png
+    alt: "placeholder Framework"
+    title: "Framework"
+    excerpt: '.............'
+    url: /framework/
+    btn_label: "Read More"
+    btn_class: "btn--primary"
+---
+
+{% include feature_row id="intro" type="center" %}
+
+{% include feature_row id="feature_rowFramework" type="left" %}
+
+{% include feature_row %}
