@@ -17,14 +17,14 @@ minimal_mistakes_skin    :  "dirt"
 locale                   : "en-US"
 title                    : ""
 title_separator          : "-"
-subtitle                 : #"GreatSPN+Epimod: a modeling framework for studying biological systems."
+subtitle                 : #"CONNECTOR"
 name                     : "qbioGroup"
 description              : 
 url                      : "https://github.com/qBioTurin/epimod"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "qBioTurin/epimod"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "/assets/images/logoGreatMod.png"
+logo                     : "/assets/images/logoCONNECTOR.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
