@@ -1,6 +1,6 @@
-#' Growth curves
+#' Time series plot
 #'
-#' Generates the line plot of the growth data. The curves are colored with respect to the feature chosen by the user and/or reported in the AnnotationFile.
+#' Generates the line plot of the time series data. The curves are colored with respect to the feature chosen by the user and/or reported in the AnnotationFile.
 #'
 #' @param data CONNECTORList. (see \code{\link{DataImport}})
 #' @param feature The column name reported in the AnnotationFile containing the feature to be investigated.
@@ -8,7 +8,7 @@
 #' @param save If TRUE then the plot is saved into a pdf file.
 #' @param path The folder path  where the plot will be saved. If it is missing, the plot is saved in the current working  directory.
 #' 
-#' @return GrowthCurve returns a list containing the line plot as ggplot object, namely GrowthCurve_plot, and data, i.e. the CONNECTORList.
+#' @return PlotTimeSeries returns a list containing the line plot as ggplot object, namely PlotTimeSeries_plot, and data, i.e. the CONNECTORList.
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
@@ -16,14 +16,14 @@
 #' GrowDataFile<-"data/745dataset.xls"
 #' AnnotationFile <-"data/745info.txt"
 #'
-#' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
+#' CONNECTORList <- DataImport(TimeSeriesFile,AnnotationFile)
 #'
-#' GrowthCurve(CONNECTORLis,"Progeny",labels=c("Time","Volume","Tumor Growth"))
+#' PlotTimeSeries(CONNECTORList,"Progeny",labels=c("Time","Volume","Tumor Growth"))
 #'
 #' @import ggplot2
 #' @export
 
-GrowthCurve <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
+PlotTimeSeries <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
 {
   if(is.null(labels))
   {
@@ -46,7 +46,7 @@ GrowthCurve <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
   colFetaure <- rainbow(dim(unique(data$Lab[feature]))[1])
   
   ### Set growth curve plot with ggplot
-  GrowthCurve <- ggplot(data=dataplot, aes(x=Time, y=Vol,group=ID,col=dataplot[,feature])) +
+  PlotTimeSeries <- ggplot(data=dataplot, aes(x=Time, y=Observation,group=ID,col=dataplot[,feature])) +
     geom_line() +
     geom_point() +
     labs(title=title,x=axes.x, y = axes.y,col=feature)+
@@ -55,12 +55,12 @@ GrowthCurve <- function(data,feature,labels=NULL,save=FALSE,path=NULL)
 
   data$FeatureColour <- colFetaure
 
-  GrowthCurve.ls <- list(GrowthCurve_plot=GrowthCurve,data=data,PlotData = dataplot)
+  PlotTimeSeries.ls <- list(PlotTimeSeries_plot=PlotTimeSeries,data=data,PlotData = dataplot)
   
   if(save==TRUE)
   {
-    ggsave(filename="GrowthCurves.pdf",plot = GrowthCurve,width=29, height = 20, units = "cm",scale = 1,path=path )
+    ggsave(filename="PlotTimeSeries.pdf",plot = PlotTimeSeries,width=29, height = 20, units = "cm",scale = 1,path=path )
   }
 
-  return( GrowthCurve.ls )
+  return( PlotTimeSeries.ls )
 }

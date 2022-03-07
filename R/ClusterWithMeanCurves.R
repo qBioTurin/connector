@@ -71,7 +71,7 @@ ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,
   }
 
   classificate <- rep(classes,data$LenCurv)
-  curves <- data.frame(Times=data$Dataset$Time,Vol=data$Dataset$Vol,ID=data$Dataset$ID,Cluster=classificate, Info=rep(t(data$LabCurv[feature]),data$LenCurv))
+  curves <- data.frame(Times=data$Dataset$Time,Observation=data$Dataset$Observation,ID=data$Dataset$ID,Cluster=classificate, Info=rep(t(data$LabCurv[feature]),data$LenCurv))
   # cut the meancurves at the growth curves' maximum time
     
   meancurves_truncated<-c()
@@ -110,9 +110,9 @@ ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,
     
     plots<-list()
     plots_spline<-list()
-    ymax<-max(plot_data$means,curves$Vol)
+    ymax<-max(plot_data$means,curves$Observation)
     xmax<-max(grid)
-    ymin<-min(plot_data$means,curves$Vol)
+    ymin<-min(plot_data$means,curves$Observation)
     xmin<-min(grid)
     
     esse<-clusterdata.info$Coefficents$esse
@@ -163,7 +163,7 @@ ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,
       plots[[paste(symbols[index.symb],"Cluster")]]<- ggplot()+
         scale_linetype_manual(values =1:G ,limits=sort(symbols),breaks=sort(symbols),name="Cluster") +
         labs(title=paste("Cluster",symbols[index.symb]), x=axis.x, y = axis.y)+
-        geom_line(data = curves[curves$Cluster==index.symb,],aes(x=Times,y=Vol,group=ID,color=factor(Info)))+
+        geom_line(data = curves[curves$Cluster==index.symb,],aes(x=Times,y=Observation,group=ID,color=factor(Info)))+
         scale_colour_manual(values = colFetaure,limits=col,breaks=sort(col),name=feature)+
         theme(plot.title = element_text(hjust = 0.5),axis.line = element_line(colour = "black"),panel.background = element_blank())+
         geom_line(data=plot_data[plot_data$Cluster==symbols[index.symb],], aes(x=Times,y=means,linetype= as.factor(Cluster)),size = 1.2 )+
@@ -183,7 +183,7 @@ ClusterWithMeanCurve<-function(clusterdata, feature ,title="", labels=c("","") ,
                           breaks=sort(symbols),name="Cluster") +
     facet_wrap(~Cluster)+
     geom_line(data = curves.tmp,
-              aes(x=Times,y=Vol,group=ID,color=factor(Info)))+
+              aes(x=Times,y=Observation,group=ID,color=factor(Info)))+
     scale_colour_manual(values = colFetaure,
                         limits=col,
                         breaks=sort(col),

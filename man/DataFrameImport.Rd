@@ -4,12 +4,12 @@
 \alias{DataFrameImport}
 \title{Data Frame Import}
 \usage{
-DataFrameImport(GrowDataFrame, AnnotationFrame = NULL)
+DataFrameImport(TimeSeriesDataFrame, AnnotationFrame = NULL)
 }
 \arguments{
-\item{GrowDataFrame}{Dataframe of three columns storing the time series. The first columns, called "\emph{ID}", stores the identification number of each sample. The second column, labeled "\emph{Vol}", contains  the data volume over the time and the respective time point is reported in the third column, labeled  "\emph{Time}"}
+\item{TimeSeriesDataFrame}{Dataframe of three columns storing the time series. The first columns, called "\emph{ID}", stores the identification number of each sample. The second column, labeled "\emph{Observation}", contains  the data observation over the time and the respective time point is reported in the third column, labeled  "\emph{Time}"}
 
-\item{AnnotationFrame}{If NULL, then in the ConnectorList only the feature ID will be reported. Otherwise a dataframe must be passed, with a number of rows equal to the number of samples in the GrowDataFrame. The first column must be named "ID" and it stores the identification numbers exploited for the matching with the samples saved in the GrowDataFrame. Then it is possible to add a column per feature to consider and to associate with the respective sample (depending on the identification number in the first column)}
+\item{AnnotationFrame}{If NULL, then in the ConnectorList only the feature ID will be reported. Otherwise a dataframe must be passed, with a number of rows equal to the number of samples in the TimeSeriesDataFrame. The first column must be named "ID" and it stores the identification numbers exploited for the matching with the samples saved in the TimeSeriesDataFrame. Then it is possible to add a column per feature to consider and to associate with the respective sample (depending on the identification number in the first column)}
 }
 \value{
 DataFrameImport returns a list, called ConnectorList, with four arguments: (i) Dataset: data frame with three columns (i.e. ID, data and time values) encoding the growth data for each sample, (ii) LenCurv: the vector reporting the number of observations collected per sample  (iii) LabCurv: the data frame matching the samples with their annotations, (iv) TimeGrid: the vector storing all the sample time points (i.e. time grid). Furthermore, it prints a brief summary of the input data, i.e. the total number of curves (samples), the minimum and the maximum curve length.
@@ -20,7 +20,7 @@ Reads the data.frame and creates a list storing all the information.
 \details{
 One data frame is requested to run the data analysis exploiting the CONNECTOR package:
 \itemize{
-\item the \emph{GrowDataFrame}, reporting the growth evolution data. 
+\item the \emph{TimeSeriesDataFrame}, reporting the growth evolution data. 
 }
 }
 \examples{

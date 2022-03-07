@@ -75,14 +75,14 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
     
     TestSet<-data$Dataset[data$Dataset$ID%in%SampleTestSet,]
     TestSet <-data.frame(ID=rep(1:(length(SampleTestSet)),data$LenCurv[which(samples %in% SampleTestSet)]),
-                         Vol=TestSet$Vol[],
+                         Observation=TestSet$Observation[],
                          Time=TestSet$Time)
     
     TrainingSet<-data$Dataset[-which(data$Dataset$ID%in%SampleTestSet),]
     
     #### Let define the FCM input matrix of ID sample, Points and time indexes per sample into the grid.
     
-    data.funcit <-matrix(c(rep(1:(n_sample-length(SampleTestSet)),data$LenCurv[-which(samples %in% SampleTestSet)]),TrainingSet$Vol,match(TrainingSet$Time,grid)),
+    data.funcit <-matrix(c(rep(1:(n_sample-length(SampleTestSet)),data$LenCurv[-which(samples %in% SampleTestSet)]),TrainingSet$Observation,match(TrainingSet$Time,grid)),
                          ncol=3,byrow=F)
     
     CrossLikelihood<-sapply(p.values, CalcLikelihood, data.funcit,TestSet,grid)
@@ -140,7 +140,7 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
     labs(x = "Time grid", y = "" )
   
   dataplot <- data$Dataset
-  GrowthCurve <- ggplot(data= dataplot, aes(x=Time, y=Vol,group=ID) )+
+  GrowthCurve <- ggplot(data= dataplot, aes(x=Time, y=Observation,group=ID) )+
     scale_x_continuous(breaks = as.integer(seq(min(grid),max(grid),length.out = length(grid)/5) ) ) +
     geom_line() +
     geom_point()+
@@ -207,7 +207,7 @@ CalcLikelihood<-function(p,data.funcit,TestSet,grid){
     data.temp<-TestSet[TestSet$ID==x,]
     time.temp<-data.temp$Time
     base.i<-base[grid%in%time.temp,]
-    Yi<-data.temp$Vol
+    Yi<-data.temp$Observation
     n.i<-length(time.temp)
     Vi<-base.i%*%Gamma%*%t(base.i)+sigma^2*diag(n.i)
     mui<-base.i%*%mu

@@ -9,7 +9,8 @@
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
-#' @return Time Grid Density returns the time grid density plot as a ggplot object.
+#' @return Time Grid Density returns the time grid density plot as a ggplot object, in which a point $p_{x,y}$ is defined by a pair of coordinates $p_{x,y}=\left( x,y\right) \ $ and by a colour. $p_{x,y}$ is defined if only if exists at least one sample with two observations at time $x\ $ and $y$.
+#'  The colour associates with it encodes the frequency of samples in which $p_{x,y}$ is present.
 #' 
 #' @examples
 #' GrowDataFile<-"data/745dataset.xls"

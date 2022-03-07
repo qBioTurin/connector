@@ -2,9 +2,15 @@
 % Please edit documentation in R/SplinePlots.R
 \name{Spline.plots}
 \alias{Spline.plots}
-\title{Save the plots of the spline exploited to fit and cluster the samples.}
+\title{Return the plots of the spline exploited to fit and cluster the samples.}
 \usage{
-Spline.plots(FCM.plots, All = TRUE, SampleNumber = NULL, path = NULL)
+Spline.plots(
+  FCM.plots,
+  All = TRUE,
+  SampleNumber = NULL,
+  save = FALSE,
+  path = NULL
+)
 }
 \arguments{
 \item{FCM.plots}{CONNECTORList obtained from the ClusterWithMeanCurve function. (see \code{\link{ClusterWithMeanCurve}})}
@@ -13,10 +19,12 @@ Spline.plots(FCM.plots, All = TRUE, SampleNumber = NULL, path = NULL)
 
 \item{SampleNumber}{The number/vector of the sample ID(s) referring to the curve(s) that will be saved.}
 
+\item{save}{If TRUE then the spline plots are saved (a pdf file will be generated for each curve).}
+
 \item{path}{The folder path where the plot(s) will be saved. If it is missing, the plot is saved in the current working  directory.}
 }
 \description{
-Saves the Cubic Spline plots from the ClusterWithMeanCurve output list (see \code{\link{ClusterWithMeanCurve}}). Each plot shows (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval.
+Returns the Cubic Spline plots from the ClusterWithMeanCurve output list (see \code{\link{ClusterWithMeanCurve}}). Each plot shows (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval.
 }
 \author{
 Cordero Francesca, Pernice Simone, Sirovich Roberta

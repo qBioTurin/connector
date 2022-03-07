@@ -1,20 +1,21 @@
-#' Save the plots of the spline exploited to fit and cluster the samples.
+#' Return the plots of the spline exploited to fit and cluster the samples.
 #' 
 #' @description 
-#' Saves the Cubic Spline plots from the ClusterWithMeanCurve output list (see \code{\link{ClusterWithMeanCurve}}). Each plot shows (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval.
+#' Returns the Cubic Spline plots from the ClusterWithMeanCurve output list (see \code{\link{ClusterWithMeanCurve}}). Each plot shows (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval.
 #'
 #' @param FCM.plots CONNECTORList obtained from the ClusterWithMeanCurve function. (see \code{\link{ClusterWithMeanCurve}})
 #' @param All If TRUE then all the plots, for each sample curve, are saved.
 #' @param SampleNumber The number/vector of the sample ID(s) referring to the curve(s) that will be saved.
 #' @param path The folder path where the plot(s) will be saved. If it is missing, the plot is saved in the current working  directory.
-#'  
+#' @param save If TRUE then the spline plots are saved (a pdf file will be generated for each curve). 
+#'
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
 #' @import ggplot2
 #' @export
 #' 
-Spline.plots <- function(FCM.plots, All=TRUE, SampleNumber = NULL, path = NULL){
-  
+Spline.plots <- function(FCM.plots, All=TRUE, SampleNumber = NULL, save = FALSE, path = NULL){
+  ListFitting = list()
   n.samples<-length(FCM.plots$spline.plots)
   
   if(All){ 
@@ -32,10 +33,13 @@ Spline.plots <- function(FCM.plots, All=TRUE, SampleNumber = NULL, path = NULL){
   }
   
   if(is.null(path)) path <- getwd()
-      
-      for(i in samplesIndexes)
-      {
-        ggsave(filename = paste("Spline",i,"sample.pdf",sep="_"),plot=FCM.plots$spline.plots[[paste("Sample ",i)]],width=29, height = 20, units = "cm",scale = 1,path = path)
-      }
-      
+  
+  for(i in samplesIndexes)
+  {
+    ListFitting[[paste(i)]] = FCM.plots$spline.plots[[paste("Sample ",i)]]
+    
+    if(save)
+      ggsave(filename = paste("Spline",i,"sample.pdf",sep="_"),plot=FCM.plots$spline.plots[[paste("Sample ",i)]],width=29, height = 20, units = "cm",scale = 1,path = path)
+  }
+  return(ListFitting)
 }

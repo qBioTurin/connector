@@ -4,12 +4,12 @@
 \alias{DataImport}
 \title{Data Import}
 \usage{
-DataImport(GrowDataFile, AnnotationFile)
+DataImport(TimeSeriesFile, AnnotationFile)
 }
 \arguments{
-\item{GrowDataFile}{The name of the excel file storing the  growth evolution data. See \sQuote{Details}.}
+\item{TimeSeriesFile}{The name of the excel file storing the  growth evolution data. See \sQuote{Details}.}
 
-\item{AnnotationFile}{The name of a csv file storing  the annotation data. See \sQuote{Details}.}
+\item{AnnotationFile}{The name of a txt/csv file storing  the annotation data. See \sQuote{Details}.}
 }
 \value{
 DataImport returns a list, called ConnectorList, with four arguments: (i) Dataset: data frame with three columns (i.e. ID, data and time values) encoding the growth data for each sample, (ii) LenCurv: the vector reporting the number of observations collected per sample  (iii) LabCurv: the data frame matching the samples with their annotations, (iv) TimeGrid: the vector storing all the sample time points (i.e. time grid). Furthermore, it prints a brief summary of the input data, i.e. the total number of curves (samples), the minimum and the maximum curve length.
@@ -20,20 +20,20 @@ Reads the files and creates a list storing all the information.
 \details{
 Two files are requested to run the data analysis exploiting the CONNECTOR package:
 \itemize{
-\item the excel file, namely \emph{GrowDataFile}, reporting the growth evolution data,
+\item the excel file, namely \emph{TimeSeriesFile}, reporting the growth evolution data,
 \item the csv file, namely \emph{AnnotationFile}, containing the annotation information associated with the samples.
 }
-Hence, the growth data associated with an experiment must be stored into GrowDataFile as a table with two columns for each sample.
-The first column, labeled  \emph{Time}, contains the time points of a sample. The second column, labeled by the sample name, contains  the data volume over the time.
+Hence, the growth data associated with an experiment must be stored into TimeSeriesFile as a table with two columns for each sample.
+The first column, labeled  \emph{Time}, contains the time points of a sample. The second column, labeled by the sample name, contains  the data observation over the time.
 
 Instead, the second file (i.e. AnnotationFile)  stores  the annotated information associated with the samples as a table in csv format so that  number of rows is equals to the total number of samples.
 }
 \examples{
 
-GrowDataFile<-"data/475dataset.xls"
-AnnotationFile <-"data/475info.txt"
+TimeSeriesFile <- "data/475dataset.xls"
+AnnotationFile <- "data/475info.txt"
 
-CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
+CONNECTORList <- DataImport(TimeSeriesFile,AnnotationFile)
 
 }
 \author{

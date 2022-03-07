@@ -53,10 +53,10 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
                      by="ID")
   
   grid.cl <- lapply(1:length(cluster.grid),function(i)
-    data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
+    data.frame(Cluster =i,Time= cluster.grid[[paste0("G",i)]])
   )
   grid.cl <- do.call("rbind",grid.cl)
-  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
+  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Time"),all.y= T)
   ShortCurves = Database.subset %>%
     dplyr::group_by(ID) %>%
     dplyr::count(ID) %>% filter(n < 3)
@@ -81,27 +81,27 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
   }
   
-  meancurves <- data.frame(Times = rep(grid,G),
+  meancurves <- data.frame(Time = rep(grid,G),
                            MeanCurve = c(dmeancurves),
                            Cluster = rep(1:G,each=length(grid)) )
   
-  gpred <- data.frame(Times = rep(grid,n.curves),
+  gpred <- data.frame(Time = rep(grid,n.curves),
                       gpred = c(t(dgpred)),
                       ID = rep(unique(database$ID),each=length(grid)), 
                       Cluster = rep(clust,each=length(grid)) )
   
-  gpred.subset <- merge(gpred,Database.subset,by = c("Times","ID","Cluster"),all.y= T)
-  Dataset.all<- merge(meancurves,gpred.subset,by = c("Times","Cluster"),all.y= T)
+  gpred.subset <- merge(gpred,Database.subset,by = c("Time","ID","Cluster"),all.y= T)
+  Dataset.all<- merge(meancurves,gpred.subset,by = c("Time","Cluster"),all.y= T)
   
   fxk <- Dataset.all %>%
-    group_by(ID , Times)
+    group_by(ID , Time)
   
-  fxk <- fxk %>% summarise(Diff = (gpred - MeanCurve)^2, Times = Times, ID = ID)
+  fxk <- fxk %>% summarise(Diff = (gpred - MeanCurve)^2, Time = Time, ID = ID)
   
   
   dist.curve2mu <- fxk %>%
     group_by(ID) %>%
-    group_map( ~ integrate.xy(x = .x$Times ,fx = .x$Diff ,use.spline = F))
+    group_map( ~ integrate.xy(x = .x$Time ,fx = .x$Diff ,use.spline = F))
   
   return(sqrt(unlist(dist.curve2mu)))
 }
@@ -211,13 +211,13 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
                      database,
                      by="ID")
   if("Time" %in% colnames(Database.cl))
-    colnames(Database.cl)[colnames(Database.cl) == "Time"] <- "Times"
+    colnames(Database.cl)[colnames(Database.cl) == "Time"] <- "Time"
   grid.cl <- lapply(1:length(cluster.grid),function(i)
-    data.frame(Cluster =i,Times= cluster.grid[[paste0("G",i)]])
+    data.frame(Cluster =i,Time= cluster.grid[[paste0("G",i)]])
   )
   grid.cl <- do.call("rbind",grid.cl)
   
-  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Times"),all.y= T)
+  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Time"),all.y= T)
   
   if(deriv==0)
   {
@@ -233,21 +233,21 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
   }
 
-  gpred <- data.frame(Times = rep(grid,n.curves),
+  gpred <- data.frame(Time = rep(grid,n.curves),
                       gpred = c(t(dgpred)),
                       ID = rep(unique(database$ID),each=length(grid)), 
                       Cluster = rep(clust,each=length(grid)) )
   
-  Dataset.all <- merge(gpred,Database.subset,by = c("Times","ID","Cluster"),all.y= T)
+  Dataset.all <- merge(gpred,Database.subset,by = c("Time","ID","Cluster"),all.y= T)
 
   fxk <- Dataset.all %>%
-    group_by(ID , Times)
+    group_by(ID , Time)
   
-  fxk <- fxk %>% summarise(Diff = (gpred)^2, Times = Times, ID = ID)
+  fxk <- fxk %>% summarise(Diff = (gpred)^2, Time = Time, ID = ID)
   
   dist.curve2mu <- fxk %>%
     group_by(ID) %>%
-    group_map( ~ integrate.xy(x = .x$Times ,fx = .x$Diff ,use.spline = F))
+    group_map( ~ integrate.xy(x = .x$Time ,fx = .x$Diff ,use.spline = F))
   
   return(sqrt(unlist(dist.curve2mu)))
 }

@@ -108,15 +108,15 @@ DiscriminantPlot<-function(clusterdata,feature,save=FALSE,path=NULL)
     
     projectedclustcentersPCA =
               (projectedclustcenters -
-                 matrix(pca$center,ncol = 3,nrow=length(projectedclustcenters[,1]),byrow = T)) %*%
+                 matrix(pca$center,ncol = h,nrow=length(projectedclustcenters[,1]),byrow = T)) %*%
                 pca$rotation
     
     DataFrameSamples<-data.frame(PrjCurv1=pca$x[,"PC1"],
                                  PrjCurv2=pca$x[,"PC2"],
                                  Feature=unlist(Feature),
                                  Cluster=symbols[classes] )
-    DataFrameCluster<-data.frame(projectedclustcenters1=projectedclustcentersPCA[,1],
-                                 projectedclustcenters2=projectedclustcentersPCA[,2],
+    DataFrameCluster<-data.frame(projectedclustcenters1=projectedclustcentersPCA[,"PC1"],
+                                 projectedclustcenters2=projectedclustcentersPCA[,"PC2"],
                                  Cluster=symbols,
                                  Center=paste("c.",symbols,sep=""))
     

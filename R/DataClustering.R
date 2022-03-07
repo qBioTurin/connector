@@ -58,9 +58,9 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   ## Let define some parameters needed to FCM
   params <- list()
   database<-data$Dataset
-  data.funcit <-matrix(c(database$ID,database$Vol,database$Time),ncol=3,byrow=F)
+  data.funcit <-matrix(c(database$ID,database$Observation,database$Time),ncol=3,byrow=F)
   params$grid <- grid <- data$TimeGrid
-  params$points <- database$Vol
+  params$points <- database$Observation
   params$ID <- database$ID
   params$timeindex <- match(database$Time,grid)
   #######
@@ -319,8 +319,8 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       
       database<-data$Dataset
       ClustCurve <- data.frame(ID=database[,1],
-                               Times=database[,3],
-                               Vol=database[,2],
+                               Time=database[,3],
+                               Observation=database[,2],
                                Cluster= rep(cluster,data$LenCurv))
       
       ## Goodness coefficents calculation

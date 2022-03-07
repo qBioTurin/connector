@@ -1,11 +1,11 @@
 library(connector)
 
 ### Data files
-GrowDataFile<-system.file("data", "475dataset.xlsx", package = "connector")
+TimeSeriesFile<-system.file("data", "475dataset.xlsx", package = "connector")
 AnnotationFile <-system.file("data", "475info.txt", package = "connector")
 
 ### Merge curves and target file
-CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
+CONNECTORList <- DataImport(TimeSeriesFile,AnnotationFile)
 
 ### Visualization
 
@@ -20,12 +20,13 @@ Datavisual
 
 
 ### Truncation
-CONNECTORList.trunc<- DataTruncation(CONNECTORList,feature="Progeny",70,
+CONNECTORList.trunc<- DataTruncation(CONNECTORList,
+                                     feature="Progeny",
+                                     truncTime = 70,
                                      labels = c("Time","Volume","Tumor Growth"))
 
 ### Calculation of p
 CrossLogLike<-BasisDimension.Choice(CONNECTORList.trunc,2:6,Cores = 2)
-save(CrossLogLike,file = "CrossLL.Rds")
 
 CrossLogLike$CrossLogLikePlot
 CrossLogLike$KnotsPlot
@@ -40,24 +41,25 @@ S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=2:5,
                        Cores=2)
 
 IndexesPlot.Extrapolation(S.cl)-> indexes
-indexes$Plot 
+indexes$Plot
 
 ConsMatrix.Extrapolation(S.cl)-> ConsInfo
+ConsInfo$G3$ConsensusPlot
+ConsInfo$G4$ConsensusPlot
+
 MostProbableClustering.Extrapolation(S.cl,4) ->MostProbableClustering
 
-ConsInfo$G4$ConsensusPlot
-ConsInfo$G5$ConsensusPlot
 
-
-FMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
+FCMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
                                feature = "Progeny",
                                labels = c("Time","Volume"),
-                               title= (" FCM model"))
+                               title= ("FCM model"))
 
 
-# Spline.plots(FCMplots,All=T,path="~/Desktop/")
+PlotSpline = Spline.plots(FCMplots)
+PlotSpline$`1`
 
-### Disriminant Plot (goodness of the cluster) just for h = 1 or 2
+### Disriminant Plot (goodness of the cluster)
 DiscriminantPlot(clusterdata = MostProbableClustering,
                  feature = "Progeny")
 
@@ -65,7 +67,8 @@ DiscriminantPlot(clusterdata = MostProbableClustering,
 
 NumberSamples<-CountingSamples(clusterdata=MostProbableClustering,
                                feature = "Progeny")
-
+NumberSamples$Counting
+NumberSamples$ClusterNames
 
 ######
 # Advanced Analysis
@@ -74,4 +77,4 @@ NumberSamples<-CountingSamples(clusterdata=MostProbableClustering,
 ######
 MaxDiscrPlots<-MaximumDiscriminationFunction(clusterdata = MostProbableClustering)
 
-MaxDiscrPlots
+MaxDiscrPlots[[1]]

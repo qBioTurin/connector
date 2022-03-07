@@ -279,7 +279,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
     geom_segment(data = cluster.lines, 
                  aes(x, y, xend = xend, yend = yend), size = 1.5, 
                  inherit.aes = F) +
-    labs(title = "Consensus Matrix",
+    labs(title = paste( "Consensus Matrix, G=", length(G) ),
          subtitle = paste("Black line for the most probable clustering: ",MeanFreq) ) + 
     annotate(geom = "text", x = x.text, y = y.text, 
              label = labText , 
@@ -301,7 +301,7 @@ IndexesValues.calculation <- function(Clusters.List, G,q){
       }else{
         Clusters.List[[i]]$ClusterAll[[j]]$FCM$prediction -> fcm.prediction
         Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$cl.info$class.pred -> cluster
-        Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$ClustCurve[,c("ID","Vol","Times")] -> database
+        Clusters.List[[i]]$ClusterAll[[j]]$FCM$cluster$ClustCurve[,c("ID","Observation","Time")] -> database
         Clusters.List[[i]]$ClusterAll[[j]]$FCM$fit -> fcm.fit  
         ## Goodness coefficents calculation
         fcm.prediction$meancurves->meancurves
@@ -406,7 +406,7 @@ IndexesValues.extrap <- function(IndexesValues.list,Clusters.List,G){
   dt.fr.max <- aggregate(dt.fr.max$V, by = list(Cluster = dt.fr.max$Cluster,
                                                 Index = dt.fr.max$Index, ClusterH = dt.fr.max$ClusterH,
                                                 Freq = dt.fr.max$Freq), FUN = "min")
-  colnames(dt.fr.max)[5] <- "V"
+  colnames(dt.fr.max)[5] <- "Obs"
   dt.fr.max <- merge(dt.fr.max, dt.fr)
   
   return(list(Indexes.MostProb = dt.fr.max,Indexes.Rep = dt.fr.rep,DataIndexes = Data))
