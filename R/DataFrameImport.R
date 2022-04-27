@@ -25,7 +25,8 @@ DataFrameImport <- function(TimeSeriesDataFrame,AnnotationFrame=NULL) {
   
   ###Read growth curves dataframe
   colnames(TimeSeriesDataFrame) <-c("ID","Observation","Time")
-  
+  TimeSeriesDataFrame = TimeSeriesDataFrame[order(TimeSeriesDataFrame$ID),]
+ 
   ID.sample <- unique(TimeSeriesDataFrame$ID)
   samplesize <- length(ID.sample)
   alldata$LenCurv <- table(TimeSeriesDataFrame$ID)
