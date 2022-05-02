@@ -26,6 +26,18 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
   Clusters.List<-stability.list$Clusters.List 
   G <- as.numeric(sub("G","",names(Clusters.List)))
   
+  Allerrors = which(sapply(1:length(Clusters.List),
+                           function(x) is.character(Clusters.List[[x]]) ))
+  if(length(Allerrors)>0)
+  {
+    errors = sapply(Allerrors, function(x) 
+      paste("Cluster",G[x],"have the folloing errors: ", Clusters.List[[x]]) )
+    
+    print(errors)
+    G = G[-Allerrors]
+    Clusters.List = Clusters.List[-Allerrors]
+  }
+  
   IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb

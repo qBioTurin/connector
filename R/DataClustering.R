@@ -78,14 +78,15 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                                   params = params,
                                   #gauss.infoList = gauss.infoList,
                                   h.gBefore = h.gBefore
-                                  )
+    )
     if(is.character(FCM.Cluster)){
-      stop(FCM.Cluster)
+      # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
+      Clusters.List[[g]] = FCM.Cluster
+    }else{
+      # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
+      h.gBefore <- FCM.Cluster$h.gBefore
+      Clusters.List[[g]] = FCM.Cluster$ClusterAll
     }
-    # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
-    h.gBefore <- FCM.Cluster$h.gBefore
-    Clusters.List[[g]] = FCM.Cluster$ClusterAll
-      
   }
   
   names(Clusters.List)<-paste0("G",G)
@@ -97,7 +98,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
-
+  
   if(is.null(h.user)){
     ##########################################
     ## First run with h = min(G-1,p) or with the h from the smaller G (the upper bound of the errors runs was found)
@@ -122,7 +123,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
                                maxit=maxit,
                                Cores=Cores,
                                runs=runs)
-   
+      
       ## Check the same parameters configurations:
       Indexes.Uniq.Par<-Unique.Param(ALL.runs)
       if(is.character(Indexes.Uniq.Par)){
@@ -174,7 +175,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
       }
       
     }
-
+    
   }else{
     ## run with h passed by the user
     ALL.runs = Par.fitfclust(points=params$points,
@@ -233,8 +234,8 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
         err.list<-list(Error= err)
         #print(err)
         return(err.list)
-        })
-    })
+      })
+  })
   
   stopCluster(cl)
   
@@ -320,7 +321,7 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
                   Params= List.runs.fitfclust[[j]]) 
         return( err )
       }
-       
+      
       ##
       
       database<-data$Dataset
@@ -368,10 +369,10 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
     }, error=function(e) {
       err<-paste("ERROR in prediction :",conditionMessage(e), "\n")
       err.list<-list(Error= err,
-                Params= List.runs.fitfclust[[j]])
+                     Params= List.runs.fitfclust[[j]])
       #print(err)
       return(err.list)
-      }
+    }
     )
   })
   
