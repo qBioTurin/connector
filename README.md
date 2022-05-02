@@ -4,8 +4,12 @@ It exploits an unsupervised clustering algorithm to cluster the fitted data, and
 
 ### Required installed packages
 The following R packages must be installed to use connector:
-cowplot, fda, flexclust, ggplot2, MASS, Matrix, plyr, RColorBrewer, readxl, reshape2, splines, statmod.
+cowplot, fda, flexclust, ggplot2, MASS, Matrix, plyr, ggplotify, RColorBrewer, readxl, reshape2, splines, statmod, sfsmisc, shinyWidgets, viridis and dashboardthemes.
 
+```
+install.packages(c("cowplot", "fda", "flexclust", "ggplot2", "MASS", "Matrix", "plyr", "ggplotify",
+	"RColorBrewer", "readxl", "reshape2", "splines", "statmod", "sfsmisc", "shinyWidgets", "viridis", "dashboardthemes"))
+```
 
 ### How to install connector
 To install it you can use  **devtools**:
