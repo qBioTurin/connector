@@ -79,6 +79,9 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                                   #gauss.infoList = gauss.infoList,
                                   h.gBefore = h.gBefore
                                   )
+    if(is.character(FCM.Cluster)){
+      stop(FCM.Cluster)
+    }
     # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
     h.gBefore <- FCM.Cluster$h.gBefore
     Clusters.List[[g]] = FCM.Cluster$ClusterAll
@@ -122,6 +125,9 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
    
       ## Check the same parameters configurations:
       Indexes.Uniq.Par<-Unique.Param(ALL.runs)
+      if(is.character(Indexes.Uniq.Par)){
+        return(Indexes.Uniq.Par)
+      }
       
       ## Let calculate the clustering and the fDB indexes
       ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.infoList,G)
@@ -237,16 +243,16 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
 
 Unique.Param = function(List.runs.fitfclust)
 {
-  L1<- length(List.runs.fitfclust)
-  # deleting if there was some errors in the predictions:
-  List.runs.fitfclust <-lapply(1:L1,function(x){
-    if(!is.character(List.runs.fitfclust[[x]]$Error))
+  List.runs.fitfclust.tmp = List.runs.fitfclust
+  L1 <- length(List.runs.fitfclust)
+  List.runs.fitfclust <- lapply(1:L1, function(x) {
+    if (!is.character(List.runs.fitfclust[[x]]$Error)) 
       List.runs.fitfclust[[x]]
     else NA
-  } )
-  
-  if(length(which(is.na(List.runs.fitfclust)))==length(List.runs.fitfclust) ){
-    stop("All runs have errors!")
+  })
+  if (length(which(is.na(List.runs.fitfclust))) == length(List.runs.fitfclust)) {
+    errors = unlist(unique(List.runs.fitfclust.tmp))
+    return(paste("All runs have errors, that are the following:\n ",errors) )
   }
   
   # if(length(which(is.na(List.runs.fitfclust)))!=0){
