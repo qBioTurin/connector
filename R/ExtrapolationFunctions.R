@@ -37,6 +37,10 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
     G = G[-Allerrors]
     Clusters.List = Clusters.List[-Allerrors]
   }
+  if(length(G)==0)
+  {
+    return("All the CONNECTOR runs have errors!")
+  }
   
   IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
