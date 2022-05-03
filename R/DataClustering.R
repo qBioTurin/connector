@@ -148,8 +148,13 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
       } )
       
       if(length( which(is.na(ClusterAll.tmp)) )!=0 ) {
-        Nerr.Clus <- sum(sapply( which(is.na(ClusterAll.tmp)) ,
-                                 function(i) length(Indexes.Uniq.Par[[i]] )))
+        if (length(which(is.na(ClusterAll.tmp))) == length(ClusterAll.tmp) ) {
+          errors = unique(sapply(1:length(ClusterAll$ClusterAll), function(x) ClusterAll$ClusterAll[[x]]$Error))
+          return(paste("All runs have errors, that are the following:\n ",errors) )
+        }else{
+          Nerr.Clus <- sum(sapply( which(is.na(ClusterAll.tmp)) ,
+                                   function(i) length(Indexes.Uniq.Par[[i]] )))
+        }
       }else{
         Nerr.Clus <- 0
       }
