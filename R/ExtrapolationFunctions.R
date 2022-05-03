@@ -84,6 +84,21 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   runs <-stability.list$runs 
   
   G <- as.numeric(sub("G","",names(Clusters.List)))
+  Allerrors = which(sapply(1:length(Clusters.List),
+                           function(x) is.character(Clusters.List[[x]]) ))
+  if(length(Allerrors)>0)
+  {
+    errors = sapply(Allerrors, function(x) 
+      paste("Cluster",G[x],"have the folloing errors: ", Clusters.List[[x]]) )
+    
+    print(errors)
+    G = G[-Allerrors]
+    Clusters.List = Clusters.List[-Allerrors]
+  }
+  if(length(G)==0)
+  {
+    return("All the CONNECTOR runs have errors!")
+  }
   
   IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
@@ -110,6 +125,21 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
   runs <-stability.list$runs 
   
   G.all <- as.numeric(sub("G","",names(Clusters.List)))
+  Allerrors = which(sapply(1:length(Clusters.List),
+                           function(x) is.character(Clusters.List[[x]]) ))
+  if(length(Allerrors)>0)
+  {
+    errors = sapply(Allerrors, function(x) 
+      paste("Cluster",G.all[x],"have the folloing errors: ", Clusters.List[[x]]) )
+    
+    print(errors)
+    G.all = G.all[-Allerrors]
+    Clusters.List = Clusters.List[-Allerrors]
+  }
+  if(length(G.all)==0)
+  {
+    return("All the CONNECTOR runs have errors!")
+  }
   
   IndexesValues.list <- IndexesValues.calculation(Clusters.List, G.all,q)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G.all)
