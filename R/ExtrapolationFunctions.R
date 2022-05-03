@@ -31,7 +31,7 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
   if(length(Allerrors)>0)
   {
     errors = sapply(Allerrors, function(x) 
-      paste("Cluster",G[x],"have the folloing errors: ", Clusters.List[[x]]) )
+      paste("Cluster",G[x],"has the following errors: ", Clusters.List[[x]]) )
     
     print(errors)
     G = G[-Allerrors]
@@ -89,7 +89,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   if(length(Allerrors)>0)
   {
     errors = sapply(Allerrors, function(x) 
-      paste("Cluster",G[x],"have the folloing errors: ", Clusters.List[[x]]) )
+      paste("Cluster",G[x],"has the following errors: ", Clusters.List[[x]]) )
     
     print(errors)
     G = G[-Allerrors]
@@ -130,7 +130,7 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
   if(length(Allerrors)>0)
   {
     errors = sapply(Allerrors, function(x) 
-      paste("Cluster",G.all[x],"have the folloing errors: ", Clusters.List[[x]]) )
+      paste("Cluster",G.all[x],"has the following errors: ", Clusters.List[[x]]) )
     
     print(errors)
     G.all = G.all[-Allerrors]
