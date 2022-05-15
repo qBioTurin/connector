@@ -1,8 +1,7 @@
 ---
 layout: single
-title: "CONNECTOR - Framework"
-permalink: /framework/
+title: "CONNECTOR - Introduction"
+permalink: /intro/
 --- 
 
-# Introduction
-**CONNECTOR** represents ..... 
+# This page is under construction
