@@ -59,7 +59,7 @@ FCMplots<- ClusterWithMeanCurve(clusterdata = MostProbableClustering,
 PlotSpline = Spline.plots(FCMplots)
 PlotSpline$`1`
 
-### Disriminant Plot (goodness of the cluster)
+### Discriminant Plot (goodness of the cluster)
 DiscriminantPlot(clusterdata = MostProbableClustering,
                  feature = "Progeny")
 

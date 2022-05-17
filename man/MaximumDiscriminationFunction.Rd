@@ -11,7 +11,8 @@ MaximumDiscriminationFunction(clusterdata, absvalue = TRUE)
 
 \item{absvalue}{If TRUE, the absolute values of the weights are plotted.
  @return
-MaximumDiscriminationFunction generates h plots as ggplot objects, showing the      the weights, applied to each dimension for determining the cluster membership, plotted as a single curve.}
+MaximumDiscriminationFunction generates two plots as ggplot objects, showing 
+the weights applied to each dimension for determining the cluster membership, plotted as a single curve.}
 }
 \description{
 Visualizes the h curve(s) representing the optimal weights to apply to each dimension for determining the cluster membership.
