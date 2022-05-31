@@ -51,7 +51,7 @@ CountingSamples<-function(clusterdata,feature="ID")
   countRes = ClustCurve[,c("ID", "Cluster", feature)]
   
   NAs = which(is.na(countRes[,feature]))
-  if(NAs > 0){
+  if(length(NAs) > 0){
     countRes[NAs,feature] = "NA"
   }
   countRes[,feature] = as.factor(countRes[,feature])
