@@ -58,7 +58,9 @@ CountingSamples<-function(clusterdata,feature="ID")
   
   Counting <-  countRes %>%
     group_by_at(.vars = vars(c("Cluster", feature)), .drop = F)  %>% 
-    tally
+    tally %>%
+    ungroup() %>%
+    as.data.frame()
   
   return(list(Counting=Counting,
               ClusterNames=  ClustCurve[,c("ID", "Cluster")] ))

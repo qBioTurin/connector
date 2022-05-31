@@ -48,7 +48,11 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
   Time2 <- PointsCoord[,2]
   
   df <- data.frame(Time1=Time1,Time2=Time2)
-  df1<- ddply(df,.(Time1,Time2),nrow)
+  df1 <- df %>%
+    group_by(Time1, Time2, .drop = F)  %>% 
+    tally %>%
+    ungroup() %>%
+    as.data.frame()
   
 
   ### Plot density grid
