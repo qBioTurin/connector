@@ -67,7 +67,7 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
 
   
   TimeGrid_plot <-  ggplot() + 
-    geom_point(data=df1,aes(Time1, Time2,col=V1/max(V1)))+
+    geom_point(data=df1,aes(Time1, Time2,col=n/max(n)))+
     stat_density_2d(data=df,aes(Time1, Time2,fill=stat(nlevel)), geom = "polygon" )+
     scale_fill_gradientn(colours = c("#baffc9","#FF0000"),
                          name="Freq. of \nobservations")+
