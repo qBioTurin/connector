@@ -31,7 +31,7 @@ ClusterWithMeanCurve returns a list with three objects:
 \itemize{
 \item{PlotsCluster:}{a list storing the growth curves plots partitioned according to the cluster membership; }
 \item{PlotMeanCurve:}{the cluster mean curves plot; }
-\item{spline.plots:}{a list of N plots, where N is the number of samples, showing: (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval. } 
+\item{spline.plots:}{a list of N plots, where N is the number of samples, showing: (i) in blue the sample curve, (ii) in red the cubic spline estimated from the FCM, (iii) in black the correspondive cluster mean curve, and finally (iv) the grey area represents the confidence interval. }
 }
 }
 \description{
@@ -40,22 +40,22 @@ Visualizes the plots regarding the fitted and clustered data by exploiting the F
 \details{
 We define the following indexes for obtaining a cluster separation measure:
 \itemize{
- \item{S_k:}{ 
- \deqn{ S_k = \sqrt{\frac{1}{G_k} \sum_{i=1}^{G_k} D_q^2(\hat{g}_i, \bar{g}^k);} }
- with G_k the number of curves in the k-th cluster;
- }
- \item{M_{hk}:}{ the distance between centroids (mean-curves) of h-th and k-th cluster 
- \deqn{M_{hk} =  D_q(\bar{g}^h, \bar{g}^k);}
- }
- \item{R_{hk}:}{  a measure of how good the clustering is,
- \deqn{R_{hk} =   \frac{S_h + S_k}{M_{hk}};}
- }  
- \item{fDB_q:}{ functional Davies-Bouldin index, the cluster separation measure
- \deqn{fDB_q = \frac{1}{G} \sum_{k=1}^G \max_{h \neq k} { R_{hk} }. }
- }
+\item{S_k:}{
+\deqn{ S_k = \sqrt{\frac{1}{G_k} \sum_{i=1}^{G_k} D_q^2(\hat{g}_i, \bar{g}^k);} }
+with G_k the number of curves in the k-th cluster;
+}
+\item{M_{hk}:}{ the distance between centroids (mean-curves) of h-th and k-th cluster
+\deqn{M_{hk} =  D_q(\bar{g}^h, \bar{g}^k);}
+}
+\item{R_{hk}:}{  a measure of how good the clustering is,
+\deqn{R_{hk} =   \frac{S_h + S_k}{M_{hk}};}
+}
+\item{fDB_q:}{ functional Davies-Bouldin index, the cluster separation measure
+\deqn{fDB_q = \frac{1}{G} \sum_{k=1}^G \max_{h \neq k} { R_{hk} }. }
+}
 }
 Where the proximities measures choosen is defined as follow
- \deqn{D_q(f,g) = \sqrt( \integral | f^{(q)}(s)-g^{(q)}(s) |^2 ds ), d=0,1,2}
+\deqn{D_q(f,g) = \sqrt( \integral | f^{(q)}(s)-g^{(q)}(s) |^2 ds ), d=0,1,2}
 with f and g are two curves and f^{(q)} and g^{(q)} are their q-th derivatives. Note that for q=0, the equation becomes the distance induced by the classical L^2-norm.
 }
 \examples{

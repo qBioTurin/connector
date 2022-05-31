@@ -28,32 +28,39 @@
 #' CONNECTORList.FCM.k4.h2<- CONNECTORList.FCM$FCM_all$`k= 4`$`h= 2`
 #'
 #' NumberSamples<-CountingSamples(clusterdata=CONNECTORList.FCM.k4.h2,CONNECTORList,feature = "Progeny")
-#' @importFrom plyr ddply
+#' @import dplyr 
 #' @export
 #' 
 CountingSamples<-function(clusterdata,feature="ID")
 {
   data = clusterdata$CONNECTORList
-  if( is.null(clusterdata$FCM) &  is.null(clusterdata$cluster) )
-  {
-    warning("In input is needed the FCM or StabilityAnalysis file. ",immediate. = T)
-  }else{
-    if(!is.null(clusterdata$FCM))    clusterdata <- clusterdata$FCM
+  if (is.null(clusterdata$FCM) & is.null(clusterdata$cluster)) {
+    warning("In input is needed the FCM or StabilityAnalysis file. ", 
+            immediate. = T)
   }
-  
+  else {
+    if (!is.null(clusterdata$FCM)) 
+      clusterdata <- clusterdata$FCM
+  }
   ClustCurve <- clusterdata$cluster$ClustCurve
-  
-  ClustCurve <- data.frame(merge(ClustCurve,data$LabCurv,by="ID"))
+  ClustCurve <- merge(ClustCurve %>% select(ID,Cluster) %>% distinct() ,
+                      data$LabCurv,
+                      by = "ID")
   
   ClustCurve$Cluster <- clusterdata$cluster$cluster.names[ClustCurve$Cluster]
+  countRes = ClustCurve[,c("ID", "Cluster", feature)]
   
-  countRes<-count(ClustCurve,
-                  c("ID", "Cluster",feature))
-  countRes<-countRes[,-length(count(ClustCurve, c("ID", "Cluster",feature)))]
+  NAs = which(is.na(countRes[,feature]))
+  if(NAs > 0){
+    countRes[NAs,feature] = "NA"
+  }
+  countRes[,feature] = as.factor(countRes[,feature])
   
+  Counting <-  countRes %>%
+    group_by_at(.vars = vars(c("Cluster", feature)), .drop = F)  %>% 
+    tally
   
-  Counting<-ddply(countRes, c("Cluster", feature),summarise, freq = sum(ID), .drop=FALSE)
-
-  return(list(Counting=Counting,ClusterNames=data.frame(Cluster=ClustCurve$Cluster[cumsum(data$LenCurv)],ID=unique(ClustCurve[,"ID"])) ))
+  return(list(Counting=Counting,
+              ClusterNames=  ClustCurve[,c("ID", "Cluster")] ))
 }
 

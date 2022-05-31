@@ -19,7 +19,7 @@
 #' CONNECTORList <- DataImport(GrowDataFile,AnnotationFile)
 #' TimeGridDensity(CONNECTORList)
 #'
-#' @import ggplot2 grid plyr
+#' @import ggplot2 grid dplyr
 #' @importFrom ggplotify as.ggplot 
 #' @importFrom gridExtra arrangeGrob
 #' @export
@@ -48,7 +48,7 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
   Time2 <- PointsCoord[,2]
   
   df <- data.frame(Time1=Time1,Time2=Time2)
-  df1<-ddply(df,.(Time1,Time2),nrow)
+  df1<- ddply(df,.(Time1,Time2),nrow)
   
 
   ### Plot density grid

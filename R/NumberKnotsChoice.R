@@ -34,7 +34,6 @@
 #'
 #' @import ggplot2 fda parallel grid
 #' @importFrom ggplotify  as.ggplot
-#' @importFrom plyr ldply
 #' @importFrom MASS ginv
 #' @export
 #' 
@@ -150,7 +149,7 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
   Knots.Plot.new <-arrangeGrob(rbind(ggplotGrob(GrowthCurve), ggplotGrob(Knots.Plot), size = "last"))
   Knots.Plot.new <-ggplotify::as.ggplot(Knots.Plot.new)
 
-  ALLcrossvalid<-ldply(crossvalid, rbind)
+  ALLcrossvalid<-do.call("rbind",crossvalid)
   
   mean<-sapply(p.values, function(x){ mean(ALLcrossvalid$CrossLikelihood[ALLcrossvalid$p==x]) } )
   meandata<-data.frame(p=p.values,mean=mean)

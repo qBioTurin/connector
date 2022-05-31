@@ -19,8 +19,8 @@ DataVisualization(data, feature, labels = NULL, save = FALSE, path = NULL)
 }
 \value{
 Data Visualization returns a plot with the density time grid and the line plot of growth data as a ggplot object.
- In details, a point $p_{x,y}$ of the time grid density  is defined by a pair of coordinates $p_{x,y}=\left( x,y\right) \ $ and by a colour. $p_{x,y}$ is defined if only if exists at least one sample with two observations at time $x\ $ and $y$.
- The colour associates with it encodes the frequency of samples in which $p_{x,y}$ is present.
+In details, a point $p_{x,y}$ of the time grid density  is defined by a pair of coordinates $p_{x,y}=\left( x,y\right) \ $ and by a colour. $p_{x,y}$ is defined if only if exists at least one sample with two observations at time $x\ $ and $y$.
+The colour associates with it encodes the frequency of samples in which $p_{x,y}$ is present.
 }
 \description{
 Computes the time grid and the line plot of growth data.

@@ -10,8 +10,8 @@ MaximumDiscriminationFunction(clusterdata, absvalue = TRUE)
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{MostProbableClustering.Extrapolation}}).}
 
 \item{absvalue}{If TRUE, the absolute values of the weights are plotted.
- @return
-MaximumDiscriminationFunction generates two plots as ggplot objects, showing 
+@return
+MaximumDiscriminationFunction generates two plots as ggplot objects, showing
 the weights applied to each dimension for determining the cluster membership, plotted as a single curve.}
 }
 \description{

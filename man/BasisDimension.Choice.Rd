@@ -21,7 +21,7 @@ BasisDimension.Choice(data, p, save = FALSE, path = NULL, Cores = 1)
 DimensionBasis.Choice returns line plot of the cross-validated loglikelihood for each value of p, in grey the result of all ten repetitions of the likelihood calculation and in black the mean of them.
 }
 \description{
-Generates a line plot reporting the cross-validated loglikelihood value for each number of knots. In details, for each number of knots 10\% of the curves from the whole data are removed and treated as a test set, then the remaing curves are fitted using the FCM and the loglikelihood on the test set is calculated. The process is then repeated nine more times.
+Generates a line plot reporting the cross-validated loglikelihood value for each number of knots. In details, for each number of knots 10\\% of the curves from the whole data are removed and treated as a test set, then the remaing curves are fitted using the FCM and the loglikelihood on the test set is calculated. The process is then repeated nine more times.
 }
 \examples{
 

@@ -17,7 +17,7 @@
 #' @name ExtrapolationFuncs
 NULL
 #> NULL
-#' @import ggplot2 viridis reshape2 statmod
+#' @import ggplot2 viridis tidyr statmod dplyr
 #' 
 #' @rdname ExtrapolationFuncs
 #' @export
@@ -274,7 +274,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   consensusM <- as.matrix(consensusM)
   consensusM[upper.tri(consensusM)] <- NA
   
-  m<-melt( as.matrix(consensusM) , na.rm = TRUE)
+  m<-gather(as.matrix(consensusM) , na.rm = TRUE)
   
   m$Var2<-factor(m$Var2,levels = curvename.ordered  )
   m$Var1<-factor(m$Var1,levels = rev(curvename.ordered )  )

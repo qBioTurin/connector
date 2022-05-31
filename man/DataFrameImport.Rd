@@ -20,7 +20,7 @@ Reads the data.frame and creates a list storing all the information.
 \details{
 One data frame is requested to run the data analysis exploiting the CONNECTOR package:
 \itemize{
-\item the \emph{TimeSeriesDataFrame}, reporting the growth evolution data. 
+\item the \emph{TimeSeriesDataFrame}, reporting the growth evolution data.
 }
 }
 \examples{
