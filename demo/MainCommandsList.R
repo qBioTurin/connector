@@ -37,7 +37,7 @@ p<-3
 #### New part:
 S.cl <-ClusterAnalysis(CONNECTORList.trunc,G=2:5,
                        p=p,
-                       runs=100,
+                       runs=50,
                        Cores=2)
 
 IndexesPlot.Extrapolation(S.cl)-> indexes

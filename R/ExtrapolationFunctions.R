@@ -273,8 +273,11 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   consensusM <- consensusM[curvename.ordered,curvename.ordered]
   consensusM <- as.matrix(consensusM)
   consensusM[upper.tri(consensusM)] <- NA
-  
-  m<-gather(as.data.frame(consensusM) , na.rm = TRUE)
+
+  m<- as.data.frame(consensusM) %>% 
+    mutate(Var1 = row.names(consensusM)) %>% 
+    gather(-Var1,value = "value", key = "Var2") %>%
+    na.omit()
   
   m$Var2<-factor(m$Var2,levels = curvename.ordered  )
   m$Var1<-factor(m$Var1,levels = rev(curvename.ordered )  )
@@ -300,7 +303,9 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   G <- unique(cl.memer)
   Freq.cl<-lapply(G,function(g){
     as.numeric(names(cl.memer[which(cl.memer == g)])) -> curve.cl.fixed
-    indexes <- which(m$Var1 %in% curve.cl.fixed & m$Var2 %in% curve.cl.fixed & as.numeric(levels(m$Var1)[c(m$Var1)]) - as.numeric(levels(m$Var2)[c(m$Var2)])!=0)
+    indexes <- which(as.numeric(m$Var1) %in% curve.cl.fixed &
+                       m$Var2 %in% curve.cl.fixed &
+                       as.numeric(levels(m$Var1)[c(m$Var1)]) - as.numeric(levels(m$Var2)[c(m$Var2)])!=0)
     data.frame(Median= median(m[indexes,3]), Mean = round(mean(m[indexes,3]),2),Cluster = g)
   })
   Freq.cl<-do.call("rbind",Freq.cl)
