@@ -342,7 +342,8 @@
       # appropriate metric of each curve from each class centroid. 
       for (k in 1:K){
         y <- as.vector(alpha.hat[i,])-fit$par$alpha[k,]
-        distance[i,k] <- t(y)%*%InvCalpha %*%y}}
+        distance[i,k] <- t(y)%*%InvCalpha %*%y}
+      }
     # Calculate final class predictions for each curve.
     class.pred <- rep(1, N)
     log.pi <- log(fit$par$pi)

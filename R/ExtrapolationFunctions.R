@@ -210,7 +210,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   ################
   ### ordering the samples to have all curves in the same cluster close with each otehrs.
   
-  cl.memer<-BestClustering$FCM$cluster$cluster.m
+  cl.member<-BestClustering$FCM$cluster$cluster.m
   #  mat[do.call(order, as.data.frame(mat)),]
   
   fcm<-BestClustering
@@ -253,23 +253,23 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   
   #2) Sorting depending on the cluster membership
   
-  cl.memer.tmp <- data.frame(curvename,names(cl.memer),cl.memer)
+  cl.member.tmp <- data.frame(curvename,names(cl.member),cl.member)
   
-  cl.memer.tmp<-cl.memer.tmp[order(cl.memer.tmp$names.cl.memer.),]
-  cl.memer <- cl.memer.tmp$cl.memer
-  names(cl.memer) <- cl.memer.tmp$curvename
+  cl.member.tmp<-cl.member.tmp[order(cl.member.tmp$names.cl.member.),]
+  cl.member <- cl.member.tmp$cl.member
+  names(cl.member) <- cl.member.tmp$curvename
   
   #3) Defining a dataframe in order to sort the curves depending by the cluster and distance!
   
   namefroml2<-1:length(curvename)
   names(namefroml2)<-curvename.ordered
-  namefroml2<-namefroml2[names(cl.memer)] # ordering the curve ordered by the L2 distance
+  namefroml2<-namefroml2[names(cl.member)] # ordering the curve ordered by the L2 distance
   
-  curve.name.dtfr<-data.frame(namefroml2=namefroml2,cl.mem=cl.memer,1:length(curvename.ordered))
+  curve.name.dtfr<-data.frame(namefroml2=namefroml2,cl.mem=cl.member,1:length(curvename.ordered))
   
   # ind<-curve.name.dtfr[order(curve.name.dtfr$namefroml2,curve.name.dtfr$cl.mem,curve.name.dtfr$namefroml2),3]
   ind<-curve.name.dtfr[order(curve.name.dtfr$cl.mem,curve.name.dtfr$namefroml2),3]
-  curvename.ordered<-names(cl.memer)[ind]
+  curvename.ordered<-names(cl.member)[ind]
   consensusM <- consensusM[curvename.ordered,curvename.ordered]
   consensusM <- as.matrix(consensusM)
   consensusM[upper.tri(consensusM)] <- NA
@@ -283,7 +283,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   m$Var1<-factor(m$Var1,levels = rev(curvename.ordered )  )
   
   ############
-  length.cl<-rev(as.numeric(table(cl.memer[ind])[unique(cl.memer[ind])]))
+  length.cl<-rev(as.numeric(table(cl.member[ind])[unique(cl.member[ind])]))
   coor<-c(0,cumsum(length.cl))
   coor.2<-sum(length.cl)-coor
   
@@ -300,13 +300,16 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   lab = rev(BestClustering$FCM$cluster$cluster.names)[rev(BestClustering$FCM$cluster$cluster.names) %in% unique(names(BestClustering$FCM$cluster$cluster.member)) ]
   
   ### Freq in each cluster
-  G <- unique(cl.memer)
+  G <- unique(cl.member)
   Freq.cl<-lapply(G,function(g){
-    as.numeric(names(cl.memer[which(cl.memer == g)])) -> curve.cl.fixed
-    indexes <- which(as.numeric(m$Var1) %in% curve.cl.fixed &
-                       m$Var2 %in% curve.cl.fixed &
-                       as.numeric(levels(m$Var1)[c(m$Var1)]) - as.numeric(levels(m$Var2)[c(m$Var2)])!=0)
-    data.frame(Median= median(m[indexes,3]), Mean = round(mean(m[indexes,3]),2),Cluster = g)
+    as.numeric(names(cl.member[which(cl.member == g)])) -> curve.cl.fixed
+    m %>% filter( Var1 %in% curve.cl.fixed & Var2 %in% curve.cl.fixed  & Var1 != Var2) %>%
+      dplyr::summarise(Mean = round(mean(value),2),Median= round(median(value),2), Cluster = g )
+    
+    # indexes <- which(as.numeric(m$Var1) %in% curve.cl.fixed &
+    #                    m$Var2 %in% curve.cl.fixed &
+    #                    as.numeric(levels(m$Var1)[c(m$Var1)]) - as.numeric(levels(m$Var2)[c(m$Var2)])!=0)
+    # data.frame(Median= median(m[indexes,3]), Mean = round(mean(m[indexes,3]),2),Cluster = g)
   })
   Freq.cl<-do.call("rbind",Freq.cl)
   Freq.cl$Cluster<-BestClustering$FCM$cluster$cluster.names[Freq.cl$Cluster]
