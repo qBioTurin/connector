@@ -119,15 +119,15 @@ ClassificationSingleCurve = function(clusterdata,newdata,FullS =F){
   
   ProbAnnot = data.frame(Cluster = clusterdata$FCM$cluster$cluster.names,
                          Prob = round(Pclass,digits = 2),
-                         x = rep(40,Nclusters),
-                         y = rep(4000,Nclusters))
+                         x = rep(-Inf,Nclusters),
+                         y = rep(Inf,Nclusters))
   
   pl = ggplot()+
     geom_line(data = MeanCurve,aes(x = Time, y = Mean,linetype=Cluster),alpha = .4) +
     geom_line(data = ClustCurve,aes(x = Time, y = Observation, group = ID, col = as.factor(ID)),alpha = .4) +
     facet_grid(~Cluster)+
     geom_line(data = newdata,aes(x = Time, y = Observation),col = "red") + 
-    geom_text(data = ProbAnnot, aes(x = x, y = y, label = paste0("Prob: ",Prob)))
+    geom_text(data = ProbAnnot, aes(x = x, y = y, label = paste0("Prob: ",Prob)),hjust = 0, vjust = 1)
   
   return(list(plot = pl, weight = Pcl,prob = Pclass))
 }
