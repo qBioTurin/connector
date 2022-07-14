@@ -4,12 +4,14 @@
 \alias{ClassificationNewCurves}
 \title{Classification New Curves}
 \usage{
-ClassificationNewCurves(newdata, clusterdata)
+ClassificationNewCurves(newdata, clusterdata, Cores = 1)
 }
 \arguments{
 \item{newdata}{}
 
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}).}
+
+\item{Cores}{Number of cores to parallelize computations.}
 }
 \value{
 
