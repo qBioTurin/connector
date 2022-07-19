@@ -46,8 +46,12 @@ ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
   
   stopCluster(cl)
   
-  names(ALL.runs) = paste0("ID",IDcurves)
-  return(ALL.runs)
+  names(ALL.runs) = paste0("ID_",IDcurves)
+  df = as.data.frame(t(sapply(ALL.runs,"[[",3)),row.names = F)
+  df$ID = IDcurves
+  df = df[, c("ID",sort(colnames(df%>%select(-ID))) )]
+  
+  return(list(ClassMatrix = df, ListClassID =  ALL.runs ) )
 }
 
 
