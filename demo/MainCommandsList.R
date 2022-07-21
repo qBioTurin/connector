@@ -1,8 +1,8 @@
 library(connector)
 
 ### Data files
-TimeSeriesFile<-system.file("data", "475dataset.xlsx", package = "connector")
-AnnotationFile <-system.file("data", "475info.txt", package = "connector")
+TimeSeriesFile<-system.file("data", "475treatedDataset.xlsx", package = "connector")
+AnnotationFile <-system.file("data", "475treatedInfo.txt", package = "connector")
 
 ### Merge curves and target file
 CONNECTORList <- DataImport(TimeSeriesFile,AnnotationFile)
