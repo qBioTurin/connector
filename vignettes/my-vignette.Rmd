@@ -1,5 +1,5 @@
 ---
-title: "An introduction to `connector`"
+title: "An introduction to connector"
 author: "Simone Pernice, Roberta Sirovich and Francesca Cordero"
 
 header-includes:
@@ -48,6 +48,7 @@ where $\mathbf{s}(t)$ is a $p-$dimensional spline basis vector and $\boldsymbol{
 Particular attention will be devoted to model selection. In particular, one must choose the number of clusters to fit, and the dimension of the spline basis. `connector` provides a complete toolkit to lead the user through such decisions, one of the most difficult problems in cluster analysis.  -->
 
 
+
 # Installation
 
 The `connector` package is hosted on the GitHub platform. The simplest way to obtain `connector` is to install it using `devtools`. Type the following commands in R console:  
@@ -71,7 +72,14 @@ library(connector)
 
 ```
 
-The following packages are required before installing *CONNECTOR*: `devtools`, `dashboardthemes`, `dplyr`, `sfsmisc`, `shinyWidgets`, `viridis`, `ggplotify`.
+The following packages are required before installing *CONNECTOR*: 
+```{r, eval=FALSE}
+install.packages(c("cowplot", "fda", "flexclust",
+                   "ggplot2", "MASS", "Matrix", "plyr",
+                   "ggplotify", "RColorBrewer", "readxl",
+                   "reshape2", "splines", "statmod", "sfsmisc",
+                   "shinyWidgets", "viridis", "dashboardthemes"))
+```
 
 ## Quick Start
 
@@ -89,7 +97,7 @@ We illustrate the functionalities and the usage of the `connector` package on a 
 
 ## Data description
 
-
+..... to do ...
 
 ## Data Importing
 
@@ -99,11 +107,11 @@ The analysis starts from two distinct files.
 
 1. An excel file reporting the discretely sampled curve data. As functional data are longitudinal, we respect the convention of parametrizing the models in terms of time $t$ and y-values $y$. Each sample is represented as two columns of the excel file, the first one named *time* includes the lags list and the second one named with the *ID sample* (each sample has different ID name, for example 475_P1b is the ID name of the first sample in the following figure) includes the list of observed $y$ values. Hence, if we record 24 tumor growth curves, the file have 48 columns. See Figure \ref{fig:xlsx}.
 
-1. A csv (or txt) file containing the annotations associated to the sampled curves. It is composed by a number of rows equal to the number of samples. The first row must be the columns names, in which the first column must collect the *ID sample*, and the remaining ones codify for the annotated features. Notice that the column *ID sample* must contain the same ID names which appear in the excel file of the sampled curves. See Figure \ref{fig:csv}.
+1. A csv (or txt) file containing the annotations associated to the sampled curves. It is composed by a number of rows equal to the number of samples. The first row must be the columns names, in which the first column, which has to be named **IDSample**,  must collect the *ID sample*, and the remaining ones codify for the annotated features. Notice that the column *ID sample* must contain the same ID names which appear in the excel file of the sampled curves. See Figure \ref{fig:csv}.
 
 ![First lines of the excel file of the sampled curve data.\label{fig:xlsx}](./Fig/excel_file.png){ width=90% }
 
-![First lines of the csv file of the annotated features.\label{fig:csv}](./Fig/txt_file.png)
+![First lines of the csv file of the annotated features.\label{fig:csv}](./Fig/txt_file.png){ width=70% }
 
 Once data have been prepared in the two files above described, they are imported by the `DataImport` function. Two arguments, with the file names respectively, should be specified. In this example the full path names have been saved in the `TimeSeriesFile` and `AnnotationFile` strings.
 
@@ -242,7 +250,7 @@ CrossLogLike$CrossLogLikePlot
 
 ```
 
-```{r, fig.height = 8, fig.width = 7, fig.align = "center",fig.cap="Knots ditribution. \\label{fig:Knotscrossloglike}"}
+```{r, out.width = '60%', fig.align = "center",fig.cap="Knots ditribution. \\label{fig:Knotscrossloglike}"}
 
 CrossLogLike$KnotsPlot
 # set p
@@ -345,7 +353,7 @@ The indexes show that $G=4$ is a good choices, since it is the number of cluster
 The variability of the two measures among runs, exhibited in Figure \ref{fig:TandfDB}, is related to the random initialization of the k-means algorithm to get initial cluster memberships from points. The stability of the clustering procedure can be visualized through the consensus matrix extrapolated by the function `ConsMatrix.Extrapolation`, as shown in Figure \ref{fig:ConsMatg4}.
 Let us note that the number associated with each cluster in the consensus matrix represents the average number of time that the curves belonging to the same cluster are counted in the most probable cluster; while the average of these indexes is reported in the title.
 
-```{r, fig.height =3, fig.width = 4, fig.align = "center",fig.cap=c("\\label{fig:ConsMatg4} Consensus Matrices for G = 4.")}
+```{r, out.width = '70%', fig.align = "center",fig.cap=c("\\label{fig:ConsMatg4} Consensus Matrices for G = 4.")}
 
 ConsMatrix<-ConsMatrix.Extrapolation(stability.list = ClusteringList)
 str(ConsMatrix, max.level = 2, vec.len=1)
@@ -380,8 +388,8 @@ FCMplots<- ClusterWithMeanCurve(clusterdata = CONNECTORList.FCM.opt,
 
 A detailed visualization of the clusterization of the sample curves can be obtained by means of the `DiscriminantPlot` function. In [@james2003clustering], the authors describe how to obtain low-dimensional plots of curve datasets, enabling a visual assessment of clustering. They propose to project the curves into the lower dimensional space of the mean space, so that they can be plotted as points (with coordinates the functional linear discriminant components), making it much easier to detect the presence of clusters. In details, when $h$ is equal to 1 or 2, than the `DiscriminantPlot` function return the plots of the curves projected onto the $h$ dimensional mean space: 
 
-1. when $h=1$, the functional linear discriminant $\\alpha_1$ is plotted versus its variability;
-2. when $h=2$, the functional linear discriminant $\\alpha_1$ is plotted versus the functional linear discriminant $\\alpha_2$.
+1. when $h=1$, the functional linear discriminant $\alpha\_1$ is plotted versus its variability;
+2. when $h=2$, the functional linear discriminant $\alpha\_1$ is plotted versus the functional linear discriminant $\alpha\_2$.
 
 If $h > 2$, the principal component analysis is exploited to extrapolate the components of the $h$-space with more explained variability (which is reported in brackets), that are then plotted together. 
 
@@ -470,5 +478,5 @@ Large absolute values correspond to large weights and hence large discrimination
 
 ---
 nocite: |
-@ClassicalModels
-...
+
+---
