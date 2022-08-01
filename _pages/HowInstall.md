@@ -17,7 +17,7 @@ library(devtools)
 install_github("https://github.com/qBioTurin/connector", ref="master")
 ```
 
-Here the CONNECTOR step by step guide: [CONNECTOR pdf]{https://github.com/qBioTurin/connector/blob/master/vignettes/CONNECTORguide.pdf}.
+Here the CONNECTOR step by step guide: [CONNECTOR pdf](https://github.com/qBioTurin/connector/blob/master/vignettes/CONNECTORguide.pdf).
 
 ## Docker
 If you want to use Docker (which is not mandatory), you need to have it installed on your machine. For more info see this document:
