@@ -9,7 +9,7 @@ toc_icon: "cog"
 
 
 ## CONNECTOR
-To install **CONNECTOR** you can use use **devtools**:
+To install **CONNECTOR** you can use the **devtools** R package:
 
 ```
 install.packages("devtools")
@@ -17,10 +17,10 @@ library(devtools)
 install_github("https://github.com/qBioTurin/connector", ref="master")
 ```
 
+Here the CONNECTOR step by step guide: [CONNECTOR pdf]{https://github.com/qBioTurin/connector/blob/master/vignettes/CONNECTORguide.pdf}.
 
 ## Docker
-
-You need to have docker installed on your machine, for more info see this document:
+If you want to use Docker (which is not mandatory), you need to have it installed on your machine. For more info see this document:
 https://docs.docker.com/engine/installation/.
 
 Ensure your user has the rights to run docker (witout the use of ```sudo```). To create the docker group and add your user:
