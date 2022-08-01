@@ -23,6 +23,7 @@ Here the CONNECTOR step by step guide: [CONNECTOR pdf](https://github.com/qBioTu
 If you want to use Docker (which is not mandatory), you need to have it installed on your machine. For more info see this document:
 https://docs.docker.com/engine/installation/.
 
+### How to install docker
 Ensure your user has the rights to run docker (witout the use of ```sudo```). To create the docker group and add your user:
 
 * Create the docker group.
@@ -36,4 +37,7 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
   $ sudo usermod -aG docker $USER
 ```
 * Log out and log back in so that your group membership is re-evaluated.
+
+### How to run CONNECTOR from docker
+
 
