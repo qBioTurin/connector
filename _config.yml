@@ -121,7 +121,7 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/qBioTurin"
+      url: "https://github.com/qBioTurin/connector"
     #- label: "GitLab"
     #  icon: "fab fa-fw fa-gitlab"
       # url:
