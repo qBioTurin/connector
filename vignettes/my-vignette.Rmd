@@ -74,11 +74,13 @@ library(connector)
 
 The following packages are required before installing *CONNECTOR*: 
 ```{r, eval=FALSE}
-install.packages(c("cowplot", "fda", "flexclust",
-                   "ggplot2", "MASS", "Matrix", "plyr",
-                   "ggplotify", "RColorBrewer", "readxl",
-                   "reshape2", "splines", "statmod", "sfsmisc",
-                   "shinyWidgets", "viridis", "dashboardthemes"))
+install.packages(c('cowplot', 'fda', 'flexclust','ggplot2',
+                   'MASS', 'Matrix', 'plyr','ggplotify',
+                   'RColorBrewer', 'readxl',
+                   'reshape2', 'splines', 'statmod',
+                   'sfsmisc','shinyWidgets', 'viridis',
+                   'dashboardthemes','shinybusy',
+                   'shinydashboard','shinyjs','tidyr'))
 ```
 
 ## Quick Start
@@ -90,6 +92,9 @@ A demo is available to provide the list of commands to perform the analysis of t
 demo("MainCommandsList", package = "connector")
 
 ```
+
+## Docker 
+
 
 # Case study: tumor growth dataset
 

@@ -20,8 +20,9 @@ RUN apt-get clean all && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install all required R packages
-RUN Rscript -e "install.packages('devtools'); install.packages('dashboardthemes'); install.packages('dplyr'); install.packages('sfsmisc'); install.packages('shinyWidgets'); install.packages('viridis'); install.packages('ggplotify');"
-
+RUN Rscript -e "install.packages(c('cowplot', 'fda', 'flexclust','ggplot2', 'MASS', 'Matrix', 'plyr','ggplotify', 'RColorBrewer', 'readxl','reshape2', 'splines', 'statmod', 'sfsmisc','shinyWidgets', 'viridis', 'dashboardthemes','shinybusy','shinydashboard','shinyjs','tidyr'))"
+RUN Rscript -e "install.packages('devtools')"
+RUN Rscript -e "install.packages('shinyFiles')"
 # Create scratch directory
 #RUN mkdir /home/scratch; chmod 777 /home/scratch
 
@@ -31,5 +32,5 @@ RUN Rscript -e "install.packages('devtools'); install.packages('dashboardthemes'
 # date > marker
 # COPY marker /dev/null
 
-RUN Rscript -e "library(devtools); install_github('qBioTurin/connector', ref='master',dependencies=TRUE, force = TRUE)"
+RUN Rscript -e "devtools::install_github('qBioTurin/connector', ref='master',dependencies=TRUE, force = TRUE)"
 
