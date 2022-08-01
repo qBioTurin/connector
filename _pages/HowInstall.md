@@ -39,5 +39,21 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 * Log out and log back in so that your group membership is re-evaluated.
 
 ### How to run CONNECTOR from docker
+* **Without installing CONNECTOR:** 
 
-
+ 1. Download the image from [dockerhub](https://hub.docker.com/layers/qbioturin/connector/latest/images/sha256:47a2db335ce28139952542ebe86a067373e1e7a3fafb1003b73786b52a26b96f)
+```
+  $ docker pull qbioturin/connector:latest
+```
+ 2. Run the RStudio Docker image with CONNECTOR installed and work with RStudio in the browser
+ ```
+  $ docker run --cidfile=dockerID -e DISABLE_AUTH=true -p 8787:8787 -d qbioturin/connector:latest
+  $ open http://localhost:8787/
+ ```
+ 
+* **From CONNECTOR:** 
+ it is possible to download and run the RStudio Docker image by using the CONNECTOR functions called *downloadContainers* and *docker.run* as follows:
+ ```
+ > downloadContainers()
+ > docker.run()
+ ```
