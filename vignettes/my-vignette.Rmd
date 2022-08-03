@@ -1,6 +1,6 @@
 ---
 title: "An introduction to connector"
-author: "Simone Pernice, Roberta Sirovich and Francesca Cordero"
+author: "Simone Pernice, Roberta Sirovich and Francesca "
 
 header-includes:
    - \usepackage{amsfonts,amsmath}
