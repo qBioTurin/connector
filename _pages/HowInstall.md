@@ -9,10 +9,28 @@ toc_icon: "cog"
 
 
 ## CONNECTOR
-To install **CONNECTOR** you can use the **devtools** R package:
+
+**CONNECTOR** is built under R 4.1.0, for previous versions we suggest to install the right version of the package *locfit*:
+```
+install_version("locfit", version = "1.5-9.2")
+```
+
+Note that R should be built with tcltk support. To check this, you should run *capabilities("tcltk")* from R. If it returns FALSE then we suggest to check how to cope with this from [here](https://stackoverflow.com/questions/25212800/error-onload-failed-in-loadnamespace-for-tcltk).
+
+Before installing **CONNECTOR**, the following R packages has to be installed:
 
 ```
-install.packages("devtools")
+install.packages(c('cowplot', 'fda', 'flexclust','ggplot2', 'MASS',
+                   'Matrix', 'plyr','ggplotify', 'RColorBrewer',
+                   'readxl', 'reshape2', 'splines', 'statmod', 
+                   'sfsmisc','shinyWidgets', 'viridis', 'dashboardthemes',
+                   'shinybusy','shinydashboard','shinyjs','tidyr',
+                   'shinyFiles','devtools'))"
+```
+
+Finally, to install **CONNECTOR** you can use the **devtools** R package:
+
+```
 library(devtools)
 install_github("https://github.com/qBioTurin/connector", ref="master")
 ```
