@@ -16,7 +16,7 @@ feature_rowEasy:
     alt: "placeholder image 2"
     title: "1864: Ovarian PDX curves"
     excerpt: ""
-    url: "/1865PDXovarian/"
+    url: "/1864PDXovarian/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
 ---
