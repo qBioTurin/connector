@@ -5,9 +5,12 @@ author: "Simone Pernice, Roberta Sirovich and Francesca Cordero"
 header-includes:
    - \usepackage{amsfonts,amsmath,float}
 output: 
-  md_document:
+  pdf_document:
+    extra_dependencies: ["float"]
     toc: true
     toc_depth: 3
+    fig_caption: yes
+    keep_tex: true
     
 bibliography: biblio.bib  
 vignette: >
