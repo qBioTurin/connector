@@ -5,16 +5,16 @@ layout: splash
 intro: 
   - excerpt: ''
 feature_rowEasy:
-  - image_path: /assets/images/475.png
+  - image_path: /assets/images/475Plot.png
     alt: "placeholder image 2"
     title: "475: Ovarian PDX curves"
     excerpt: ""
     url: "/475PDXovarian/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
-  - image_path: /assets/images/1865.png
+  - image_path: /assets/images/1864Plot.png
     alt: "placeholder image 2"
-    title: "1865: Ovarian PDX curves"
+    title: "1864: Ovarian PDX curves"
     excerpt: ""
     url: "/1865PDXovarian/"
     btn_label: "Read More"
