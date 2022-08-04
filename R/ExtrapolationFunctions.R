@@ -8,7 +8,7 @@
 #' @details 
 #' \itemize{
 #' \item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
-#' \item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Consensus Matrix for G fixed.}
+#' \item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Stability Matrix for G fixed.}
 #' \item{MostProbableClustering.Extrapolation}{extrapolates from ClusterAnalysis output list the most frequent clustering among the several runs obtained  for G fixed.}
 #' }
 #' 
@@ -333,7 +333,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
     geom_segment(data = cluster.lines, 
                  aes(x, y, xend = xend, yend = yend), size = 1.5, 
                  inherit.aes = F) +
-    labs(title = paste( "Consensus Matrix, G=", length(G) ),
+    labs(title = paste( "Stability Matrix, G=", length(G) ),
          subtitle = paste("Black line for the most probable clustering: ",MeanFreq) ) + 
     annotate(geom = "text", x = x.text, y = y.text, 
              label = labText , 

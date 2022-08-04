@@ -32,5 +32,5 @@ RUN Rscript -e "install.packages('shinyFiles')"
 # date > marker
 # COPY marker /dev/null
 
-RUN Rscript -e "devtools::install_github('qBioTurin/connector', ref='master',dependencies=TRUE, force = TRUE)"
+RUN Rscript -e " devtools::install_github('qBioTurin/connector', ref='master',dependencies=TRUE, force = TRUE)"
 
