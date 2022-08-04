@@ -1,6 +1,6 @@
 ---
 title: "CONNECTOR - Applications"
-permalink: /PDXovarian/
+permalink: /475PDXovarian/
 layout: splash
  ---
 
