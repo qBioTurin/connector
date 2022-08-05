@@ -373,6 +373,6 @@ Sampled curves grouped by cluster membership.
 ## Maximum Discrimination Function
 
 <img src="./assets/images/PDX1864/unnamed-chunk-43-1.png" />
-<p class="caption">
+<p class="caption" align="center">
 Discriminant curve.
 </p>
