@@ -15,8 +15,8 @@ minimal_mistakes_skin    :  "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "CONNECTOR"
-title_separator          : ""
+title                    : ""
+title_separator          : "CONNECTOR"
 subtitle                 : #"CONNECTOR"
 name                     : "qbioGroup"
 description              : 
