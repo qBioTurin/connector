@@ -26,11 +26,11 @@ toc_icon: "cog"
         Function</a>
 
 
-In the first set of PDX lines (PDX line #1864), 21 curves are collected from five serial passages (1 on P1, 2 on P2, 2 on P3, 5 on P4 and 11 on P5). Regrettably, the patient relapsed after six months, at post-chemotherapy surgery, another sample from the same patient was propagated in 17 PDX line obtained from five serial passages. Those were treated with three different drugs carboplatin, gemcitabine and trabectedin.
+In the first set of PDX lines (PDX line #1864), 17 curves are collected from five serial passages (1 on P1, 2 on P2, 2 on P3, 5 on P4 and 11 on P5). Regrettably, the patient relapsed after six months, at post-chemotherapy surgery, another sample from the same patient was propagated in 14 PDX line obtained from five serial passages. Those were treated with three different drugs carboplatin, gemcitabine and trabectedin.
 
 # First test: 1864
 
-<img src="../assets/images/PDX1864/unnamed-chunk-4-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 From the plots it is straightforward that we should truncate at time 60.
 
@@ -46,12 +46,12 @@ From the plots it is straightforward that we should truncate at time 60.
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-7-1.png" style="display: block; margin: auto;"  width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-7-1.png" style="display: block; margin: auto;"   />
 <p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-8-1.png"  style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-8-1.png"  style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Knots ditribution.
 </p>
@@ -60,7 +60,7 @@ We set p= 3.
 
 ## G selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-10-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-10-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Violin Plots of the  *T* calculated on each run and for different
 number of clusters *G* (right panel). Violin Plots of the  fDB
@@ -92,7 +92,7 @@ Consensus Matrices for G = 3 and 4.
     #> ##############################################################
     #> ############################################################## 
     #> 
-    #>         ######## M indexes ############
+    #>######## M indexes ############
     #> 
     #> 
     #> |          | Cluster D| Cluster B| Cluster A| Cluster C|
@@ -138,7 +138,7 @@ Discriminant curve.
 
 # Second test: 1864 treated
 
-<img src="../assets/images/PDX1864/unnamed-chunk-18-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-18-1.png" style="display: block; margin: auto;"  />
 
 From the plots it is straightforward that we should truncate at time 60.
 
@@ -155,12 +155,12 @@ From the plots it is straightforward that we should truncate at time 60.
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-21-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-21-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-22-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-22-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Knots ditribution.
 </p>
@@ -169,7 +169,7 @@ We set p= 3.
 
 ## G selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-24-1.png" style="display: block; margin: auto;"  width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-24-1.png" style="display: block; margin: auto;"   />
 <p class="caption" align="center">
 Violin Plots of the  *T* calculated on each run and for different
 number of clusters *G* (right panel). Violin Plots of the  fDB
@@ -201,7 +201,7 @@ Consensus Matrices for G = 3 and 4.
     #> ##############################################################
     #> ############################################################## 
     #> 
-    #>         ######## M indexes ############
+    #>######## M indexes ############
     #> 
     #> 
     #> |          | Cluster A| Cluster B| Cluster D| Cluster C|
@@ -248,7 +248,7 @@ Discriminant curve.
 
 # Third test: 1864
 
-<img src="../assets/images/PDX1864/unnamed-chunk-32-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-32-1.png" style="display: block; margin: auto;"  />
 
 From the plots it is straightforward that we should truncate at time 70.
 
@@ -265,12 +265,12 @@ From the plots it is straightforward that we should truncate at time 70.
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-35-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-35-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-36-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-36-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Knots ditribution.
 </p>
@@ -279,7 +279,7 @@ We set p= 3.
 
 ## G selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-38-1.png" style="display: block; margin: auto;" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-38-1.png" style="display: block; margin: auto;"  />
 <p class="caption" align="center">
 Violin Plots of the  *T* calculated on each run and for different
 number of clusters *G* (right panel). Violin Plots of the fDB
@@ -311,7 +311,7 @@ Consensus Matrices for G = 3 and 4.
     #> ##############################################################
     #> ############################################################## 
     #> 
-    #>         ######## M indexes ############
+    #>######## M indexes ############
     #> 
     #> 
     #> |          | Cluster B| Cluster D| Cluster C| Cluster A|
