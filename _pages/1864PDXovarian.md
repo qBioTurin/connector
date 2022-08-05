@@ -18,7 +18,7 @@ toc_icon: "cog"
         id="toc-maximum-discrimination-function">Maximum Discrimination
         Function</a>
 -   <a href="#second-test-1864-treated"
-    id="toc-second-test-1864-treated">1864 withtreatment</a>
+    id="toc-second-test-1864-treated">1864 with treatment</a>
     -   <a href="#p-selection-1" id="toc-p-selection-1">p selection</a>
     -   <a href="#g-selection-1" id="toc-g-selection-1">G selection</a>
     -   <a href="#maximum-discrimination-function-1"
@@ -28,7 +28,7 @@ toc_icon: "cog"
 
 In the first set of PDX lines (PDX line #1864), 17 curves are collected from five serial passages (1 on P1, 2 on P2, 2 on P3, 5 on P4 and 11 on P5). Regrettably, the patient relapsed after six months, at post-chemotherapy surgery, another sample from the same patient was propagated in 14 PDX line obtained from five serial passages. Those were treated with three different drugs carboplatin, gemcitabine and trabectedin.
 
-# First test: 1864
+# 1864 without treatment
 
 <img src="../assets/images/PDX1864/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
@@ -130,7 +130,7 @@ Sampled curves grouped by cluster membership.
 
 ## Maximum Discrimination Function
 
-<img src="../assets/images/PDX1864/unnamed-chunk-15-1.png"style="display: block; margin: auto;" />
+<img src="../assets/images/PDX1864/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 <p class="caption" align="center">
 Discriminant curve.
 </p>
@@ -244,9 +244,7 @@ Sampled curves grouped by cluster membership.
 Discriminant curve.
 </p>
 
-## Fitting visualizations
-
-# Third test: 1864
+# 1864 with treatment
 
 <img src="../assets/images/PDX1864/unnamed-chunk-32-1.png" style="display: block; margin: auto;"  />
 
