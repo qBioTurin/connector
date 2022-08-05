@@ -30,7 +30,7 @@ In the first set of PDX lines (PDX line #1864), 21 curves are collected from fiv
 
 # First test: 1864
 
-<img src="../assets/images/PDX1864/unnamed-chunk-4-1.png" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-4-1.png" style="display: block; margin: auto;" width="60%"  />
 
 From the plots it is straightforward that we should truncate at time 60.
 
@@ -43,17 +43,16 @@ From the plots it is straightforward that we should truncate at time 60.
     #>  Number of truncated curves: 10 ;
     #>  Min points deleted:  2 ; Max points deleted:  3 ;
     #> ##############################################################
-    #> NULL
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-7-1.png" alt="Cross-validated loglikelihood functions. \label{fig:crossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-7-1.png" style="display: block; margin: auto;"  width="60%"  />
+<p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-8-1.png" alt="Knots ditribution. \label{fig:Knotscrossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-8-1.png"  style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
 Knots ditribution.
 </p>
 
@@ -61,27 +60,21 @@ We set p= 3.
 
 ## G selection
 
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-<img src="../assets/images/PDX1864/unnamed-chunk-10-1.png" alt="\label{fig:TandfDB} Violin Plots of the {\it total tightness} $T$ calculated on each run and for different number of clusters $G$ (right panel). Violin Plots of the {\it functional DB index} fDB calculated on each run and for different number of clusters $G$ (left panel)." width="60%"  />
-<p class="caption">
-Violin Plots of the {} *T* calculated on each run and for different
-number of clusters *G* (right panel). Violin Plots of the {} fDB
+<img src="../assets/images/PDX1864/unnamed-chunk-10-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
+Violin Plots of the  *T* calculated on each run and for different
+number of clusters *G* (right panel). Violin Plots of the  fDB
 calculated on each run and for different number of clusters *G* (left
 panel).
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-11-1.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-11-2.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
@@ -130,26 +123,22 @@ Consensus Matrices for G = 3 and 4.
     #> 
     #> ##############################################################
 
-<img src="../assets/images/PDX1864/unnamed-chunk-14-1.png" alt="\label{fig:clusters} Sampled curves grouped by cluster membership."  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Sampled curves grouped by cluster membership.
 </p>
 
 ## Maximum Discrimination Function
 
-<img src="../assets/images/PDX1864/unnamed-chunk-15-1.png" alt="\label{fig:discrimination} Discriminant curve."  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-15-1.png"style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Discriminant curve.
 </p>
-
-## Fitting visualizations
-
-
 
 
 # Second test: 1864 treated
 
-<img src="../assets/images/PDX1864/unnamed-chunk-18-1.png" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-18-1.png" style="display: block; margin: auto;" width="60%"  />
 
 From the plots it is straightforward that we should truncate at time 60.
 
@@ -162,17 +151,17 @@ From the plots it is straightforward that we should truncate at time 60.
     #>  Number of truncated curves: 11 ;
     #>  Min points deleted:  1 ; Max points deleted:  9 ;
     #> ##############################################################
-    #> NULL
+
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-21-1.png" alt="Cross-validated loglikelihood functions. \label{fig:crossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-21-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-22-1.png" alt="Knots ditribution. \label{fig:Knotscrossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-22-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
 Knots ditribution.
 </p>
 
@@ -180,33 +169,21 @@ We set p= 3.
 
 ## G selection
 
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-    #> Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-    #> collapsing to unique 'x' values
-
-<img src="../assets/images/PDX1864/unnamed-chunk-24-1.png" alt="\label{fig:TandfDB} Violin Plots of the {\it total tightness} $T$ calculated on each run and for different number of clusters $G$ (right panel). Violin Plots of the {\it functional DB index} fDB calculated on each run and for different number of clusters $G$ (left panel)." width="60%"  />
-<p class="caption">
-Violin Plots of the {} *T* calculated on each run and for different
-number of clusters *G* (right panel). Violin Plots of the {} fDB
+<img src="../assets/images/PDX1864/unnamed-chunk-24-1.png" style="display: block; margin: auto;"  width="60%"  />
+<p class="caption" align="center">
+Violin Plots of the  *T* calculated on each run and for different
+number of clusters *G* (right panel). Violin Plots of the  fDB
 calculated on each run and for different number of clusters *G* (left
 panel).
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-25-1.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-25-2.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-25-2.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
@@ -255,15 +232,15 @@ Consensus Matrices for G = 3 and 4.
     #> 
     #> ##############################################################
 
-<img src="../assets/images/PDX1864/unnamed-chunk-28-1.png" alt="\label{fig:clusters} Sampled curves grouped by cluster membership."  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-28-1.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Sampled curves grouped by cluster membership.
 </p>
 
 ## Maximum Discrimination Function
 
-<img src="../assets/images/PDX1864/unnamed-chunk-29-1.png" alt="\label{fig:discrimination} Discriminant curve."  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /> 
+<p class="caption" align="center">
 Discriminant curve.
 </p>
 
@@ -271,7 +248,7 @@ Discriminant curve.
 
 # Third test: 1864
 
-<img src="../assets/images/PDX1864/unnamed-chunk-32-1.png" width="60%"  />
+<img src="../assets/images/PDX1864/unnamed-chunk-32-1.png" style="display: block; margin: auto;" width="60%"  />
 
 From the plots it is straightforward that we should truncate at time 70.
 
@@ -288,13 +265,13 @@ From the plots it is straightforward that we should truncate at time 70.
 
 ## p selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-35-1.png" alt="Cross-validated loglikelihood functions. \label{fig:crossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-35-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
 Cross-validated loglikelihood functions.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-36-1.png" alt="Knots ditribution. \label{fig:Knotscrossloglike}" width="60%"  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-36-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
 Knots ditribution.
 </p>
 
@@ -302,21 +279,21 @@ We set p= 3.
 
 ## G selection
 
-<img src="../assets/images/PDX1864/unnamed-chunk-38-1.png" alt="\label{fig:TandfDB} Violin Plots of the {\it total tightness} $T$ calculated on each run and for different number of clusters $G$ (right panel). Violin Plots of the {\it functional DB index} fDB calculated on each run and for different number of clusters $G$ (left panel)." width="60%"  />
-<p class="caption">
-Violin Plots of the {} *T* calculated on each run and for different
-number of clusters *G* (right panel). Violin Plots of the {} fDB
+<img src="../assets/images/PDX1864/unnamed-chunk-38-1.png" style="display: block; margin: auto;" width="60%"  />
+<p class="caption" align="center">
+Violin Plots of the  *T* calculated on each run and for different
+number of clusters *G* (right panel). Violin Plots of the fDB
 calculated on each run and for different number of clusters *G* (left
 panel).
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-39-1.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-39-1.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
-<img src="../assets/images/PDX1864/unnamed-chunk-39-2.png" alt="\label{fig:ConsMatg4} Consensus Matrices for G = 3 and 4. "  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-39-2.png" style="display: block; margin: auto;" />
+<p class="caption" align="center">
 Consensus Matrices for G = 3 and 4.
 </p>
 
@@ -365,14 +342,14 @@ Consensus Matrices for G = 3 and 4.
     #> 
     #> ##############################################################
 
-<img src="../assets/images/PDX1864/unnamed-chunk-42-1.png" alt="\label{fig:clusters} Sampled curves grouped by cluster membership."  />
-<p class="caption">
+<img src="../assets/images/PDX1864/unnamed-chunk-42-1.png" style="display: block; margin: auto;"/>
+<p class="caption" align="center">
 Sampled curves grouped by cluster membership.
 </p>
 
 ## Maximum Discrimination Function
 
-<img src="./assets/images/PDX1864/unnamed-chunk-43-1.png" />
+<img src="../assets/images/PDX1864/unnamed-chunk-43-1.png" style="display: block; margin: auto;" />
 <p class="caption" align="center">
 Discriminant curve.
 </p>
