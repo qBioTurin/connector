@@ -23,6 +23,6 @@ feature_rowEasy:
 
 ##   Ovarian Cancer Application
 
-**CONNECTOR** is extremely flexible in analyzing longitudinal data and aims to tackle a key difficulty in the visualization of high-dimensional clustering data. To show the basic use of CONNECTOR, we analyzed the spontaneous tumor growth patterns of patient-derived xenograft (PDX) lines derived from the propagation of one chemotherapy-na\"ive high-grade serous epithelial ovarian cancer (HGS-EOC). In particular we will exploit the PDX line #475 and the PDX line #1864 of the protocol published in [(Erriquez J, 2016)](https://doi.org/10.18632%2Foncotarget.8325).
+**CONNECTOR** is extremely flexible in analyzing longitudinal data and aims to tackle a key difficulty in the visualization of high-dimensional clustering data. To show the basic use of CONNECTOR, we analyzed the spontaneous tumor growth patterns of patient-derived xenograft (PDX) lines derived from the propagation of one chemotherapy-naive high-grade serous epithelial ovarian cancer (HGS-EOC). In particular we will exploit the PDX line #475 and the PDX line #1864 of the protocol published in [(Erriquez J, 2016)](https://doi.org/10.18632%2Foncotarget.8325).
 
 {% include feature_row id="feature_rowEasy" %}
