@@ -10,14 +10,14 @@ toc_icon: "cog"
 
 ## CONNECTOR
 
-**CONNECTOR** is built under R 4.1.0, for previous versions we suggest to install the right version of the package *locfit*:
+it is built under R 4.1.0, for previous versions we suggest installing the right version of the package *locfit*:
 ```
 install_version("locfit", version = "1.5-9.2")
 ```
 
-Note that R should be built with tcltk support. To check this, you should run *capabilities("tcltk")* from R. If it returns FALSE then we suggest to check how to cope with this from [here](https://stackoverflow.com/questions/25212800/error-onload-failed-in-loadnamespace-for-tcltk).
+Note that R should be built with tcltk support. To check this, you should run *capabilities("tcltk")* from R. If it returns FALSE then we suggest checking how to cope with this from [here](https://stackoverflow.com/questions/25212800/error-onload-failed-in-loadnamespace-for-tcltk).
 
-Before installing **CONNECTOR**, the following R packages has to be installed:
+Before installing **CONNECTOR**, the following R packages have to be installed:
 
 ```
 install.packages(c('cowplot', 'fda', 'flexclust','ggplot2', 'MASS',
@@ -42,7 +42,7 @@ If you want to use Docker (which is not mandatory), you need to have it installe
 https://docs.docker.com/engine/installation/.
 
 ### How to install docker
-Ensure your user has the rights to run docker (witout the use of ```sudo```). To create the docker group and add your user:
+Ensure your user has the rights to run docker (without the use of ```sudo```). To create the docker group and add your user:
 
 * Create the docker group.
 
