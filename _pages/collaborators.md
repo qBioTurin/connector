@@ -5,12 +5,6 @@ permalink: /collaboration/
 author_profile: true
 --- 
 
----
-layout: single
-title: "CONNECTOR - Team"
-permalink: /group/
-author_profile: true
---- 
 
 ### [Candiolo Cancer Institute, FPO-IRCCS, Candiolo, Italy] (https://www.irccs.org/translational-cancer-medici)
 
