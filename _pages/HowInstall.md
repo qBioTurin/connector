@@ -6,7 +6,11 @@ toc: true
 toc_label: "Requirements"
 toc_icon: "cog"
 ---
-
+<style type="text/css">
+  body{
+  font-size: 1.125em;
+}
+</style>
 
 ## CONNECTOR
 
