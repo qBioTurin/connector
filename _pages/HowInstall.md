@@ -5,12 +5,11 @@ permalink: /HowInstall/
 toc: true
 toc_label: "Requirements"
 toc_icon: "cog"
+html_document:
+    css: main.css
 ---
-<style type="text/css">
-  body{
-  font-size: 1.125em;
-}
-</style>
+
+
 
 ## CONNECTOR
 
