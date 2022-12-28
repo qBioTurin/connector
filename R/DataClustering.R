@@ -211,7 +211,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
 {
   
   if(Cores == 1){
-    ALL.runs<-lapply(cl,1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit){
+    ALL.runs<-lapply(1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit){
       tryCatch({
         fitfclust(x=points,
                   curve=ID,
