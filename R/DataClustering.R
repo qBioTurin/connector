@@ -210,7 +210,30 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
 Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404)
 {
   
-  cl <- makeCluster(Cores)
+  if(Cores == 1){
+    ALL.runs<-lapply(cl,1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit){
+      tryCatch({
+        fitfclust(x=points,
+                  curve=ID,
+                  timeindex=timeindex,
+                  q=p,
+                  h=h,
+                  K=G,
+                  p=p,
+                  grid=grid,
+                  tol = tol,
+                  maxit = maxit)},
+        error=function(e) {
+          err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
+          err.list<-list(Error= err)
+          #print(err)
+          return(err.list)
+        })
+    },points,ID,timeindex,G,p,h,grid,tol,maxit)
+  }else{
+
+  type <- if (exists("mcfork", mode="function")) "FORK" else "PSOCK"
+  cl <- makeCluster(Cores, type = type)
   clusterSetRNGStream(cl, seed)
   clusterCall(cl, function(){ 
     library(Matrix)
@@ -220,7 +243,8 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
   
   
   clusterExport(cl,list("fitfclust","fclustinit","fclustMstep","fclustEstep","fclustconst",
-                        "points","ID","timeindex","G","p","h","grid","tol","maxit"),envir = environment() )
+                        "points","ID","timeindex","G","p","h","grid","tol","maxit"),
+                envir = environment() )
   
   ALL.runs<-parLapply(cl,1:runs, function(i){
     tryCatch({
@@ -243,6 +267,8 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
   })
   
   stopCluster(cl)
+  
+  }
   
   return(ALL.runs)
 }

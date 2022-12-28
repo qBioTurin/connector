@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.1)  4 AUG 2022 17:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.1)  5 AUG 2022 15:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide.tex
-(/private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide.tex
+**/private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide.tex
+(/private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-07-15> (/Users/simonepernice/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -480,82 +480,82 @@ LaTeX Font Warning: Font shape `TS1/lmtt/bx/it' in size <10> not available
 (Font)              Font shape `TS1/lmtt/b/sl' tried instead on input line 355.
 
 [5]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf, id=150, 441.65pt x 284.06125pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf  used on input line 443.
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf, id=150, 441.65pt x 284.06125pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf  used on input line 443.
 (pdftex.def)             Requested size: 441.66911pt x 284.07353pt.
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf, id=152, 489.83pt x 204.765pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf  used on input line 466.
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf, id=152, 489.83pt x 204.765pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf  used on input line 466.
 (pdftex.def)             Requested size: 469.76805pt x 196.37843pt.
-[6 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf>] [7 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf, id=189, 453.695pt x 313.17pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 525.
+[6 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-14-1.pdf>] [7 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-15-1.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf, id=189, 453.695pt x 313.17pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 525.
 (pdftex.def)             Requested size: 453.6939pt x 313.16922pt.
-[8 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf, id=208, 493.845pt x 207.77625pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf  used on input line 598.
+[8 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-18-1.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf, id=209, 493.845pt x 207.77625pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf  used on input line 597.
 (pdftex.def)             Requested size: 469.75291pt x 197.63994pt.
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf, id=209, 422.57875pt x 296.10625pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 613.
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf, id=210, 422.57875pt x 296.10625pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 612.
 (pdftex.def)             Requested size: 281.86247pt x 197.50458pt.
-[9 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf>]
+[9 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-19-1.pdf>]
 
-LaTeX Warning: Reference `eq:gsplinepred' on page 10 undefined on input line 654.
+LaTeX Warning: Reference `eq:gsplinepred' on page 10 undefined on input line 653.
 
 
-LaTeX Warning: Reference `eq:splinemeancurve' on page 10 undefined on input line 655.
+LaTeX Warning: Reference `eq:splinemeancurve' on page 10 undefined on input line 654.
 
-[10 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf>] [11]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf, id=257, 1128.215pt x 472.76625pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 784.
+[10 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-20-1.pdf>] [11]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf, id=258, 1128.215pt x 472.76625pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 784.
 (pdftex.def)             Requested size: 469.74986pt x 196.84358pt.
-[12 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf, id=278, 437.635pt x 300.12125pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf  used on input line 840.
+[12 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-24-1.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf, id=279, 437.635pt x 300.12125pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf  used on input line 840.
 (pdftex.def)             Requested size: 281.85504pt x 193.2905pt.
-[13] [14 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf, id=303, 453.695pt x 313.17pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 929.
+[13] [14 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-25-1.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf, id=304, 453.695pt x 313.17pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 932.
 (pdftex.def)             Requested size: 281.85567pt x 194.55522pt.
-[15 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf, id=317, 457.71pt x 316.18124pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf  used on input line 1000.
+[15 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-27-1.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf, id=318, 457.71pt x 316.18124pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf  used on input line 1003.
 (pdftex.def)             Requested size: 281.86363pt x 194.70842pt.
 [16]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf, id=327, 457.71pt x 316.18124pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf  used on input line 1015.
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf, id=328, 457.71pt x 316.18124pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf  used on input line 1018.
 (pdftex.def)             Requested size: 281.86363pt x 194.70842pt.
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf, id=329, 457.71pt x 314.17375pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf  used on input line 1039.
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf, id=330, 457.71pt x 314.17375pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf  used on input line 1042.
 (pdftex.def)             Requested size: 281.86363pt x 193.47217pt.
-[17 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf> </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf>]
-</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf, id=351, 457.71pt x 313.17pt>
-File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf Graphic file (type pdf)
-<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf>
-Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf  used on input line 1068.
+[17 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-1.pdf> </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-29-2.pdf>]
+</private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf, id=352, 457.71pt x 313.17pt>
+File: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf Graphic file (type pdf)
+<use /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf>
+Package pdftex.def Info: /private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf  used on input line 1071.
 (pdftex.def)             Requested size: 281.86363pt x 192.85405pt.
-[18 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf> </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpyJx8w5/preview-1559d789fc537.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf>] [19] (./CONNECTORguide.aux)
+[18 </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-30-1.pdf> </private/var/folders/81/9j7tyzks7c34104pkjdybty40000gn/T/RtmpPNgMsq/preview-1666d7b0f1e79.dir/CONNECTORguide_files/figure-latex/unnamed-chunk-31-1.pdf>] [19] (./CONNECTORguide.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -565,16 +565,16 @@ Package rerunfilecheck Info: File `CONNECTORguide.out' has not changed.
 Here is how much of TeX's memory you used:
  11491 strings out of 479983
  194071 string characters out of 5887131
- 484836 words of memory out of 5000000
+ 484838 words of memory out of 5000000
  29384 multiletter control sequences out of 15000+600000
  526668 words of font info for 75 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,6n,77p,545b,560s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtko10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/simonepernice/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on CONNECTORguide.pdf (19 pages, 793959 bytes).
+Output written on CONNECTORguide.pdf (19 pages, 795508 bytes).
 PDF statistics:
- 494 PDF objects out of 1000 (max. 8388607)
- 388 compressed objects within 4 object streams
+ 495 PDF objects out of 1000 (max. 8388607)
+ 389 compressed objects within 4 object streams
  92 named destinations out of 1000 (max. 500000)
  207 words of extra memory for PDF output out of 10000 (max. 10000000)
 
