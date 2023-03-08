@@ -16,7 +16,7 @@ ClusterAnalysis(
   Cores = 1,
   PercPCA = 0.85,
   MinErrFreq = 0,
-  pert = pert
+  pert = 0.01
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ ClusterAnalysis(
 
 \item{Cores}{Number of cores to parallelize computations.}
 
-\item{PercPCA=.85}{}
+\item{pert}{....}
 }
 \value{
 StabilityAnalysis returns a list of (i) lists, called ConsensusInfo, reporting for each G and h: the Consensus Matrix, either as a NxN matrix, where N is the number of samples, or plot, and the most probable clustering obtained from running several times the method; (ii) the box plots showing both the Elbow plot considering the total tightness and the box plots of the fDB indexes for each G; and finally, (iii) the seed. See \code{\link{IndexesPlot.Extrapolation}} and \code{\link{MostProbableClustering.Extrapolation}}.

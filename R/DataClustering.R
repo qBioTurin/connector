@@ -13,6 +13,7 @@
 #' @param path The folder path where the plot(s) will be saved. If it is missing, the plot is saved in the current working  directory.
 #' @param Cores Number of cores to parallelize computations.
 #' @param PercPCA=.85
+#' @param pert ....
 #' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
@@ -53,7 +54,7 @@
 #' @import RColorBrewer statmod parallel Matrix splines 
 #' @export
 
-ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0,pert = pert)
+ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0,pert = 0.01)
 {
   ## Let define some parameters needed to FCM
   params <- list()
