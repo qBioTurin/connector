@@ -49,7 +49,7 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
   
   Box.pl<- ggplot(data= Indexes.Rep)+
     facet_wrap(~Index,scales = "free")+
-    geom_violin(aes(x=Cluster,y=V,fill=ClusterH,group=Cluster))+
+    geom_violin(aes(x=Cluster,y=V,fill=ClusterH,group=Cluster),scale = "width")+
     geom_line(data= Indexes.MostProb,aes(x=Cluster,y=V,col="Most probable"))+
     geom_jitter(aes(x=Cluster,y=V),color="black", width = .1, height = 0, alpha=0.5)+   
     scale_fill_viridis("",discrete = TRUE, alpha=0.6) +

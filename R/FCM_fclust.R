@@ -47,7 +47,7 @@
   }
 
 "fclustinit" <-
-  function(data, pert = 0, grid = seq(0.01, 1, length = 100), h = 1, p = 2, q = 5,K = K,seed){
+  function(data, pert = 0.01, grid = seq(0.01, 1, length = 100), h = 1, p = 2, q = 5,K = K,seed){
     S <- FullS <- NULL
     # This function initializes all the parameters.
     # Produce spline basis matrix
