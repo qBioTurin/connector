@@ -211,7 +211,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
   return(list(h.gBefore = h.gBefore, ClusterAll = ClusterAll) )
 }
 
-Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404)
+Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404,pert = 0.01)
 {
   
   if(Cores == 1){
