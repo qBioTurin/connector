@@ -6,7 +6,8 @@
 
 "fitfclust" <-
   function(x=NULL,curve=NULL,timeindex=NULL,data=NULL, q = 5, h = 1, p = 5,
-           K = 2, tol = 0.001, maxit = 20, pert = 0.01, grid = seq(0, 1, length = 100), hard = F, plot= F,trace=F,seed=NULL)
+           K = 2, tol = 0.001, maxit = 20, pert = 0.01, grid = seq(0, 1, length = 100),
+           hard = F, plot= F,trace=F,seed=NULL)
   {
     # This is the main function to implement the FClust procedure.
     if (is.null(data))  data <- list(x=x,curve=curve,timeindex=timeindex)

@@ -15,7 +15,8 @@ ClusterAnalysis(
   path = NULL,
   Cores = 1,
   PercPCA = 0.85,
-  MinErrFreq = 0
+  MinErrFreq = 0,
+  pert = pert
 )
 }
 \arguments{

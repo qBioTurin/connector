@@ -26,7 +26,7 @@ Extrapolate objects from ClusterAnalysis output list (see \code{\link{ClusterAna
 \details{
 \itemize{
 \item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
-\item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Consensus Matrix for G fixed.}
+\item{ConsMatrix.Extrapolation}{extrapolates from ClusterAnalysis output list the Stability Matrix for G fixed.}
 \item{MostProbableClustering.Extrapolation}{extrapolates from ClusterAnalysis output list the most frequent clustering among the several runs obtained  for G fixed.}
 }
 }

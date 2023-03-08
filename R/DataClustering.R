@@ -53,7 +53,7 @@
 #' @import RColorBrewer statmod parallel Matrix splines 
 #' @export
 
-ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0)
+ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0,pert = pert)
 {
   ## Let define some parameters needed to FCM
   params <- list()
@@ -77,7 +77,8 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                                   runs = runs,
                                   params = params,
                                   #gauss.infoList = gauss.infoList,
-                                  h.gBefore = h.gBefore
+                                  h.gBefore = h.gBefore,
+                                  pert= pert
     )
     if(is.character(FCM.Cluster)){
       # If NULL it means that it was not found any errors during the model runs. Otherwise the max h value without errors is used thereafter.
@@ -94,7 +95,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   return(list(Clusters.List=Clusters.List, CONNECTORList = data, seed=seed,runs = runs))
 }
 
-FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,PercPCA=.85,runs=50,MinErrFreq= 0)
+FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=NULL,Cores=1,seed=2404,tol = 0.001, maxit = 20,pert = 0.01,PercPCA=.85,runs=50,MinErrFreq= 0)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
@@ -121,6 +122,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
                                grid=params$grid,
                                tol=tol,
                                maxit=maxit,
+                               pert= pert,
                                Cores=Cores,
                                runs=runs)
       
@@ -192,6 +194,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
                              grid=params$grid,
                              tol=tol,
                              maxit=maxit,
+                             pert = pert,
                              Cores=Cores,
                              runs=runs)
     h.out <- h.user 
@@ -211,7 +214,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
 {
   
   if(Cores == 1){
-    ALL.runs<-lapply(1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit){
+    ALL.runs<-lapply(1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit,pert){
       tryCatch({
         fitfclust(x=points,
                   curve=ID,
@@ -222,6 +225,7 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
                   p=p,
                   grid=grid,
                   tol = tol,
+                  pert = pert,
                   maxit = maxit)},
         error=function(e) {
           err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
@@ -229,45 +233,46 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
           #print(err)
           return(err.list)
         })
-    },points,ID,timeindex,G,p,h,grid,tol,maxit)
+    },points,ID,timeindex,G,p,h,grid,tol,maxit,pert)
   }else{
-
-  type <- if (exists("mcfork", mode="function")) "FORK" else "PSOCK"
-  cl <- makeCluster(Cores, type = type)
-  clusterSetRNGStream(cl, seed)
-  clusterCall(cl, function(){ 
-    library(Matrix)
-    library(splines)
-    library(statmod)
-  })
-  
-  
-  clusterExport(cl,list("fitfclust","fclustinit","fclustMstep","fclustEstep","fclustconst",
-                        "points","ID","timeindex","G","p","h","grid","tol","maxit"),
-                envir = environment() )
-  
-  ALL.runs<-parLapply(cl,1:runs, function(i){
-    tryCatch({
-      fitfclust(x=points,
-                curve=ID,
-                timeindex=timeindex,
-                q=p,
-                h=h,
-                K=G,
-                p=p,
-                grid=grid,
-                tol = tol,
-                maxit = maxit)},
-      error=function(e) {
-        err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
-        err.list<-list(Error= err)
-        #print(err)
-        return(err.list)
-      })
-  })
-  
-  stopCluster(cl)
-  
+    
+    type <- if (exists("mcfork", mode="function")) "FORK" else "PSOCK"
+    cl <- makeCluster(Cores, type = type)
+    clusterSetRNGStream(cl, seed)
+    clusterCall(cl, function(){ 
+      library(Matrix)
+      library(splines)
+      library(statmod)
+    })
+    
+    
+    clusterExport(cl,list("fitfclust","fclustinit","fclustMstep","fclustEstep","fclustconst",
+                          "points","ID","timeindex","G","p","h","grid","tol","maxit","pert"),
+                  envir = environment() )
+    
+    ALL.runs<-parLapply(cl,1:runs, function(i){
+      tryCatch({
+        fitfclust(x=points,
+                  curve=ID,
+                  timeindex=timeindex,
+                  q=p,
+                  h=h,
+                  K=G,
+                  p=p,
+                  grid=grid,
+                  tol = tol,
+                  pert = pert,
+                  maxit = maxit)},
+        error=function(e) {
+          err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
+          err.list<-list(Error= err)
+          #print(err)
+          return(err.list)
+        })
+    })
+    
+    stopCluster(cl)
+    
   }
   
   return(ALL.runs)
