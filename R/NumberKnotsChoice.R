@@ -119,7 +119,7 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
                  width = 0.4, col = "black") +
     scale_y_continuous(breaks = c(unique(Knots.df$p.num),max(Knots.df$p.num) +1),
                        labels = c(paste("p = ", unique(Knots.df$p.num)),
-                                  "Time grid \n distribution"))+
+                                  "Time points \n distribution"))+
     theme(axis.text=element_text(size = 15, hjust = 0.5),
           axis.text.x=element_text(angle=+90),
           axis.title=element_text(size=18,face="bold"),
@@ -136,7 +136,7 @@ BasisDimension.Choice<-function(data,p,save=FALSE,path=NULL,Cores = 1)
           plot.margin=unit(c(10,5,5,5),"mm"), 
           strip.background = element_blank(),
           strip.text.x = element_blank() )+
-    labs(x = "Time grid", y = "" )
+    labs(x = "Time", y = "" )
   
   dataplot <- data$Dataset
   GrowthCurve <- ggplot(data= dataplot, aes(x=Time, y=Observation,group=ID) )+

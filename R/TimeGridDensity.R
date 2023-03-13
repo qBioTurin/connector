@@ -74,7 +74,7 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
     scale_color_gradientn(colours = c("#baffc9","#FF0000"),
                          name="Freq. of \nobservations")+
     theme_bw() +
-    labs(title="Time grid",x="Time", y = "Time")+
+    labs(title="Grid of time points",x="Time", y = "Time")+
     theme(plot.title = element_text(hjust = 0.5),
           title =element_text(size=12, face='bold'))+
     guides(color = "none")
@@ -82,7 +82,7 @@ TimeGridDensity <- function(data,save=FALSE,path=NULL)
   BarPlot<-ggplot(data=data.frame(x=data$Dataset$Time), aes(x) )+
     geom_boxplot(width=0.4)+ coord_flip()+
     #labs(x="",y="Number of observations per time point")+
-    labs(x="",y="Time Grid distribution")+
+    labs(x="",y="Time points distribution")+
     theme(legend.text=element_text(size=14),
           legend.position=c(.9,1.1),
           legend.title=element_blank(),
