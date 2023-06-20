@@ -35,6 +35,7 @@ CONNECTOR developers have no liability for any use of docker4seq functions, incl
 
 ## How to cite
 
+```
 @article{pernice2023connector,
   title={CONNECTOR, fitting and clustering of longitudinal data to reveal a new risk stratification system},
   author={Pernice, Simone and Sirovich, Roberta and Grassi, Elena and Viviani, Marco and Ferri, Martina and Sassi, Francesco and Alessandr{\`\i}, Luca and Tortarolo, Dora and Calogero, Raffaele A and Trusolino, Livio and others},
@@ -45,3 +46,4 @@ CONNECTOR developers have no liability for any use of docker4seq functions, incl
   year={2023},
   publisher={Oxford University Press}
 }
+```
