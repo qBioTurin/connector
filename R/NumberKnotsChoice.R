@@ -1,7 +1,7 @@
 #' Choice of the B-spline dimension 
 #'
 #'@description
-#'	Generates a line plot reporting the cross-validated loglikelihood value for each number of knots. In details, for each number of knots 10\% of the curves from the whole data are removed and treated as a test set, then the remaing curves are fitted using the FCM and the loglikelihood on the test set is calculated. The process is then repeated nine more times.
+#'	Generates a line plot reporting the cross-validated loglikelihood value for each number of knots. In details, for each number of knots 10% of the curves from the whole data are removed and treated as a test set, then the remaing curves are fitted using the FCM and the loglikelihood on the test set is calculated. The process is then repeated nine more times.
 #'  
 #'
 #' @param data CONNECTORList. (see \code{\link{DataImport}})
