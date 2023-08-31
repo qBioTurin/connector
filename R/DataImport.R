@@ -45,6 +45,7 @@ DataImport <- function(TimeSeriesFile,AnnotationFile) {
   labcurv$ID = 1:length(labcurv$IDSample)
   labcurveID <-  labcurv$ID
   names(labcurveID) <- labcurv$IDSample
+  labcurv$IDSample = as.character(labcurv$IDSample)
   
   ###Check the column names
   c_names<-colnames(dataset[2*(1:(length(dataset[1,])/2))])
