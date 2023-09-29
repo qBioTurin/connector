@@ -35,13 +35,13 @@ ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
       ClassificationSingleCurve(clusterdata,
                                 newdata %>% filter(ID == i),
                                 FullS = T)
-      },
-      error=function(e) {
-        err<-paste("ERROR:",conditionMessage(e), "\n")
-        err.list<-list(Error= err)
-        #print(err)
-        return(err.list)
-      })
+    },
+    error=function(e) {
+      err<-paste("ERROR:",conditionMessage(e), "\n")
+      err.list<-list(Error= err)
+      #print(err)
+      return(err.list)
+    })
   })
   
   stopCluster(cl)
@@ -51,7 +51,19 @@ ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
   df$ID = IDcurves
   df = df[, c("ID",sort(colnames(df%>%select(-ID))) )]
   
-  return(list(ClassMatrix = df, ListClassID =  ALL.runs ) )
+  # Entropy calculation
+  
+  df_Entrop = df %>%
+    tidyr::gather(-ID,key = "Cluster",value = "Prob") %>%
+    group_by(ID) %>%
+    mutate(Entropy = -sum(Prob*log2(Prob)),
+           MajorProb = max(Prob) )%>%
+    mutate(ClusterOld = Cluster,
+           Cluster = ifelse(Entropy<1 | MajorProb>0.6, "Unclassified" ,Cluster) ) %>%
+    ungroup() %>%
+    tidyr::spread(key = "ClusterOld",value = "Prob") 
+  
+  return(list(ClassMatrix = df, ClassMatrix_entropy = df_Entrop, ListClassID =  ALL.runs ) )
 }
 
 
