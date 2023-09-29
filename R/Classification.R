@@ -59,7 +59,7 @@ ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
     mutate(Entropy = -sum(Prob*log2(Prob)),
            MajorProb = max(Prob) )%>%
     mutate(ClusterOld = Cluster,
-           Cluster = ifelse(Entropy<1 | MajorProb>0.6, "Unclassified" ,Cluster) ) %>%
+           Cluster = ifelse(Entropy<1 | MajorProb>0.6 , Cluster[which(Prob == MajorProb)]), "Unclassified" ) %>%
     ungroup() %>%
     tidyr::spread(key = "ClusterOld",value = "Prob") 
   
