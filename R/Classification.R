@@ -4,8 +4,13 @@
 #'
 #' @param newdata 
 #' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}). 
+#' @param entropyCutoff  Entropy filter value for the definition of the UNCLASSIFIED cluster. The default is 1, and it works together with  probCutoff parameter.
+#' @param probCutoff  Probability filter value for the definition of the UNCLASSIFIED cluster. The default is 0.6, and it works together with  entropyCutoff parameter.
 #' @param Cores Number of cores to parallelize computations.
 
+#' @description Filter formula for the definion of the UNCLASSIFIED cluster 
+#'              $ Entropy >= entropyCutoff && MajorProb<=probCutoff$ then $"Unclassified"$
+#' 
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #'  
 #' @return 
@@ -15,7 +20,7 @@
 #' @import dplyr ggplot2 tidyr mvtnorm parallel
 #' @export
 #' 
-ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
+ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCutoff = 0.6, Cores=1)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
@@ -59,7 +64,7 @@ ClassificationNewCurves<-function(newdata, clusterdata, Cores=1)
     mutate(Entropy = -sum(Prob*log2(Prob)),
            MajorProb = max(Prob) )%>%
     mutate(ClusterOld = Cluster,
-           Cluster = ifelse(Entropy<1 | MajorProb>0.6 , Cluster[which(Prob == MajorProb)], "Unclassified") ) %>%
+           Cluster = ifelse(Entropy<entropyCutoff | MajorProb>probCutoff , Cluster[which(Prob == MajorProb)], "Unclassified") ) %>%
     ungroup() %>%
     tidyr::spread(key = "ClusterOld",value = "Prob") 
   
