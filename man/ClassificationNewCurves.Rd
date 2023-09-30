@@ -4,12 +4,22 @@
 \alias{ClassificationNewCurves}
 \title{Classification New Curves}
 \usage{
-ClassificationNewCurves(newdata, clusterdata, Cores = 1)
+ClassificationNewCurves(
+  newdata,
+  clusterdata,
+  entropyCutoff = 1,
+  probCutoff = 0.6,
+  Cores = 1
+)
 }
 \arguments{
 \item{newdata}{}
 
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}).}
+
+\item{entropyCutoff}{Entropy filter value for the definition of the UNCLASSIFIED cluster. The default is 1, and it works together with  probCutoff parameter.}
+
+\item{probCutoff}{Probability filter value for the definition of the UNCLASSIFIED cluster. The default is 0.6, and it works together with  entropyCutoff parameter.}
 
 \item{Cores}{Number of cores to parallelize computations.}
 }
@@ -18,6 +28,9 @@ ClassificationNewCurves(newdata, clusterdata, Cores = 1)
 }
 \description{
 
+
+Filter formula for the definion of the UNCLASSIFIED cluster
+$ Entropy >= entropyCutoff && MajorProb<=probCutoff$ then $"Unclassified"$
 }
 \examples{
 
