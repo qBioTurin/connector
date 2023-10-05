@@ -21,7 +21,7 @@
 #' @export
 #' 
 #' 
-ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCutoff = 0.6, Cores=1)
+ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCutoff = 0.6, Cores=1,Cut=F)
 {
   nworkers <- detectCores()
   if(nworkers<Cores) Cores <- nworkers
@@ -76,7 +76,7 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
     library(tidyr)
   })
   clusterExport(cl,list("clusterdata","newdata","Lambda.alpha.new","Snew", 
-                        "Gamma.new","ClassificationSingleCurve"),envir = environment() )
+                        "Gamma.new","ClassificationSingleCurve","Cut"),envir = environment() )
   IDcurves = unique(newdata$ID)
   
   ALL.runs<-parLapply(cl,IDcurves, function(i){
@@ -85,7 +85,8 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
                                 newdata %>% filter(ID == i),
                                 Snew = Snew,
                                 Gamma.new = Gamma.new,
-                                Lambda.alpha.new = Lambda.alpha.new)
+                                Lambda.alpha.new = Lambda.alpha.new,
+                                Cut =Cut)
     },
     error=function(e) {
       err<-paste("ERROR:",conditionMessage(e), "\n")
@@ -117,7 +118,7 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
   return(list(ClassMatrix = df, ClassMatrix_entropy = df_Entrop, ListClassID =  ALL.runs ) )
 }
 
-ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new, Lambda.alpha.new){
+ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new, Lambda.alpha.new,Cut){
   par <- clusterdata$FCM$fit$parameters
   p = unique(dim(par$Gamma))
   Nclusters =  length(clusterdata$FCM$cluster$cluster.names)
@@ -126,10 +127,13 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
   
   
   ##
-  Pcl = lapply(1:Nclusters, function(i,Snew, Gamma.new, Lambda.alpha.new){
+  Pcl = lapply(1:Nclusters, function(i,Snew, Gamma.new, Lambda.alpha.new,Cut){
     ### Truncate the curve w.r.t the maximum time among the curves belonging the corresponding cluster.
     MaxTimeCluster = clusterdata$FCM$cluster$ClustCurve %>% filter(Cluster == i) %>% summarise(T_max = max(Time))
-    newdata_sing_Cl = newdata_sing %>% dplyr::filter(Time <= MaxTimeCluster$T_max)
+    if(Cut)
+      newdata_sing_Cl = newdata_sing %>% dplyr::filter(Time <= MaxTimeCluster$T_max)
+    else
+      newdata_sing_Cl = newdata_sing
     
     if(length(newdata_sing_Cl$Time) < 2)
       return(data.frame(log_pi = 0, pi = 0, cluster = i) )
@@ -152,7 +156,7 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
                               sigma = Sigma, log = T ) + log(par$pi[i])
     
     return(data.frame(log_pi = log_pi, pi = pi, cluster = i) )
-  }, Snew =Snew, Gamma.new = Gamma.new, Lambda.alpha.new = Lambda.alpha.new)
+  }, Snew =Snew, Gamma.new = Gamma.new, Lambda.alpha.new = Lambda.alpha.new,Cut =Cut)
   
   Pcl =  do.call(rbind,Pcl)
   Pcl$Cluster = clusterdata$FCM$cluster$cluster.names[Pcl[,"cluster"]]
