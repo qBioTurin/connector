@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' @param newdata 
+#' @param newdata Dataframe of three columns storing the new longitudinal data to classify into the clusters stored in *clusterdata*. The first columns, called "\emph{ID}", stores the identification number of each sample. The second column, labeled "\emph{Observation}", contains  the data observation over the time and the respective time point is reported in the third column, labeled  "\emph{Time}"
 #' @param clusterdata The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}). 
 #' @param entropyCutoff  Entropy filter value for the definition of the UNCLASSIFIED cluster. The default is 1, and it works together with  probCutoff parameter.
 #' @param probCutoff  Probability filter value for the definition of the UNCLASSIFIED cluster. The default is 0.6, and it works together with  entropyCutoff parameter.
@@ -19,6 +19,7 @@
 #'
 #' @import dplyr ggplot2 tidyr mvtnorm parallel
 #' @export
+#' 
 #' 
 ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCutoff = 0.6, Cores=1)
 {
@@ -115,7 +116,6 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
   
   return(list(ClassMatrix = df, ClassMatrix_entropy = df_Entrop, ListClassID =  ALL.runs ) )
 }
-
 
 ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new, Lambda.alpha.new){
   par <- clusterdata$FCM$fit$parameters
