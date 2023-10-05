@@ -362,13 +362,16 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       ##
       
       database<-data$Dataset
-      ClustCurve <- data.frame(ID=database[,1],
-                               Time=database[,3],
-                               Observation=database[,2],
-                               Cluster= rep(cluster,data$LenCurv))
+       ClustCurve <- merge(database,
+                          data.frame(ID = unique(database[,1]), Cluster = names(cluster)) )
+      
+      # ClustCurve <- data.frame(ID=database[,1],
+      #                          Time=database[,3],
+      #                          Observation=database[,2],
+      #                          Cluster= rep(cluster,data$LenCurv))
       
       ## Goodness coefficents calculation
-      fcm.prediction$meancurves->meancurves
+       
       #distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
       distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q=NULL)
       #Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
@@ -388,10 +391,15 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       out.funcit<-list()
       output<-list()
       
+      as.data.frame(fcm.prediction$meancurves)->meancurves
+      colnames(meancurves) = cl.names
+      meancurves$Time = data$TimeGrid
+      
       out.funcit$cluster <- list(ClustCurve=ClustCurve,
                                  cl.info=fcm.PRED,
                                  cluster.member=cluster,
-                                 cluster.names=cl.names)
+                                 cluster.names=cl.names,
+                                 meancurves = meancurves)
       out.funcit$fit <- fcm.fit
       out.funcit$prediction <- fcm.prediction
       out.funcit$TimeGrid<-data$TimeGrid
