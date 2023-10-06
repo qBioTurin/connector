@@ -42,27 +42,15 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
   lambda.zero <- as.vector(par$lambda.zero)
   Lambda.alpha <- lambda.zero + Lambda %*% t(alpha)
   Gamma <- par$Gamma
+  FullS <- clusterdata$FCM$fit$FullS
   
-  cbind(1,splines::ns(grid, df = (p - 1))) -> Sold
-  svdSold = svd(Sold)
-  U = svdSold$u
-  V = svdSold$v
-  D = svdSold$d
-  Dinv = 1/D *diag(nrow = p)
   
-  # Now we have to find the inverse of the covariance and meancurves
-  
-  Lambda.alpha.new = V %*% Dinv %*% Lambda.alpha
-  Gamma.new = V %*% Dinv %*% Gamma %*% Dinv %*% t(V)
   
   # Lets calculate the new S of the new curves
   
   newGrid = sort(unique(newdata$Time))
   Snew = matrix(1,ncol = p , nrow = length(newGrid))
-  Snew[,2:(dim(Sold)[2])] = sapply(2: (dim(Sold)[2]), 
-                                   function(i) 
-                                     stats::spline(x = grid, y = Sold[,i], xout = newGrid )$y
-  )
+  Snew[,1:p] = sapply(1:p,function(i) stats::spline(x = grid, y = FullS[,i], xout = newGrid )$y)
   row.names(Snew) = newGrid
   
   
@@ -75,8 +63,8 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
     library(mvtnorm)
     library(tidyr)
   })
-  clusterExport(cl,list("clusterdata","newdata","Lambda.alpha.new","Snew", 
-                        "Gamma.new","ClassificationSingleCurve","Cut"),envir = environment() )
+  clusterExport(cl,list("clusterdata","newdata","Lambda.alpha","Snew", 
+                        "Gamma","ClassificationSingleCurve","Cut"),envir = environment() )
   IDcurves = unique(newdata$ID)
   
   ALL.runs<-parLapply(cl,IDcurves, function(i){
@@ -84,8 +72,8 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
       ClassificationSingleCurve(clusterdata,
                                 newdata %>% filter(ID == i),
                                 Snew = Snew,
-                                Gamma.new = Gamma.new,
-                                Lambda.alpha.new = Lambda.alpha.new,
+                                Gamma = Gamma,
+                                Lambda.alpha = Lambda.alpha,
                                 Cut =Cut)
     },
     error=function(e) {
@@ -118,7 +106,7 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
   return(list(ClassMatrix = df, ClassMatrix_entropy = df_Entrop, ListClassID =  ALL.runs ) )
 }
 
-ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new, Lambda.alpha.new,Cut){
+ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma, Lambda.alpha,Cut){
   par <- clusterdata$FCM$fit$parameters
   p = unique(dim(par$Gamma))
   Nclusters =  length(clusterdata$FCM$cluster$cluster.names)
@@ -127,7 +115,7 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
   
   
   ##
-  Pcl = lapply(1:Nclusters, function(i,Snew, Gamma.new, Lambda.alpha.new,Cut){
+  Pcl = lapply(1:Nclusters, function(i,Snew, Gamma, Lambda.alpha,Cut){
     ### Truncate the curve w.r.t the maximum time among the curves belonging the corresponding cluster.
     MaxTimeCluster = clusterdata$FCM$cluster$ClustCurve %>% filter(Cluster == i) %>% summarise(T_max = max(Time))
     if(Cut)
@@ -142,9 +130,9 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
     Sx  = Snew[row.names(Snew) %in% newdata_sing_Cl$Time,]
     x = newdata_sing_Cl$Observation
     n = length(x)
-    Sigma <- par$sigma * diag(n) + Sx %*% Gamma.new %*% t(Sx)
+    Sigma <- par$sigma * diag(n) + Sx %*% Gamma %*% t(Sx)
     
-    mu_i =  Sx %*% Lambda.alpha.new[,i] #(par$lambda.zero + par$Lambda %*% alphai )
+    mu_i =  Sx %*% Lambda.alpha[,i] #(par$lambda.zero + par$Lambda %*% alphai )
     x_mu = (x - mu_i)
     
     pi = mvtnorm::dmvnorm(x = x,
@@ -156,7 +144,7 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
                               sigma = Sigma, log = T ) + log(par$pi[i])
     
     return(data.frame(log_pi = log_pi, pi = pi, cluster = i) )
-  }, Snew =Snew, Gamma.new = Gamma.new, Lambda.alpha.new = Lambda.alpha.new,Cut =Cut)
+  }, Snew =Snew, Gamma = Gamma, Lambda.alpha = Lambda.alpha,Cut =Cut)
   
   Pcl =  do.call(rbind,Pcl)
   Pcl$Cluster = clusterdata$FCM$cluster$cluster.names[Pcl[,"cluster"]]
@@ -197,6 +185,3 @@ ClassificationSingleCurve = function(clusterdata, newdata_sing, Snew, Gamma.new,
   
   return(list(plot = pl, weight = Pcl, prob = Pclass))
 }
-
-
-
