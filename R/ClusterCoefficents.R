@@ -40,30 +40,18 @@ NULL
 #> NULL
 
 #' @rdname DBindexL2dist
-L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
+L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
   n.curves<-length(fcm.curve$gpred[,1])
   dist.curve2mu <-rep(0,n.curves)
+  
   # Definition of the grid depending on the cluster membership
-  cluster.grid<-ClusterGrid.truncation(clust,database,q)
   grid <-sort(unique(database$Time))
   G<-length(fcm.curve$meancurves[1,])
   
-  Database.cl<-merge(data.frame(ID = unique(database$ID),Cluster=clust),
-                     database,
-                     by="ID")
-  
-  grid.cl <- lapply(1:length(cluster.grid),function(i)
-    data.frame(Cluster =i,Time= cluster.grid[[paste0("G",i)]])
-  )
-  grid.cl <- do.call("rbind",grid.cl)
-  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Time"),all.y= T)
-  ShortCurves = Database.subset %>%
-    dplyr::group_by(ID) %>%
-    dplyr::count(ID) %>% filter(n < 3)
-  
-  if(length(ShortCurves$ID) > 0 ) 
-    stop(paste0("The quantile values must be smaller in order to calculate correcty the fdb indexes. The following curves with the IDs:", 
-                paste(ShortCurves$ID,collapse = ", "), " are too sparse and during the cutting procedure for calculating the indexes, these curves are too short." ))
+  time <- gauss.info$time
+  weights <- gauss.info$weights
+  a<-gauss.info$a
+  b<-gauss.info$b
   
   if(deriv==0)
   {
@@ -81,117 +69,109 @@ L2dist.curve2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
   }
   
-  meancurves <- data.frame(Time = rep(grid,G),
-                           MeanCurve = c(dmeancurves),
-                           Cluster = rep(1:G,each=length(grid)) )
+  meancurves = do.call(rbind,
+                       lapply(1:dim(dmeancurves)[2],
+                              function(i){
+                                data.frame(Time = gauss.info$time,
+                                           MeanCurve = stats::spline(x = grid, y = dmeancurves[,i], xout = gauss.info$time)$y,
+                                           Cluster = i)
+                              } 
+                       )
+  )
   
-  gpred <- data.frame(Time = rep(grid,n.curves),
-                      gpred = c(t(dgpred)),
-                      ID = rep(unique(database$ID),each=length(grid)), 
-                      Cluster = rep(clust,each=length(grid)) )
+  gpred = do.call(rbind,
+                       lapply(1:dim(dgpred)[1],
+                              function(i){
+                                data.frame(Time = gauss.info$time,
+                                           gpred = stats::spline(x = grid, y = dgpred[i,], xout = gauss.info$time)$y,
+                                           Cluster = clust[i],
+                                           ID = unique(database$ID)[i],
+                                           Weights = gauss.info$weights)
+                              } 
+                       )
+  )
   
-  gpred.subset <- merge(gpred,Database.subset,by = c("Time","ID","Cluster"),all.y= T)
-  Dataset.all<- merge(meancurves,gpred.subset,by = c("Time","Cluster"),all.y= T)
-  
-  fxk <- Dataset.all %>%
-    group_by(ID , Time)
-  
-  fxk <- fxk %>% summarise(Diff = (gpred - MeanCurve)^2, Time = Time, ID = ID)
-  
-  
-  dist.curve2mu <- fxk %>%
+  dist.curve2mu <- merge(meancurves,gpred,by = c("Time","Cluster"),all.y= T) %>%
+    group_by(ID , Time) %>%
+    summarize(Diff = Weights * (gpred - MeanCurve)^2, Time = Time, ID = ID)%>%
+    ungroup() %>%
     group_by(ID) %>%
-    group_map( ~ integrate.xy(x = .x$Time ,fx = .x$Diff ,use.spline = F))
+    summarize(dist = sqrt((b-a)/2 *sum(Diff)) )
   
-  return(sqrt(unlist(dist.curve2mu)))
+  return(dist.curve2mu$dist)
 }
 
 #' @rdname DBindexL2dist
-L2dist.mu2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
+L2dist.mu2mu <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
   n.curves<-length(fcm.curve$gpred[,1])
-  # gauss.info<-gauss.infoList[[n.curves+1]]
-  # itimeindex<-gauss.info$itimeindex
-  #  
-  # weights <- gauss.info$gauss$weights 
-  # a<-gauss.info$a
-  # b<-gauss.info$b
+  
+  time <- gauss.info$time
+  weights <- gauss.info$weights
+  a<-gauss.info$a
+  b<-gauss.info$b
+  
   # Definition of the grid depending on the cluster membership
-  cluster.grid<-ClusterGrid.truncation(clust,database,q) 
   grid <-sort(unique(database$Time))
-  
-  fcm.curve$meancurves->meancurves
-  k<-length(meancurves[1,])
-  dist.mu2mu<-matrix(0,ncol = k,nrow = k)
-  
- #clust.ind <- combn(1:k,2)
-  clust.ind <- expand.grid(1:k,1:k)
   
   if(deriv==0)
   {
-    fxk <- (meancurves[,clust.ind$Var1]-meancurves[,clust.ind$Var2])^2
+    fcm.curve$meancurves->meancurves
   }else{
     dspl <-basis.derivation(fcm.fit,deriv)
     u.dspl<-dspl$u.dspl
-    dmeancurves<-dspl$dmeancurves
-    
-    fxk <- (dmeancurves[,clust.ind$Var1]-dmeancurves[,clust.ind$Var2])^2
-
+    meancurves<- dspl$dmeancurves
   }
-  # 
-  # if(length(as.matrix(fxk)[1,] ) == 1 ){
-  #   int <- (b-a)/2 * sum(weights * fxk)
-  # }else int <- (b-a)/2 * colSums(weights * fxk)
-  # 
-  # dist.mu2mu[,] <- sqrt(int)
-  int <- sapply( 1:length(fxk[1,]), function(i){
-    cl.1 <- clust.ind[i,1]
-    cl.2 <- clust.ind[i,2]
-    # to claculate the diffeernce bertween the mean curves we consider the union of the two time intervals associated with each mean curve
-    t.min<-min(min(cluster.grid[[cl.1]]),min(cluster.grid[[cl.2]]))
-    t.max<-max(max(cluster.grid[[cl.1]]),max(cluster.grid[[cl.2]]))
-    itime<- which(grid >= t.min & grid <= t.max )
-    integrate.xy(grid[itime],fxk[itime,i],use.spline = F)
-  } )
+  meancurves = sapply(1:dim(meancurves)[2],
+                      function(i) stats::spline(x = grid, y = meancurves[,i], xout = gauss.info$time)$y )
+  
+  k<-length(meancurves[1,])
+  dist.mu2mu<-matrix(0,ncol = k,nrow = k)
+  clust.ind <- expand.grid(1:k,1:k)
+  
+  fxk <- (meancurves[,clust.ind$Var1]-meancurves[,clust.ind$Var2])^2
+  
+  if(length(as.matrix(fxk)[1,] ) == 1 ){
+    int <- (b-a)/2 * sum(weights * fxk)
+  }else int <- (b-a)/2 * colSums(weights * fxk)
+  
   dist.mu2mu[,] <- sqrt(int)
   return(dist.mu2mu)
 }
 
 #' @rdname DBindexL2dist
-L2dist.mu20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
+L2dist.mu20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
   n.curves<-length(fcm.curve$gpred[,1])
-  # gauss.info<-gauss.infoList[[n.curves+1]]
-  # 
-  # itimeindex <- gauss.info$itimeindex
-  # weights <- gauss.info$gauss$weights 
-  # a<-gauss.info$a
-  # b<-gauss.info$b
-  # 
-  fcm.curve$meancurves->meancurves
-  cluster.grid<-ClusterGrid.truncation(clust,database,q) 
   grid <-sort(unique(database$Time))
-  k<-length(meancurves[1,])
+  
+  time <- gauss.info$time
+  weights <- gauss.info$weights
+  a<-gauss.info$a
+  b<-gauss.info$b
   
   if(deriv==0)
   {
-    fxk <- (meancurves)^2
+    fcm.curve$meancurves-> meancurves
   }else{
     dspl <-basis.derivation(fcm.fit,deriv)
     u.dspl<-dspl$u.dspl
-    dmeancurves<-dspl$dmeancurves
-    
-    fxk <- (dmeancurves)^2
-    
+    dspl$dmeancurves-> meancurves
   }
+  k<-length(meancurves[1,])
   
-  # if(length(as.matrix(fxk)[1,] ) == 1 ){
-  #   int <- (b-a)/2 * sum(weights * fxk)
-  # }else int <- (b-a)/2 * colSums(weights * fxk)
-  # 
-  int <- sapply( 1:length(fxk[1,]), function(i){
-    cl.grid <- cluster.grid[[i]]
-    itime <- which(grid %in% cl.grid)
-    integrate.xy(grid[itime],fxk[itime,i],use.spline = F)
-  })
+  # we obtain the meancurves values in the gauss points
+  meancurves = sapply(1:dim(meancurves)[2],
+                      function(i) stats::spline(x = grid, y = meancurves[,i], xout = gauss.info$time)$y )
+  fxk <- (meancurves)^2
+  
+  if(length(as.matrix(fxk)[1,] ) == 1 ){
+    int <- (b-a)/2 * sum(weights * fxk)
+  }else int <- (b-a)/2 * colSums(weights * fxk)
+  
+  # int <- sapply( 1:length(fxk[1,]), function(i){
+  #   cl.grid <- cluster.grid[[i]]
+  #   itime <- which(grid %in% cl.grid)
+  #   integrate.xy(grid[itime],fxk[itime,i],use.spline = F)
+  # })
   
   dist.mu20 <- sqrt(int)
   
@@ -199,25 +179,22 @@ L2dist.mu20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
 }
 
 #' @rdname DBindexL2dist
-L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
+L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
   n.curves<-length(fcm.curve$gpred[,1])
   dist.curve2mu <-rep(0,n.curves)
   grid <-sort(unique(database$Time))
-  cluster.grid<-ClusterGrid.truncation(clust,database,q)
-  grid <-sort(unique(database$Time))
+  
+  time <- gauss.info$time
+  weights <- gauss.info$weights
+  a<-gauss.info$a
+  b<-gauss.info$b
+
   G<-length(fcm.curve$meancurves[1,])
   
   Database.cl<-merge(data.frame(ID = unique(database$ID),Cluster=clust),
                      database,
                      by="ID")
-  if("Time" %in% colnames(Database.cl))
-    colnames(Database.cl)[colnames(Database.cl) == "Time"] <- "Time"
-  grid.cl <- lapply(1:length(cluster.grid),function(i)
-    data.frame(Cluster =i,Time= cluster.grid[[paste0("G",i)]])
-  )
-  grid.cl <- do.call("rbind",grid.cl)
-  
-  Database.subset <- merge(Database.cl,grid.cl,by = c("Cluster","Time"),all.y= T)
+
   
   if(deriv==0)
   {
@@ -228,55 +205,57 @@ L2dist.curve20 <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
     dspl <-basis.derivation(fcm.fit,deriv)
     u.dspl<-dspl$u.dspl
     etapred <- fcm.curve$etapred
-    
     matrix(0,n.curves,nrow(u.dspl)) -> dgpred
     dgpred <- t(sapply(1:n.curves ,function(ind) as.vector(u.dspl %*% etapred[ind,])))
   }
-
-  gpred <- data.frame(Time = rep(grid,n.curves),
-                      gpred = c(t(dgpred)),
-                      ID = rep(unique(database$ID),each=length(grid)), 
-                      Cluster = rep(clust,each=length(grid)) )
   
-  Dataset.all <- merge(gpred,Database.subset,by = c("Time","ID","Cluster"),all.y= T)
-
-  fxk <- Dataset.all %>%
-    group_by(ID , Time)
+  gpred = do.call(rbind,
+                  lapply(1:dim(dgpred)[1],
+                         function(i){
+                           data.frame(Time = gauss.info$time,
+                                      gpred = stats::spline(x = grid, y = dgpred[i,], xout = gauss.info$time)$y,
+                                      Cluster = clust[i],
+                                      ID = unique(database$ID)[i],
+                                      Weights = gauss.info$weights)
+                         } 
+                  )
+  )
   
-  fxk <- fxk %>% summarise(Diff = (gpred)^2, Time = Time, ID = ID)
-  
-  dist.curve2mu <- fxk %>%
+  dist.curve2mu <- gpred %>%
+    group_by(ID , Time) %>%
+    summarize(Diff = Weights * (gpred)^2, Time = Time, ID = ID)%>%
+    ungroup() %>%
     group_by(ID) %>%
-    group_map( ~ integrate.xy(x = .x$Time ,fx = .x$Diff ,use.spline = F))
-  
-  return(sqrt(unlist(dist.curve2mu)))
+    summarize(dist = sqrt((b-a)/2 *sum(Diff)) )
+
+  return(dist.curve2mu$dist)
 }
 
 #' @rdname DBindexL2dist
-Sclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
-
-  distances <- L2dist.curve2mu(clust,fcm.curve,database,fcm.fit,deriv,q)
+Sclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
+  
+  distances <- L2dist.curve2mu(clust,fcm.curve,database,fcm.fit,deriv,gauss.info)
   k<-length(fcm.curve$meancurves[1,])
-
+  
   out <- sapply(1:k,
-   function(x){
-    curve <- which(clust == x)
-    if(length(curve)==0) warning("Empty clusters imply a NaN coefficents",immediate. = TRUE)
-    sqrt(1/length(curve)*sum(distances[curve]^2))
-   }
- )
+                function(x){
+                  curve <- which(clust == x)
+                  if(length(curve)==0) warning("Empty clusters imply a NaN coefficents",immediate. = TRUE)
+                  sqrt(1/length(curve)*sum(distances[curve]^2))
+                }
+  )
   
   return(out)
 }
 
 #' @rdname DBindexL2dist
-Rclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
+Rclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,gauss.info){
   k<-length(fcm.curve$meancurves[1,])
   
-  emme <- L2dist.mu2mu(clust,fcm.curve,database,fcm.fit,deriv,q)
-  cl   <- L2dist.mu20(clust,fcm.curve,database,fcm.fit,deriv,q)
+  emme <- L2dist.mu2mu(clust,fcm.curve,database,fcm.fit,deriv,gauss.info)
+  cl   <- L2dist.mu20(clust,fcm.curve,database,fcm.fit,deriv,gauss.info)
   ######### Let name the cluster with A->Z from the lower mean curve to the higher.
- 
+  
   if( k !=1 )
   {
     Cl.order<-order(cl)
@@ -288,11 +267,11 @@ Rclust.coeff <- function(clust,fcm.curve,database,fcm.fit=NULL,deriv=0,q){
   row.names(emme)<-symbols
   colnames(emme)<-symbols
   
-  esse <- Sclust.coeff(clust,fcm.curve,database,fcm.fit,deriv,q) 
+  esse <- Sclust.coeff(clust,fcm.curve,database,fcm.fit,deriv,gauss.info) 
   names(esse)<-symbols
   
   erre <- matrix(0,nrow=k,ncol=k,dimnames = list(symbols,symbols))
-
+  
   S.matrix<-matrix(rep(esse,length(esse)),ncol=length(esse))
   sum.2S <- S.matrix + t(S.matrix) 
   erre <- sum.2S / emme

@@ -44,8 +44,6 @@ ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCut
   Gamma <- par$Gamma
   FullS <- clusterdata$FCM$fit$FullS
   
-  
-  
   # Lets calculate the new S of the new curves
   
   newGrid = sort(unique(newdata$Time))

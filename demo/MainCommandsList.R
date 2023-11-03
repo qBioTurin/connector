@@ -1,8 +1,8 @@
 library(connector)
 
 ### Data files
-TimeSeriesFile<-system.file("data", "475treatedDataset.xlsx", package = "connector")
-AnnotationFile <-system.file("data", "475treatedInfo.txt", package = "connector")
+TimeSeriesFile<-system.file("data", "475dataset.xlsx", package = "connector")
+AnnotationFile <-system.file("data", "475info.txt", package = "connector")
 
 ### Merge curves and target file
 CONNECTORList <- DataImport(TimeSeriesFile,AnnotationFile)
@@ -37,10 +37,11 @@ p<-3
 
 ### Cluster Analysis to set G
 S.cl <-ClusterAnalysis(CONNECTORList.trunc,
-                       G=2:5,
+                       G=2:6,
                        p=p,
                        runs=50,
-                       Cores=1)
+                       Cores=2)
+
 
 IndexesPlot.Extrapolation(S.cl)-> indexes
 indexes$Plot

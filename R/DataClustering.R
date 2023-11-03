@@ -5,7 +5,7 @@
 #'  Fits and clusters the data with respect to the Functional Clustering Model [Sugar and James]. Multiple runs of the algorithm are necessary since the algorithm is stochastic As explained in [Sugar and James], to have a simple low-dimensional representation of the individual curves and to reduce the number of parameters to be estimated, h value must be equals or lower than \eqn{min(p,G-1)}.
 #'  
 #' @param data CONNECTORList. (see \code{\link{DataImport}} or \code{\link{DataTruncation}})
-#' @param G  The vector/number of possible clusters.
+#' @param G The vector/number of possible clusters.
 #' @param p The dimension of the natural cubic spline basis. (see \code{\link{BasisDimension.Choice}})
 #' @param runs Number of runs.
 #' @param seed Seed for the kmeans function.
@@ -65,6 +65,13 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
   params$ID <- database$ID
   params$timeindex <- match(database$Time,grid)
   #######
+  # we need to calculate the curves in the gauss$nodes considering the time window [a,b]
+  statmod::gauss.quad(10) -> gauss 
+  gauss$a <- a <- min(grid)
+  gauss$b <- b <- max(grid)
+  gauss$time <- (a+b)/2 + (b-a)/2*gauss$nodes 
+  data$gauss.info = gauss
+  
   h.gBefore <- NULL
   Clusters.List<-list()
   for( g in 1:length(G) ){
@@ -77,7 +84,7 @@ ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL
                                   Cores=Cores,
                                   runs = runs,
                                   params = params,
-                                  #gauss.infoList = gauss.infoList,
+                                  gauss.infoList = gauss,
                                   h.gBefore = h.gBefore,
                                   pert= pert
     )
@@ -135,9 +142,7 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
       
       ## Let calculate the clustering and the fDB indexes
       ClusterAll<-ClusterPrediction(ALL.runs,Indexes.Uniq.Par,data,gauss.infoList,G)
-      # l.fdb <- fdb.calc(ClusterAll$ClusterAll)
-      # rep(l.fdb$V,l.fdb$Freq) -> fDBindexes
-      
+
       ## Check the number of errors:
       ALL.runs.tmp <-lapply(1:length(ALL.runs),function(x){
         if(!is.character(ALL.runs[[x]]$Error))
@@ -330,18 +335,13 @@ Unique.Param = function(List.runs.fitfclust)
 ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.infoList,G)
 {
   L1<- length(List.runs.fitfclust)
-  # deleting if there was some errors in the predictions:
+  # deleting if there are some errors in the predictions:
   List.runs.fitfclust <-lapply(1:L1,function(x){
     if(!is.character(List.runs.fitfclust[[x]]$Error))
       List.runs.fitfclust[[x]]
     else NA
   } )
-  # if(length(which(is.na(List.runs.fitfclust)))!=0){
-  #   ErrorConfigurationFit <- List.runs.fitfclust[which(is.na(List.runs.fitfclust))]
-  #   List.runs.fitfclust <- List.runs.fitfclust[-which(is.na(List.runs.fitfclust))]
-  # }else{
-  #   ErrorConfigurationFit<-NULL
-  # }
+
   ###
   ClusterAll<-lapply(1:length(Indexes.Uniq.Par),function(i){
     tryCatch({
@@ -362,18 +362,14 @@ ClusterPrediction = function(List.runs.fitfclust,Indexes.Uniq.Par,data,gauss.inf
       ##
       
       database<-data$Dataset
-       ClustCurve <- merge(database,
-                          data.frame(ID = unique(database[,1]), Cluster = names(cluster)) )
-      
-      # ClustCurve <- data.frame(ID=database[,1],
-      #                          Time=database[,3],
-      #                          Observation=database[,2],
-      #                          Cluster= rep(cluster,data$LenCurv))
+      ClustCurve <- merge(database,
+                          data.frame(ID = unique(database[,"ID"]),
+                                     Cluster = cluster) )
       
       ## Goodness coefficents calculation
+      distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,gauss.infoList)
        
       #distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
-      distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q=NULL)
       #Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0)
       #Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1)
       #Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2)

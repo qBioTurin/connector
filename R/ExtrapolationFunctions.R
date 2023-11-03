@@ -4,7 +4,6 @@
 #'
 #' @param stability.list The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})
 #' @param G  The number of clusters.
-#' @param q The quantiles used to calculate the time grid interval on which the distances are calculated. If NULL then the time grid outliers will be ignored through the distance calculation. If double (0<q<1) then the cutting is symmetrical w.r.t. the quantile setled (e.g., q = 0.25). If a vector, then the minimum value is used for the lower cutting and the maximum value for the upper cutting.
 #' @details 
 #' \itemize{
 #' \item{IndexesPlot.Extrapolation}{extrapolates from ClusterAnalysis output list the box plot fixing the h value.}
@@ -21,7 +20,7 @@ NULL
 #' 
 #' @rdname ExtrapolationFuncs
 #' @export
-IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
+IndexesPlot.Extrapolation <- function(stability.list){
   
   Clusters.List<-stability.list$Clusters.List 
   G <- as.numeric(sub("G","",names(Clusters.List)))
@@ -42,7 +41,8 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
     return("All the CONNECTOR runs have errors!")
   }
   
-  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,
+                                                  gauss.info = stability.list$CONNECTORList$gauss.info)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   Indexes.Rep <- IndexesValues$Indexes.Rep
@@ -78,7 +78,7 @@ IndexesPlot.Extrapolation <- function(stability.list,q=NULL){
 
 #' @rdname ExtrapolationFuncs
 #' @export
-ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
+ConsMatrix.Extrapolation <- function(stability.list){
   Clusters.List<-stability.list$Clusters.List 
   data <-stability.list$CONNECTORList
   runs <-stability.list$runs 
@@ -100,7 +100,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
     return("All the CONNECTOR runs have errors!")
   }
   
-  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G,q)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G, data$gauss.info)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   
@@ -111,7 +111,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
   Freq.ConfigCl<- Freq[order(Freq$Cluster),]
   
   ConsensusInfo<-lapply(1:length(G), function(Gind){
-    ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl,q)
+    ConsM.generation(Gind,Clusters.List,runs,data,Freq.ConfigCl)
   })
   names(ConsensusInfo)<-paste0("G",G)
   
@@ -120,7 +120,7 @@ ConsMatrix.Extrapolation <- function(stability.list,q=NULL){
 
 #' @rdname ExtrapolationFuncs
 #' @export
-MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
+MostProbableClustering.Extrapolation <- function(stability.list, G){
   Clusters.List<-stability.list$Clusters.List 
   runs <-stability.list$runs 
   
@@ -141,7 +141,7 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
     return("All the CONNECTOR runs have errors!")
   }
   
-  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G.all,q)
+  IndexesValues.list <- IndexesValues.calculation(Clusters.List, G.all,stability.list$CONNECTORList$gauss.info)
   IndexesValues <- IndexesValues.extrap(IndexesValues.list,Clusters.List, G.all)
   Indexes.MostProb <- IndexesValues$Indexes.MostProb
   
@@ -165,7 +165,7 @@ MostProbableClustering.Extrapolation <- function(stability.list, G,q=NULL){
   return(MostProbableClustering)
 }
 
-ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q) 
+ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl) 
 {
   FixedG.runs<-ALL.runs[[Gind]]$ClusterAll
   L1<- length(FixedG.runs)
@@ -220,32 +220,13 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
   
   grid<-fcm$FCM$fit$grid
   
-  # gauss.quad(10) -> gauss
-  # a <- min(grid)
-  # b <- max(grid)
-  # itempi <- (a+b)/2 + (b-a)/2*gauss$nodes
-  # 
-  # match(itempi,grid) -> itimeindex 
-  # 
-  # itimeindex <- match(database$Time[database$ID == i],grid)
-  # fxG <- (curve[,itimeindex] )^2
-  # int <- (b-a)/2 * rowSums( gauss$weights * fxG )
-  # dist.curve <- sqrt(int)
-  
-  dist.curve<-L2dist.curve20(clust = fcm$FCM$cluster$cluster.member,
+  dist.curve<-L2dist.curve20(clust = unname(fcm$FCM$cluster$cluster.member),
                              fcm.curve = fcm$FCM$prediction,
                              database = data$Dataset,
-                             q = q)
+                             gauss.info = data$gauss.info)
   
   names(dist.curve) <- curvename
-  # names(which.min(dist.curve))->lowest.curve
-  # 
-  # m.lowercurve<-matrix(curve[lowest.curve,itimeindex],
-  #                      nrow = length(curve[,1]),
-  #                      ncol = length(itimeindex),byrow = T)
-  # fxG <- (curve[,itimeindex]-m.lowercurve )^2
-  # int <- (b-a)/2 * rowSums( gauss$weights * fxG )
-  # dist.curve <- sqrt(int)
+
   ################## Sorting the names!!!
   
   #1) sorting depending by the l2 distance with the zero x-axis!
@@ -343,7 +324,7 @@ ConsM.generation<-function(Gind,ALL.runs,runs,data,Freq.ConfigCl,q)
               ConsensusPlot = ConsensusPlot) )
 } 
 
-IndexesValues.calculation <- function(Clusters.List, G,q){
+IndexesValues.calculation <- function(Clusters.List, G, gauss.info){
   
   Indexes <- lapply(1:length(G),function(i){
     ## Check the same parameter configurations:
@@ -359,11 +340,11 @@ IndexesValues.calculation <- function(Clusters.List, G,q){
         Clusters.List[[i]]$ClusterAll[[j]]$FCM$fit -> fcm.fit  
         ## Goodness coefficents calculation
         fcm.prediction$meancurves->meancurves
-        distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
-        distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,q)
-        Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,q)
-        Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1,q)
-        Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2,q)
+        distances <- L2dist.curve2mu(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,gauss.info)
+        distances.zero<-L2dist.mu20(clust=cluster,fcm.prediction,database = database,fcm.fit,deriv=0,gauss.info)
+        Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 0,gauss.info)
+        Deriv.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 1,gauss.info)
+        Deriv2.Coefficents<-Rclust.coeff(clust=cluster, fcm.curve = fcm.prediction, database = database, fcm.fit = fcm.fit, deriv = 2,gauss.info)
         
         return(list(Tight.indexes = sum(distances),
                     Coefficents=Coefficents,
