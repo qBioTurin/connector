@@ -17,14 +17,8 @@ reportPlot.generation(data, crossLL = NULL, clusterData, g, title = NULL)
 
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}).}
 }
-\value{
-
-}
 \description{
 Generation of the report of images summarising th CONNECTOR analysis.
-}
-\examples{
-
 }
 \author{
 Cordero Francesca, Pernice Simone, Sirovich Roberta

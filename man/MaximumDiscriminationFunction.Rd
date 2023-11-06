@@ -17,10 +17,6 @@ the weights applied to each dimension for determining the cluster membership, pl
 \description{
 Visualizes the h curve(s) representing the optimal weights to apply to each dimension for determining the cluster membership.
 }
-\examples{
-
-
-}
 \references{
 Gareth M. James and Catherine A. Sugar, (2003). Clustering for Sparsely Sampled Functional Data. Journal of the American Statistical Association.
 }

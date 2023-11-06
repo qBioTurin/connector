@@ -9,11 +9,12 @@ ClassificationNewCurves(
   clusterdata,
   entropyCutoff = 1,
   probCutoff = 0.6,
-  Cores = 1
+  Cores = 1,
+  Cut = F
 )
 }
 \arguments{
-\item{newdata}{}
+\item{newdata}{Dataframe of three columns storing the new longitudinal data to classify into the clusters stored in \emph{clusterdata}. The first columns, called "\emph{ID}", stores the identification number of each sample. The second column, labeled "\emph{Observation}", contains  the data observation over the time and the respective time point is reported in the third column, labeled  "\emph{Time}"}
 
 \item{clusterdata}{The list obtained from extrapolating the most probable clustering from the StabilityAnalysis function output. (see \code{\link{StabilityAnalysis}} and \code{\link{clusterdata.Extrapolation}}).}
 
@@ -23,17 +24,9 @@ ClassificationNewCurves(
 
 \item{Cores}{Number of cores to parallelize computations.}
 }
-\value{
-
-}
 \description{
-
-
 Filter formula for the definion of the UNCLASSIFIED cluster
 $ Entropy >= entropyCutoff && MajorProb<=probCutoff$ then $"Unclassified"$
-}
-\examples{
-
 }
 \author{
 Cordero Francesca, Pernice Simone, Sirovich Roberta

@@ -10,17 +10,31 @@
 \alias{Rclust.coeff}
 \title{Functional Davies–Bouldin (fDB) index and L2 (or with derivatives) distances}
 \usage{
-L2dist.curve2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+L2dist.curve2mu(
+  clust,
+  fcm.curve,
+  database,
+  fcm.fit = NULL,
+  deriv = 0,
+  gauss.info
+)
 
-L2dist.mu2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+L2dist.mu2mu(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, gauss.info)
 
-L2dist.mu20(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+L2dist.mu20(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, gauss.info)
 
-L2dist.curve20(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+L2dist.curve20(
+  clust,
+  fcm.curve,
+  database,
+  fcm.fit = NULL,
+  deriv = 0,
+  gauss.info
+)
 
-Sclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+Sclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, gauss.info)
 
-Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
+Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, gauss.info)
 }
 \arguments{
 \item{clust}{The vector reporting the cluster membership for each sample.}
@@ -34,8 +48,8 @@ Rclust.coeff(clust, fcm.curve, database, fcm.fit = NULL, deriv = 0, q)
 \item{deriv}{The derivative values (0, 1 or 2).}
 }
 \value{
-\preformatted{The following indexes are calculated for obtaining a cluster separation measure:
-}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{The following indexes are calculated for obtaining a cluster separation measure:
+}\if{html}{\out{</div>}}
 
 \itemize{
 \item{T:}{ the total tightness representing the dispersion measure given by

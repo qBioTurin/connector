@@ -15,14 +15,8 @@ circo.generation(dataFrom, dataTo, nameFrom, nameTo, filename)
 
 \item{nameTo}{name of the experiment to print above the ending cluster names}
 }
-\value{
-
-}
 \description{
 Generates the circos plot given two connector clustering
-}
-\examples{
-
 }
 \author{
 Cordero Francesca, Pernice Simone, Sirovich Roberta

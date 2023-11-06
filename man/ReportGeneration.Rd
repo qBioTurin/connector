@@ -35,14 +35,8 @@ ReportGeneration(
 
 \item{pRange}{The vector of the dimension of the natural cubic spline basis, by which the cross-validated loglikelihood is calculated and plotted. It could be the path of the Rds file storing the output of the \code{\link{BasisDimension.Choice}} function. If NULL, the p selection step is omitted.}
 }
-\value{
-
-}
 \description{
 Report generation
-}
-\examples{
-
 }
 \seealso{
 \code{\link{GrowthCurve}}, code{\link{TimeGridDensity}}.

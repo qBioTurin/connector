@@ -23,9 +23,6 @@ One data frame is requested to run the data analysis exploiting the CONNECTOR pa
 \item the \emph{TimeSeriesDataFrame}, reporting the growth evolution data.
 }
 }
-\examples{
-
-}
 \author{
 Cordero Francesca, Pernice Simone, Sirovich Roberta
 }

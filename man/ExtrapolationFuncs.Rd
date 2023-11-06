@@ -7,16 +7,14 @@
 \alias{MostProbableClustering.Extrapolation}
 \title{Extrapolate objects from ClusterAnalysis}
 \usage{
-IndexesPlot.Extrapolation(stability.list, q = NULL)
+IndexesPlot.Extrapolation(stability.list)
 
-ConsMatrix.Extrapolation(stability.list, q = NULL)
+ConsMatrix.Extrapolation(stability.list)
 
-MostProbableClustering.Extrapolation(stability.list, G, q = NULL)
+MostProbableClustering.Extrapolation(stability.list, G)
 }
 \arguments{
 \item{stability.list}{The list obtained from the ClusterAnalysis function. (see \code{\link{ClusterAnalysis}})}
-
-\item{q}{The quantiles used to calculate the time grid interval on which the distances are calculated. If NULL then the time grid outliers will be ignored through the distance calculation. If double (0<q<1) then the cutting is symmetrical w.r.t. the quantile setled (e.g., q = 0.25). If a vector, then the minimum value is used for the lower cutting and the maximum value for the upper cutting.}
 
 \item{G}{The number of clusters.}
 }

@@ -58,9 +58,6 @@ Where the proximities measures choosen is defined as follow
 \deqn{D_q(f,g) = \sqrt( \integral | f^{(q)}(s)-g^{(q)}(s) |^2 ds ), d=0,1,2}
 with f and g are two curves and f^{(q)} and g^{(q)} are their q-th derivatives. Note that for q=0, the equation becomes the distance induced by the classical L^2-norm.
 }
-\examples{
-
-}
 \seealso{
 MostProbableClustering.Extrapolation, StabilityAnalysis, Spline.plots.
 }
