@@ -1,6 +1,7 @@
 # CONNECTOR
-The transition from the evaluation of a single time point to the examination of the entire dynamic evolution of a system is possible only in the presence of the proper framework. The strong variability of dynamic evolution makes the definition of an explanatory procedure for data fitting and data clustering challenging.
-Here we present CONNECTOR, an R package able to analyze and inspect longitudinal data in a straightforward and revealing way, allowing the aggregation of time-series data through an unsupervised approach in informative clusters.
+The transition from the evaluation of a single time point to the examination of the entire dynamic evolution of a system is possible only in the presence of the proper framework. The strong variability of dynamic evolution makes the definition of an explanatory procedure for data fitting and data clustering challenging. Here we present CONNECTOR, an R package able to analyze and inspect longitudinal data in a straightforward and revealing way, allowing the aggregation of time-series data through an unsupervised approach in informative clusters.
+
+[Link](https://www.protocols.io/view/connector-fitting-and-clustering-of-longitudinal-d-xdvfi66) to a step by step guide in protocols.io .
 
 ## Required installed packages
 The following R packages must be installed to use connector:
