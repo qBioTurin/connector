@@ -1,12 +1,17 @@
 Package: connector
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Fitting and clustering of longitudinal data
+Version: 1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    c(person("Simone", "Pernice", , "simone.pernice@unito.it", role = c("cre","aut"),
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person("Roberta", "Sirovich", , "rsirovich@unito.it", role = c("aut"),
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person("Francesca", "Cordero", , "fcordero@unito.it", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           )
+Description: 
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
+Imports: Matrix, RColorBrewer, circlize, dashboardthemes, dplyr, fda, ggplot2, grid, markdown, mvtnorm, parallel, patchwork, readxl, sfsmisc,shiny, shinyFiles, shinyWidgets,shinybusy, shinydashboard,shinyjs, splines, statmod, tidyr, tools, utils, viridis, wesanderson, MASS, cowplot, ggplotify, gridExtra, knitr
