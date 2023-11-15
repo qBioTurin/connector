@@ -1,6 +1,6 @@
-# connector
-It is R package that is able to fit and cluster growth data using four different fitting models (i.e. Functional Clustering Models, Malthus model, Gompertz model, and logistic model). 
-It exploits an unsupervised clustering algorithm to cluster the fitted data, and the separation and tightness measures are provide to evaluete the quality of the derived  clusters.
+# CONNECTOR
+The transition from the evaluation of a single time point to the examination of the entire dynamic evolution of a system is possible only in the presence of the proper framework. The strong variability of dynamic evolution makes the definition of an explanatory procedure for data fitting and data clustering challenging.
+Here we present CONNECTOR, an R package able to analyze and inspect longitudinal data in a straightforward and revealing way, allowing the aggregation of time-series data through an unsupervised approach in informative clusters.
 
 ## Required installed packages
 The following R packages must be installed to use connector:
