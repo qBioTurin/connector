@@ -218,8 +218,8 @@ FCM.estimation<-function(data,G,params,gauss.infoList=NULL,h.gBefore,p=5,h.user=
 
 Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=100,seed=2404,pert = 0.01)
 {
-  
   if(Cores == 1){
+    set.seed(seed)
     ALL.runs<-lapply(1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit,pert){
       tryCatch({
         fitfclust(x=points,
@@ -232,7 +232,8 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
                   grid=grid,
                   tol = tol,
                   pert = pert,
-                  maxit = maxit)},
+                  maxit = maxit
+                  )},
         error=function(e) {
           err<-paste("ERROR in fitfclust :",conditionMessage(e), "\n")
           err.list<-list(Error= err)
@@ -241,7 +242,6 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
         })
     },points,ID,timeindex,G,p,h,grid,tol,maxit,pert)
   }else{
-    
     type <- if (exists("mcfork", mode="function")) "FORK" else "PSOCK"
     cl <- makeCluster(Cores, type = type)
     clusterSetRNGStream(cl, seed)
