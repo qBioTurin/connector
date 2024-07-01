@@ -55,7 +55,7 @@ reportPlot.generation = function(data,
   
   
   ## Plot: fDB indexes
-  IndexesPlot.Extrapolation(clusterData,q = 0.0)-> indexes
+  IndexesPlot.Extrapolation(clusterData)-> indexes
   pl3.1 = ggplot(indexes$Plot$plot_env$Indexes.Rep %>% 
                    filter(Index == "fDB")) +
     facet_wrap(~Index, 
@@ -141,7 +141,7 @@ reportPlot.generation = function(data,
   pl4 = ConsInfo[[paste0("G",g)]]$ConsensusPlot
   
   ## Plot: 
-  MostProbableClustering.Extrapolation(clusterData,g,q = .0) -> MostProbableClustering
+  MostProbableClustering.Extrapolation(clusterData, g) -> MostProbableClustering
   
   Cl = MostProbableClustering$FCM$cluster$ClustCurve
   Cl$Cluster = MostProbableClustering$FCM$cluster$cluster.names[Cl$Cluster]
