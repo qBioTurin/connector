@@ -9,7 +9,7 @@ cowplot, fda, flexclust, ggplot2, MASS, Matrix, plyr, ggplotify, RColorBrewer, r
 
 ```
 install.packages(c("cowplot", "fda", "flexclust", "ggplot2", "MASS", "Matrix", "plyr", "ggplotify",
-	"RColorBrewer", "readxl", "reshape2", "splines", "statmod", "sfsmisc", "shinyWidgets", "viridis", "dashboardthemes"))
+	"RColorBrewer", "readxl", "reshape2", "splines", "statmod", "sfsmisc", "shinyWidgets", "viridis", "dashboardthemes", "RhpcBLASclt"))
 ```
 
 ## How to install connector

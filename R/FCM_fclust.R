@@ -1,6 +1,6 @@
 #' FCM functions
 #'
-#' @import  fda splines 
+#' @import  fda splines
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #' 
 

@@ -51,7 +51,7 @@
 #'
 #' @seealso MostProbableClustering.Extrapolation, BoxPlot.Extrapolation, ConsMatrix.Extrapolation.
 #' 
-#' @import RColorBrewer statmod parallel Matrix splines 
+#' @import RColorBrewer statmod parallel Matrix splines RhpcBLASctl
 #' @export
 
 ClusterAnalysis<-function(data,G,p,h=NULL,runs=50,seed=2404,save=FALSE,path=NULL,Cores=1,PercPCA=.85,MinErrFreq= 0,pert = 0.01)
@@ -222,6 +222,8 @@ Par.fitfclust = function(points,ID,timeindex,p,h,G,grid,tol,maxit,Cores=1,runs=1
     set.seed(seed)
     ALL.runs<-lapply(1:runs, function(i,points,ID,timeindex,G,p,h,grid,tol,maxit,pert){
       tryCatch({
+        RhpcBLASctl::omp_set_num_threads(1)
+        
         fitfclust(x=points,
                   curve=ID,
                   timeindex=timeindex,
