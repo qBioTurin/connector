@@ -5,7 +5,7 @@ The transition from the evaluation of a single time point to the examination of 
 
 ## Required installed packages
 The following R packages must be installed to use connector:
-cowplot, fda, flexclust, ggplot2, MASS, Matrix, plyr, ggplotify, RColorBrewer, readxl, reshape2, splines, statmod, sfsmisc, shinyWidgets, viridis and dashboardthemes.
+cowplot, fda, flexclust, ggplot2, MASS, Matrix, plyr, ggplotify, RColorBrewer, readxl, reshape2, splines, statmod, sfsmisc, shinyWidgets, viridis, RhpcBLASclt and dashboardthemes.
 
 ```
 install.packages(c("cowplot", "fda", "flexclust", "ggplot2", "MASS", "Matrix", "plyr", "ggplotify",

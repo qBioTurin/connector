@@ -1,6 +1,6 @@
 #' FCM functions
 #'
-#' @import  fda splines
+#' @import  fda splines RhpcBLASctl
 #' @author Cordero Francesca, Pernice Simone, Sirovich Roberta
 #' 
 
@@ -9,6 +9,7 @@
            K = 2, tol = 0.001, maxit = 20, pert = 0.01, grid = seq(0, 1, length = 100),
            hard = F, plot= F,trace=F,seed=NULL)
   {
+    RhpcBLASctl::omp_set_num_threads(1)
     # This is the main function to implement the FClust procedure.
     if (is.null(data))  data <- list(x=x,curve=curve,timeindex=timeindex)
     initfit <- fclustinit(data = data, pert = pert, grid = grid, h = h,
