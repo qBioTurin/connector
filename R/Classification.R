@@ -19,7 +19,7 @@
 #'
 #' @import dplyr ggplot2 tidyr mvtnorm parallel
 #' @export
-#' 
+#'  
 #' 
 ClassificationNewCurves<-function(newdata, clusterdata, entropyCutoff =1,probCutoff = 0.6, Cores=1,Cut=F)
 {

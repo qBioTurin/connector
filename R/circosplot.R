@@ -32,8 +32,11 @@ circo.generation = function(dataFrom,dataTo,nameFrom,nameTo,filename)
   CLall = unique(dataMerged2$type)
   colAll = rep("white",length(CLall))
   names(colAll) = sort(CLall)
-  colAll[grep("From",CLall)] = wes_palette("GrandBudapest1", n = length(grep("From",CLall)),type = "discrete")
-  colAll[grep("To",CLall)] = viridis(length(grep("To",CLall)))
+  colAll[grep("From", CLall)] = wesanderson::wes_palette("GrandBudapest1", 
+                                                         n = length(grep("From", CLall)), type = "continuous")
+  colAll[grep("To", CLall)] = wesanderson::wes_palette("Zissou1",
+                                                       n =length(grep("To", CLall)),
+                                                       type = "continuous")
   
   colors = c("#d8b365","#5ab4ac")
   names(colors) = c(nameFrom,nameTo)
